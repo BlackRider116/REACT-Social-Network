@@ -1,0 +1,52 @@
+.dialogs {
+  display: grid;
+  grid-template-columns: 3fr 9fr; /* деление по фракциям */
+}
+.dialog {
+  /* padding: 10px; */
+  border: 1px solid black;
+  height: 103vh;
+
+  /* block-size: 100%; */
+}
+
+.dialogItem a {
+  /* нужно дописывать а где используется NavLink */
+  color: white;
+  text-decoration: none;
+  /* vertical-align: top; */
+  /* margin-block-end: 300px; */
+  /* border: 1px solid black; */
+  /* text-indent: 100px; */
+  /* font-size: 15px;  размер текста */
+}
+.dialogItem a.active {
+  color: gold;
+  text-decoration: none;
+}
+
+.messages {
+  border: 1px solid black;
+  padding: 10px;
+  height: 100vh;
+}
+
+.message {
+  color: white;
+}
+
+.user img {
+  margin-inline-start: 10%;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  margin-top: 10px;
+}
+
+.input {
+  position: absolute;
+  bottom: 0;
+  width: 43%;
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+}

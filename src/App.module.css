@@ -1,0 +1,23 @@
+.wrapper {
+  /* margin: 0; */
+  display: grid;
+  /* width: 99.9%; */
+  /* height: 99.9%; */
+  /* padding: 1%; */
+  margin-left: auto;
+  margin-right: auto;
+  /* width: 6em */
+
+  grid-template-areas:
+    "header header header"
+    "nav content sidebar";
+  grid-template-rows: 3.3em 100%;
+  grid-template-columns: 20% 60% 20%;
+  grid-gap: 1px;
+}
+
+.content {
+  grid-area: content;
+  background-color: cornflowerblue;
+}
+
