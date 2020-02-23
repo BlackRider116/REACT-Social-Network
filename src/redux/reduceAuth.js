@@ -17,7 +17,7 @@ const reduceAuth = (state = initialState, action) => {
         userId: action.data.id,
         email: action.data.email,
         login: action.data.login,
-        isAuth: true,
+        isAuth: true
       };
 
     default:
@@ -33,7 +33,9 @@ const setAuthUserData = (data) => ({
 export const getAuthThunk = () => {
   return (dispatch) => {
     authAPI.getAuth().then(data => {
-      dispatch(setAuthUserData(data.data));
+      if (!data.resultCode) {
+        dispatch(setAuthUserData(data.data));
+      }
     });
   }
 }

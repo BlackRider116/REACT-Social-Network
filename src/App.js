@@ -11,6 +11,7 @@ import FriendsContainer from "./components/Navbar/Friends/FriendsContainer";
 import UsersContainer from "./components/Navbar/Users/UsersContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
+import Login from "./components/Login/Login";
 
 const App = () => {
     return (
@@ -25,6 +26,7 @@ const App = () => {
                 <Route path="/setting" render={() => <Setting />} />
                 <Route path="/users" render={() => <UsersContainer />} />
                 <Route path="/friends" render={() => <FriendsContainer />} />
+                <Route path="/login" render={() => <Login />} />
             </div>
             <Sidebar />
         </div>

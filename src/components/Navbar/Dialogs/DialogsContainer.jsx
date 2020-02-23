@@ -1,35 +1,14 @@
 import { addMessage, inputMessage } from "../../../redux/reduceDialogs";
 import Dialogs from "./Dialogs";
 import { connect } from "react-redux";
-
-// const DialogsContainer = props => {
-//   // debugger;
-//   const state = props.state.messagesPage
-
-//   const addNewMessage = () => {
-//     props.dispatch(addMessage());
-//   };
-
-//   const messageChange = value => {
-//     props.dispatch(inputMessage(value));
-//   };
-
-//   return (
-//     <Dialogs
-//       addNewMessage={addNewMessage}
-//       messageChange={messageChange}
-//       inputText={state.inputMessage}
-//       messagesItems={state.messages}
-//       dialogItem={state.usersDialog}
-//     />
-//   );
-// };
+import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 const mapStateToProps = state => {
   return {
     inputText: state.messagesPage.inputMessage,
     messagesItems: state.messagesPage.messages,
-    dialogItem: state.messagesPage.usersDialog
+    dialogItem: state.messagesPage.usersDialog,
   };
 };
 
@@ -44,6 +23,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
-
-export default DialogsContainer;
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withAuthRedirect
+)(Dialogs);

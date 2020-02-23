@@ -7,15 +7,16 @@ import {
   deleteFollowThunk
 } from "../../../redux/reduceUsers";
 import Preloader from "../../../common/Preloader/Preloader";
-
+import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 class UsersContainer extends React.Component {
   componentDidMount() {
-    this.props.getUsersThunk(this.props.usersCount, this.props.pageNumber)
+    this.props.getUsersThunk(this.props.usersCount, this.props.pageNumber);
   }
 
   onNumberPage = pageNumber => {
-    this.props.getUsersThunk(this.props.usersCount, pageNumber)
+    this.props.getUsersThunk(this.props.usersCount, pageNumber);
   };
 
   render() {
@@ -46,8 +47,11 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
-  postFollowThunk,
-  deleteFollowThunk,
-  getUsersThunk
-})(UsersContainer);
+export default compose(
+  connect(mapStateToProps, {
+    postFollowThunk,
+    deleteFollowThunk,
+    getUsersThunk
+  }),
+  withAuthRedirect
+)(UsersContainer);
