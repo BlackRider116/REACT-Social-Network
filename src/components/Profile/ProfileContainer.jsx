@@ -13,9 +13,14 @@ import { compose } from "redux";
 class ProfileContainer extends React.Component {
   componentDidMount() {
     let userId = this.props.match.params.userId;
-    if (!userId) userId = 2;
-    this.props.getProfileThunk(6017);
-    this.props.getUserStatus(6017);
+    if (!userId && this.props.isAuth) {
+      userId = this.props.authUserId;
+    }
+    if(!userId && !this.props.isAuth) {
+      this.props.history.push("/login")
+    }
+    this.props.getProfileThunk(userId);
+    this.props.getUserStatus(userId);
   }
 
   render() {
@@ -33,7 +38,9 @@ class ProfileContainer extends React.Component {
 const mapStateToProps = state => {
   return {
     profile: state.profilePage.profile,
-    status: state.profilePage.status
+    status: state.profilePage.status,
+    authUserId: state.auth.userId,
+    isAuth: state.auth.isAuth,
   };
 };
 

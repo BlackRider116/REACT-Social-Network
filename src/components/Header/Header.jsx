@@ -3,7 +3,7 @@ import classes from "./Header.module.css";
 import { NavLink } from "react-router-dom";
 
 const Header = props => {
-  // debugger
+  
   const logout = () => {
     props.logout();
   };
@@ -24,7 +24,7 @@ const Header = props => {
           </div>
         ) : (
           <div className={classes.loginBlock}>
-            <NavLink to="/login">LOGIN</NavLink>
+            <NavLink to="/login" activeClassName={classes.active}>LOGIN</NavLink>
           </div>
         )}
       </div>

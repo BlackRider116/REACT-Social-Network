@@ -8,10 +8,12 @@ import { Input } from "../../common/FormControl/FormControl";
 import { connect } from "react-redux";
 import { login } from "../../redux/reduceAuth";
 import { Redirect } from "react-router-dom";
+import styles from "../../common/FormControl/FormControl.module.css"
 
 const maxLength30 = maxLengthCreator(30);
 
 const LoginForm = props => {
+  // debugger
   return (
     <form onSubmit={props.handleSubmit}>
       <div>
@@ -35,6 +37,9 @@ const LoginForm = props => {
         <Field name="rememberMe" component="input" type="checkbox" /> remember
         me
       </div>
+      {props.error && <div className={styles.errorText}>
+        {props.error}
+      </div>}
       <div>
         <button>Sign in</button>
       </div>
@@ -48,7 +53,7 @@ const Login = props => {
   const onSubmit = formData => {
     props.login(formData.email, formData.password, formData.rememberMe);
   };
-  
+
   if (props.isAuth) {
     return <Redirect to="/profile" />;
   }
