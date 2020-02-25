@@ -1,5 +1,4 @@
 const ADD_MESSAGE = "ADD-MESSAGE";
-const INPUT_MESSAGE = "INPUT-MESSAGE";
 
 const initialState = {
   usersDialog: [
@@ -59,13 +58,11 @@ const initialState = {
     { id: 6, message: "Yo" },
     { id: 7, message: "BlaBla" }
   ],
-  inputMessage: "bla bla bla"
 };
 
 const reduceDialogs = (state = initialState, action) => {
   switch (action.type) {
     case ADD_MESSAGE:
-      const inputMessage = state.inputMessage;
       const messageId = state.messages[state.messages.length - 1].id;
       return {
         ...state,
@@ -73,15 +70,9 @@ const reduceDialogs = (state = initialState, action) => {
           ...state.messages,
           {
             id: messageId + 1,
-            message: inputMessage
+            message: action.message.newMessage
           }
         ],
-        inputMessage: ""
-      };
-    case INPUT_MESSAGE:
-      return {
-        ...state,
-        inputMessage: action.textMessage
       };
 
     default:
@@ -89,11 +80,6 @@ const reduceDialogs = (state = initialState, action) => {
   }
 };
 
-export const addMessage = () => ({ type: ADD_MESSAGE });
-
-export const inputMessage = message => ({
-  type: INPUT_MESSAGE,
-  textMessage: message
-});
+export const addNewMessage = (message) => ({ type: ADD_MESSAGE, message });
 
 export default reduceDialogs;

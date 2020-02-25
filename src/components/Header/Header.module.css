@@ -9,12 +9,13 @@
     padding-left: 10px;
 }
 
-.loginBlock {
+
+.loginBlockPosition {
     float: right;
     padding: 5px;
 }
 
-.loginBlock a {
+.loginBlockButton, .loginBlock a {
     position: relative;
     display: inline-block;
     width: 100px;
@@ -25,6 +26,7 @@
     text-decoration: none;
     text-shadow: 0 -1px 1px #777;
     color: #fff;
+    font-size: 15px;
     outline: none;
     border: 1px solid black;
     border-radius: 5px;
@@ -33,25 +35,56 @@
     margin: 2px
 }
 
-.loginBlockName {
-    position: relative;
-    display: inline-block;
-    width: 100px;
-    height: 2.5em;
-    line-height: 2.5em;
-    vertical-align: middle;
-    text-align: center;
+.loginBlockButton a.active {
+    color: gold;
     text-decoration: none;
-    text-shadow: 0 -1px 1px #777;
+    box-shadow: 0 0 0 60px rgba(0,0,0,.05) inset;
+  }
+
+.loginBlockName {
+    font-size: 25px;
     color: #fff;
-    outline: none;
-    border: 1px solid black;
-    border-radius: 5px;
-    box-shadow: 0 0 0 60px rgba(0, 0, 0, 0) inset, .1em .1em .2em rgb(0, 2, 136);
-    background: linear-gradient(rgb(117, 117, 251), rgb(69, 56, 244) 48%, rgb(2, 6, 234) 52%, rgb(37, 23, 240));
-    margin: 2px
 }
+
 
 
 /* color: white;
     text-decoration: none;  убрать нижние подчеркивания */
+
+    /* .loginBlock a{
+        display: block;
+        width:80px;
+        margin: 20px auto;
+        vertical-align: top;
+        padding: 7px 20px;
+        font-family: inherit;
+        font-size: 15px;
+        color: #111;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: 0 0 2px rgba(255, 255, 255, 1);
+        background-color: #ccc;
+        background-clip: padding-box;
+        border: 1px solid;
+        border-color: #202020 #1a1a1a #111;
+        border-radius: 2px;
+        background-image: -webkit-linear-gradient(top, #efefef, #777);
+        background-image: -moz-linear-gradient(top, #efefef, #777);
+        background-image: -o-linear-gradient(top, #efefef, #777);
+        background-image: linear-gradient(to bottom, #efefef, #777);
+        -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.09), 0 1px 1px rgba(0, 0, 0, 0.3);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.09), 0px 1px 1px rgba(0, 0, 0, 0.2);
+      }
+      .loginBlock a.hover {
+        background-color: #aaaaaa;
+        background-image: -webkit-linear-gradient(top, #ccc, #555);
+        background-image: -moz-linear-gradient(top, #ccc, #555);
+        background-image: -o-linear-gradient(top, #ccc, #555);
+        background-image: linear-gradient(to bottom, #ccc, #555);
+      }
+      .loginBlock a.active, .loginBlock.active {
+        background-color: #b42f32;
+        border-color: #1c1c1c #202020 #222;
+        -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.09);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.09);
+      } */
