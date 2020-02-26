@@ -20,7 +20,7 @@ const ProfileInfo = props => {
           alt="AvaPhoto"
         />
       </div>
-      <ProfileStatus status={props.status} updateUserStatus={props.updateUserStatus}/>
+      <ProfileStatus {...props} status={props.status} updateUserStatus={props.updateUserStatus}/>
     </div>
   );
 };

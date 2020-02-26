@@ -70,7 +70,7 @@ const reduceDialogs = (state = initialState, action) => {
           ...state.messages,
           {
             id: messageId + 1,
-            message: action.message.newMessage
+            message: action.message
           }
         ],
       };
