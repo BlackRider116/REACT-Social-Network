@@ -12,7 +12,9 @@ const ProfileStatus = props => {
   }, [props.status]);
 
   const activatedEditMode = () => {
-    setEdiMode(true);
+    if (userId === undefined) {
+      setEdiMode(true);
+    }
   };
   const deactivatedEditMode = () => {
     setEdiMode(false);
@@ -27,7 +29,7 @@ const ProfileStatus = props => {
     <div className={classes.item}>
       {!editMode && (
         <div>
-          <span onDoubleClick={!userId && activatedEditMode}>
+          <span onDoubleClick={activatedEditMode}>
             {props.status || "<<<The user did not set the status>>>"}
           </span>
         </div>

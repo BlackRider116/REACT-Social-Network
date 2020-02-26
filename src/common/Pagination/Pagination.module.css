@@ -1,0 +1,74 @@
+.pagination {
+  width: 650px;
+  margin: 0 auto;
+}
+
+.displayNone {
+  display: none;
+}
+
+.buttonsColor {
+  margin-inline-end: 1px;
+  margin-inline-start: 1px;
+  background-color: rgb(184, 183, 183);
+  border: 1px solid rgb(156, 156, 156);
+}
+
+.jump {
+  margin-inline-end: 3px;
+  margin-inline-start: 3px;
+  background-color: rgb(8, 172, 2);
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.pageNumber {
+  font-weight: bold;
+  background-color: rgb(8, 172, 2);
+  border: 2px solid black;
+  color: black;
+  transition: all 0.3s linear 0s;
+
+  /* margin-block-end: 10px;
+  margin-inline-end: 10px; */
+  /* font-weight: bold; */
+  /* margin-inline-end: 1px;
+  margin-inline-start: 1px; */
+
+  /* display: block; */
+  /* font: 500 26px/61px arial; */
+  /* height: 64px; */
+  /* margin: 0 auto; */
+  /* overflow: hidden; */
+  /* text-align: center; */
+  /* text-decoration: none; */
+  /* width: 160px; */
+  /* animation: credits 1s infinite; */
+  /* -webkit-animation: credits 1s infinite; */
+  /* animation-name: credits; */
+  /* -webkit-animation-name: credits; */
+
+  /* display:inline-block;
+    outline:none;
+    padding: 9px 18px;
+    margin-right:10px;
+    border: none; */
+
+  /* padding: 9px 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #fff;
+  background-color: #7ec4ce; */
+
+  /* outline: none; */
+  /* width: 200px; */
+  /* height: 42.5px; */
+
+  /* border-radius: 10px; */
+  /* color: #fff; */
+  /* font-size: 20pt; */
+  /* text-align: center; */
+  /* padding-top: 7.5px; */
+  /* cursor: pointer; */
+  /* font-family: impact; */
+}

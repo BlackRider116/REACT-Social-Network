@@ -1,84 +1,19 @@
 import React from "react";
-import styles from "./Users.module.css";
-import avatarDefault from "./../../../assets/image/avatarDefault.jpg";
-import { NavLink } from "react-router-dom";
 import Preloader from "../../../common/Preloader/Preloader";
+import Pagination from "../../../common/Pagination/Pagination";
+import UserPage from "./UserPage";
 
 const Users = props => {
-  let numberOfPage = Math.ceil(props.totalCount / props.usersCount);
-  let pages = [];
-  for (let i = 1; i <= numberOfPage; i++) {
-    pages.push(i);
-  }
-  pages.length = 40;
-
+  // debugger
   return (
     <div>
-      <div>
-        {pages.map(p => {
-          return (
-            <span
-              key={p}
-              className={props.numberPage === p ? styles.pageNumber : undefined}
-              onClick={() => {
-                props.onNumberPage(p);
-              }}
-            >{` ${p}`}</span>
-          );
-        })}
-      </div>
-      <div>
-        {props.isLoading ? (
-          <Preloader />
-        ) : (
-          props.users.map(u => (
-            <div key={u.id}>
-              <span>
-                <div>
-                  <NavLink to={`/profile/${u.id}`}>
-                    <img
-                      alt="avatarDefault"
-                      src={
-                        u.photos.small !== null ? u.photos.small : avatarDefault
-                      }
-                      className={styles.avatar}
-                    />
-                  </NavLink>
-                </div>
-                <div>
-                  {u.followed ? (
-                    <button
-                      onClick={() => {
-                        props.deleteFollowThunk(u.id);
-                      }}
-                    >
-                      UNFOLLOW
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        props.postFollowThunk(u.id);
-                      }}
-                    >
-                      FOLLOW
-                    </button>
-                  )}
-                </div>
-              </span>
-              <span>
-                <span>
-                  <div>{u.name}</div>
-                  <div>{u.status}</div>
-                </span>
-                <span>
-                  <div>{"u.location.cityName"}</div>
-                  <div>{"u.location.country"}</div>
-                </span>
-              </span>
-            </div>
-          ))
-        )}
-      </div>
+      <Pagination
+        totalItemsCount={props.totalCount}
+        usersCount={props.usersCount}
+        numberPage={props.numberPage}
+        onNumberPage={props.onNumberPage}
+      />
+      {props.isLoading ? <Preloader /> : <UserPage {...props} />}
     </div>
   );
 };

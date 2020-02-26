@@ -1,6 +1,6 @@
 import { getAuthThunk } from "./reduceAuth";
 
-const INITIALIZED_SUCCESS = "INITIALIZED_SUCCESS";
+const INITIALIZED_SUCCESS = "/auth/me/INITIALIZED_SUCCESS";
 
 const initialState = {
   initialized: false,
@@ -22,11 +22,10 @@ const reduceApp = (state = initialState, action) => {
 const setInitialization = () => ({ type: INITIALIZED_SUCCESS });
 
 export const initializeApp = () => (dispatch) => {
-  let promise = dispatch(getAuthThunk())
+  const promise = dispatch(getAuthThunk())
   promise.finally(() => {
     dispatch(setInitialization())
   })
-
 }
 
 
