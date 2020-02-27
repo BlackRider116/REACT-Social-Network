@@ -4,9 +4,10 @@ import { NavLink } from "react-router-dom";
 import FriendsOnline from "./Friends/FriendsOnline/FriendsOnline";
 
 const Navbar = props => {
-  // debugger
+
   let friendsOnline = props.friends.map(friend => <FriendsOnline state={friend} key={friend.id}/>);
   friendsOnline.length = 6;
+
   return (
     <nav className={classes.nav}>
       <div className={classes.item}>
@@ -49,4 +50,5 @@ const Navbar = props => {
   );
 };
 
-export default Navbar;
+export default Navbar
+

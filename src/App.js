@@ -5,17 +5,20 @@ import News from "./components/Navbar/News/News";
 import Setting from "./components/Setting/Setting";
 import Music from "./components/Navbar/Music/Music";
 import Sidebar from "./components/Sidebar/Sidevar";
-import DialogsContainer from "./components/Navbar/Dialogs/DialogsContainer";
 import NavbarContainer from "./components/Navbar/NavbarContainer";
-import FriendsContainer from "./components/Navbar/Friends/FriendsContainer";
-import UsersContainer from "./components/Navbar/Users/UsersContainer";
-import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { initializeApp } from "./redux/reduceApp";
 import Preloader from "./common/Preloader/Preloader";
+
+import withSuspense from "../src/hoc/withSuspense";
+const DialogsContainer = React.lazy(() => import('./components/Navbar/Dialogs/DialogsContainer'))
+const FriendsContainer = React.lazy(() => import('./components/Navbar/Friends/FriendsContainer'))
+const UsersContainer = React.lazy(() => import('./components/Navbar/Users/UsersContainer'))
+const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'))
+
 
 class App extends React.Component {
 
@@ -30,13 +33,13 @@ class App extends React.Component {
                 <HeaderContainer />
                 <NavbarContainer />
                 <div className={classes.content}>
-                    <Route path="/dialogs" render={() => <DialogsContainer />} />
-                    <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
+                    <Route path="/dialogs" render={withSuspense(DialogsContainer)} />
+                    <Route path="/profile/:userId?" render={withSuspense(ProfileContainer)} />
                     <Route path="/news" render={() => <News />} />
                     <Route path="/music" render={() => <Music />} />
                     <Route path="/setting" render={() => <Setting />} />
-                    <Route path="/users" render={() => <UsersContainer />} />
-                    <Route path="/friends" render={() => <FriendsContainer />} />
+                    <Route path="/users" render={withSuspense(UsersContainer)} />
+                    <Route path="/friends" render={withSuspense(FriendsContainer)} />
                     <Route path="/login" render={() => <Login />} />
                 </div>
                 <Sidebar />

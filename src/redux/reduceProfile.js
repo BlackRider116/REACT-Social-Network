@@ -84,6 +84,7 @@ const setUserProfile = profile => ({
 
 
 export const getProfileThunk = (userId) => {
+
   return (dispatch) => {
     profileAPI.getProfile(userId)
       .then(promise => {
