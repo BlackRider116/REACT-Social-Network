@@ -1,19 +1,27 @@
-import React from "react";
-import Preloader from "../../../common/Preloader/Preloader";
+import React, { useState } from "react";
 import avatarDefault from "../../../assets/image/avatarDefault.jpg";
 import ProfileStatus from "./ProfileStatus";
 import classes from "./ProfileInfo.module.css";
+import ProfileUserInfo from "./ProfileUserInfo";
 
 const ProfileInfo = props => {
-  if (!props.profile) {
-    return <Preloader />;
-  }
-
   const photoSelected = e => {
     if (e.target.files.length) {
       props.savePhoto(e.target.files[0]);
     }
   };
+
+  const onSubmit = formData => {
+    console.log(props.profile!==formData + "   1");
+    if (props.profile===formData ) {
+      props.saveProfile(formData);
+     
+      console.log(props.profile==formData);
+      console.log(formData);
+      return
+    }
+  };
+
 
   return (
     <div>
@@ -21,7 +29,7 @@ const ProfileInfo = props => {
         <img
           className={classes.avatar}
           src={
-            props.profile.photos.large !== null
+            props.profile.photos.small !== null
               ? props.profile.photos.large
               : avatarDefault
           }
@@ -33,6 +41,12 @@ const ProfileInfo = props => {
         {...props}
         status={props.status}
         updateUserStatus={props.updateUserStatus}
+      />
+      <ProfileUserInfo
+        {...props}
+        saveProfile={props.saveProfile}
+        onSubmit={onSubmit}
+        initialValues={props.profile}
       />
     </div>
   );

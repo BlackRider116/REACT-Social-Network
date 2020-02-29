@@ -1,10 +1,10 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
+import {reduxForm } from "redux-form";
 import {
   maxLengthCreator,
   required
 } from "../../utilities/validation/validation";
-import { InputType } from "../../common/FormControl/FormControl";
+import { fieldValue } from "../../common/FormControl/FormControl";
 import { connect } from "react-redux";
 import { login } from "../../redux/reduceAuth";
 import { Redirect } from "react-router-dom";
@@ -13,31 +13,17 @@ import styles from "../../common/FormControl/FormControl.module.css";
 const maxLength30 = maxLengthCreator(30);
 
 const LoginForm = props => {
-  // debugger
+ 
   return (
     <form onSubmit={props.handleSubmit}>
       <div>
-        <Field
-          validate={[required, maxLength30]}
-          name="email"
-          component={InputType}
-          types="input"
-          placeholder="Email"
-        />
+        {fieldValue([required, maxLength30], "email", "input", "Email")}
       </div>
       <div>
-        <Field
-          validate={[required, maxLength30]}
-          name="password"
-          component={InputType}
-          types="input"
-          placeholder="Password"
-          type="password"
-        />
+        {fieldValue([required, maxLength30],"password","input","Password","password")}
       </div>
       <div>
-        <Field name="rememberMe" component="input" type="checkbox" /> remember
-        me
+        {fieldValue(null,"rememberMe","input", null, "checkbox")} remember me
       </div>
       {props.error && <div className={styles.errorText}>{props.error}</div>}
       <div>

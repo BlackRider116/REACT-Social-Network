@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import classes from "./ProfileInfo.module.css";
 
 const ProfileStatus = props => {
-  const [editMode, setEdiMode] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [status, setStatus] = useState(props.status);
 
   const userId = props.match.params.userId;
@@ -13,11 +13,11 @@ const ProfileStatus = props => {
 
   const activatedEditMode = () => {
     if (userId === undefined) {
-      setEdiMode(true);
+      setEditMode(true);
     }
   };
   const deactivatedEditMode = () => {
-    setEdiMode(false);
+    setEditMode(false);
     props.updateUserStatus(status);
   };
 
@@ -29,8 +29,9 @@ const ProfileStatus = props => {
     <div className={classes.item}>
       {!editMode && (
         <div>
+          <b>Status: </b>
           <span onDoubleClick={activatedEditMode}>
-            {props.status || "<<<The user did not set the status>>>"}
+            {props.status || "<<<Not indicated>>>"}
           </span>
         </div>
       )}
@@ -40,7 +41,7 @@ const ProfileStatus = props => {
             onChange={onStatusChange}
             onBlur={() => {
               setTimeout(() => {
-                setEdiMode(false);
+                setEditMode(false);
               }, 500);
             }}
             autoFocus={true}

@@ -42,7 +42,7 @@ const UserPage = ({ users, deleteFollowThunk, postFollowThunk, ...props }) => {
             <span>
               <div>{u.name}</div>
               <div>
-                {u.status ? u.status : "<<<The user did not set the status>>>"}
+                {u.status ? u.status : "<<<Not indicated>>>"}
               </div>
             </span>
           </span>

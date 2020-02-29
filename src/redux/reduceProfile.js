@@ -4,6 +4,7 @@ const ADD_POST = "/profile/ADD-POST";
 const SET_USER_PROFILE = "/profile/SET_USER_PROFILE";
 const SET_USER_STATUS = "/profile/SET_USER_STATUS"
 const SAVE_PHOTO_SUCCESS = "/profile/SAVE_PHOTO_SUCCESS"
+const SAVE_PROFILE_SUCCESS = "/profile/SAVE_PROFILE_SUCCESS"
 
 const initialState = {
   posts: [
@@ -72,7 +73,7 @@ const reduceProfile = (state = initialState, action) => {
     case SAVE_PHOTO_SUCCESS:
       return {
         ...state,
-        profile: {...state.profile, photos: action.photos}
+        profile: { ...state.profile, photos: action.photos }
       };
 
     default:
@@ -113,12 +114,20 @@ export const updateUserStatus = (status) => async (dispatch) => {
   }
 }
 
-const saveProtoSuccess = (photos) => ({type: SAVE_PHOTO_SUCCESS, photos})
+const saveProtoSuccess = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos })
 
 export const savePhoto = (photoFile) => async (dispatch) => {
   const response = await profileAPI.saveAvatarPhoto(photoFile)
   if (response.data.resultCode === 0) {
     dispatch(saveProtoSuccess(response.data.data.photos));
+  }
+}
+
+export const saveProfile = (profileInfo) => async (dispatch, getState) => {
+  const userId = getState().auth.userId
+  const response = await profileAPI.saveProfileInfo(profileInfo)
+  if (response.data.resultCode === 0) {
+    dispatch(getProfileThunk(userId))
   }
 }
 
