@@ -1,5 +1,5 @@
 import React from "react";
-import {reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 import {
   maxLengthCreator,
   required
@@ -9,21 +9,27 @@ import { connect } from "react-redux";
 import { login } from "../../redux/reduceAuth";
 import { Redirect } from "react-router-dom";
 import styles from "../../common/FormControl/FormControl.module.css";
+import stylesLogin from "./Login.module.css";
 
 const maxLength30 = maxLengthCreator(30);
 
 const LoginForm = props => {
- 
   return (
     <form onSubmit={props.handleSubmit}>
       <div>
         {fieldValue([required, maxLength30], "email", "input", "Email")}
       </div>
       <div>
-        {fieldValue([required, maxLength30],"password","input","Password","password")}
+        {fieldValue(
+          [required, maxLength30],
+          "password",
+          "input",
+          "Password",
+          "password"
+        )}
       </div>
       <div>
-        {fieldValue(null,"rememberMe","input", null, "checkbox")} remember me
+        {fieldValue(null, "rememberMe", "input", null, "checkbox")} remember me
       </div>
       {props.error && <div className={styles.errorText}>{props.error}</div>}
       <div>
@@ -48,6 +54,15 @@ const Login = props => {
     <div>
       <h1>Login</h1>
       <ReduxLoginForm onSubmit={onSubmit} />
+      <div>
+        <b>Test account:</b>
+        <div className={stylesLogin.tests}>
+          <b>Email:</b> free@samuraijs.com
+        </div>
+        <div className={stylesLogin.tests}>
+          <b>Password:</b> free
+        </div>
+      </div>
     </div>
   );
 };

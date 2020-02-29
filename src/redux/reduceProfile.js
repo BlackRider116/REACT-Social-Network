@@ -4,7 +4,6 @@ const ADD_POST = "/profile/ADD-POST";
 const SET_USER_PROFILE = "/profile/SET_USER_PROFILE";
 const SET_USER_STATUS = "/profile/SET_USER_STATUS"
 const SAVE_PHOTO_SUCCESS = "/profile/SAVE_PHOTO_SUCCESS"
-const SAVE_PROFILE_SUCCESS = "/profile/SAVE_PROFILE_SUCCESS"
 
 const initialState = {
   posts: [

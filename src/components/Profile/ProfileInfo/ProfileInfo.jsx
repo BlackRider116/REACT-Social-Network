@@ -11,17 +11,14 @@ const ProfileInfo = props => {
     }
   };
 
+  const[stateProfile, setStateProfile] = useState(props.profile)
+
   const onSubmit = formData => {
-    console.log(props.profile!==formData + "   1");
-    if (props.profile===formData ) {
+    if (formData !== stateProfile) {
+      setStateProfile(formData)
       props.saveProfile(formData);
-     
-      console.log(props.profile==formData);
-      console.log(formData);
-      return
     }
   };
-
 
   return (
     <div>
