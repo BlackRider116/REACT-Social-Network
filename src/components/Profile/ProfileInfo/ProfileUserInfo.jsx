@@ -3,7 +3,7 @@ import classes from "./ProfileInfo.module.css";
 import stylesError from "../../../common/FormControl/FormControl.module.css";
 import { reduxForm } from "redux-form";
 import {fieldValue } from "../../../common/FormControl/FormControl";
-import {requiredProfile } from "../../../utilities/validation/validation";
+import { required } from "../../../utilities/validation/validation";
 
 const ProfileInfoForm = ({ profile, error, ...props }) => {
   return (
@@ -16,19 +16,19 @@ const ProfileInfoForm = ({ profile, error, ...props }) => {
 
       <div>
         <b>Full Name: </b>
-        {fieldValue(requiredProfile, "fullName", "input",null,null,profile.fullName)}
+        {fieldValue(required, "fullName", "input",null,null,profile.fullName)}
       </div>
       <div>
         <b>About me: </b>
-        {fieldValue(requiredProfile, "aboutMe",null)}
+        {fieldValue(required, "aboutMe",null)}
       </div>
       <div>
         <b>Looking for a job: </b>
-        {fieldValue(requiredProfile, "lookingForAJob", "input",null,"checkbox")}
+        {fieldValue(required, "lookingForAJob", "input",null,"checkbox")}
       </div>
       <div>
         <b>My professional skills: </b>
-        {fieldValue(requiredProfile, "lookingForAJobDescription",null,null,null)}
+        {fieldValue(required, "lookingForAJobDescription",null,null,null)}
       </div>
       <div>
         <b>Contacts: </b>
@@ -36,7 +36,7 @@ const ProfileInfoForm = ({ profile, error, ...props }) => {
           return (
             <div key={contact} className={classes.contact}>
               <b>{contact}: </b>
-              {fieldValue(requiredProfile, 'contacts.'+contact, "input", null, null)}
+              {fieldValue([], 'contacts.'+contact, "input", null, null)}
             </div>
           );
         })}

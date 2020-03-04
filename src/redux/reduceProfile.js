@@ -140,44 +140,34 @@ export const saveProfile = (profileInfo) => async (dispatch, getState) => {
     dispatch(getProfileThunk(userId))
     dispatch(profileUpdateSuccess(true))
   } else {
-    let errorName = ''
-    const fieldIsRequired = '   Field is required'
+    let errorInputForm = ''
     const invalidUrlFormat = '   Invalid url format'
-    const obj = response.data.messages[0]
-    if (obj === "The AboutMe field is required. (AboutMe)") {
-      errorName = { 'aboutMe': fieldIsRequired }
+    const errorMessage = response.data.messages[0]
+    if (errorMessage === "Invalid url format (Contacts->Facebook)") {
+      errorInputForm = { 'contacts': { 'facebook': invalidUrlFormat } }
     }
-    if (obj === "The FullName field is required. (FullName)") {
-      errorName = { 'fullName': fieldIsRequired }
+    if (errorMessage === "Invalid url format (Contacts->Website)") {
+      errorInputForm = { 'contacts': { 'website': invalidUrlFormat } }
     }
-    if (obj === "The LookingForAJobDescription field is required. (LookingForAJobDescription)") {
-      errorName = { 'lookingForAJobDescription': fieldIsRequired }
+    if (errorMessage === "Invalid url format (Contacts->Vk)") {
+      errorInputForm = { 'contacts': { 'vk': invalidUrlFormat } }
     }
-    if (obj === "Invalid url format (Contacts->Facebook)") {
-      errorName = { 'contacts': { 'facebook': invalidUrlFormat } }
+    if (errorMessage === "Invalid url format (Contacts->Twitter)") {
+      errorInputForm = { 'contacts': { 'twitter': invalidUrlFormat } }
     }
-    if (obj === "Invalid url format (Contacts->Website)") {
-      errorName = { 'contacts': { 'website': invalidUrlFormat } }
+    if (errorMessage === "Invalid url format (Contacts->Instagram)") {
+      errorInputForm = { 'contacts': { 'instagram': invalidUrlFormat } }
     }
-    if (obj === "Invalid url format (Contacts->Vk)") {
-      errorName = { 'contacts': { 'vk': invalidUrlFormat } }
+    if (errorMessage === "Invalid url format (Contacts->Youtube)") {
+      errorInputForm = { 'contacts': { 'youtube': invalidUrlFormat } }
     }
-    if (obj === "Invalid url format (Contacts->Twitter)") {
-      errorName = { 'contacts': { 'twitter': invalidUrlFormat } }
+    if (errorMessage === "Invalid url format (Contacts->Github)") {
+      errorInputForm = { 'contacts': { 'github': invalidUrlFormat } }
     }
-    if (obj === "Invalid url format (Contacts->Instagram)") {
-      errorName = { 'contacts': { 'instagram': invalidUrlFormat } }
+    if (errorMessage === "Invalid url format (Contacts->MainLink)") {
+      errorInputForm = { 'contacts': { 'mainLink': invalidUrlFormat } }
     }
-    if (obj === "Invalid url format (Contacts->Youtube)") {
-      errorName = { 'contacts': { 'youtube': invalidUrlFormat } }
-    }
-    if (obj === "Invalid url format (Contacts->Github)") {
-      errorName = { 'contacts': { 'github': invalidUrlFormat } }
-    }
-    if (obj === "Invalid url format (Contacts->MainLink)") {
-      errorName = { 'contacts': { 'mainLink': invalidUrlFormat } }
-    }
-    dispatch(stopSubmit("profileUserInfo", errorName))
+    dispatch(stopSubmit("profileUserInfo", errorInputForm))
     dispatch(profileUpdateSuccess(false))
   }
   setTimeout(() => {
