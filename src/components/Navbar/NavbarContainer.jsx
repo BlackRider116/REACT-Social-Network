@@ -5,7 +5,7 @@ import {connect} from "react-redux"
 const mapStateToProps = state => {
 
   return {
-    friends: state.friendsPage.friends,
+
   };
 };
 

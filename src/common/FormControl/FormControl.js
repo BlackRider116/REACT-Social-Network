@@ -3,7 +3,6 @@ import styles from './FormControl.module.css'
 import { Field} from "redux-form";
 
 const InputType = ({ input, meta, ...props }) => {
-    // console.log(props.input)
     const hasError = meta.touched && meta.error
     return (
         <span className={`${styles.formControl} ${hasError ? styles.error : ''}`}>
@@ -14,8 +13,7 @@ const InputType = ({ input, meta, ...props }) => {
     )
 }
 
-export const fieldValue = (validate, name, types, placeholder, type, value) => {
-    
+export const fieldValue = (validate, name, types, placeholder, type) => {
     return <Field
         validate={validate}
         name={name}
@@ -23,6 +21,5 @@ export const fieldValue = (validate, name, types, placeholder, type, value) => {
         type={type}
         component={InputType}
         types={types}
-        value={value}
     />
 }

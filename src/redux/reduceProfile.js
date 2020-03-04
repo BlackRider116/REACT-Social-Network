@@ -1,9 +1,11 @@
 import { profileAPI } from "../api/api";
+import { stopSubmit } from 'redux-form'
 
 const ADD_POST = "/profile/ADD-POST";
 const SET_USER_PROFILE = "/profile/SET_USER_PROFILE";
 const SET_USER_STATUS = "/profile/SET_USER_STATUS"
 const SAVE_PHOTO_SUCCESS = "/profile/SAVE_PHOTO_SUCCESS"
+const PROFILE_UPDATE_SUCCESS = "/profile/PROFILE_UPDATE_SUCCESS"
 
 const initialState = {
   posts: [
@@ -37,6 +39,7 @@ const initialState = {
     }
   ],
   profile: null,
+  profileUpdate: null,
   status: ""
 };
 
@@ -73,6 +76,11 @@ const reduceProfile = (state = initialState, action) => {
       return {
         ...state,
         profile: { ...state.profile, photos: action.photos }
+      };
+    case PROFILE_UPDATE_SUCCESS:
+      return {
+        ...state,
+        profileUpdate: action.isUpdate
       };
 
     default:
@@ -122,12 +130,59 @@ export const savePhoto = (photoFile) => async (dispatch) => {
   }
 }
 
+export const profileUpdateSuccess = (isUpdate) => ({ type: PROFILE_UPDATE_SUCCESS, isUpdate })
+
+
 export const saveProfile = (profileInfo) => async (dispatch, getState) => {
   const userId = getState().auth.userId
   const response = await profileAPI.saveProfileInfo(profileInfo)
   if (response.data.resultCode === 0) {
     dispatch(getProfileThunk(userId))
+    dispatch(profileUpdateSuccess(true))
+  } else {
+    let errorName = ''
+    const fieldIsRequired = '   Field is required'
+    const invalidUrlFormat = '   Invalid url format'
+    const obj = response.data.messages[0]
+    if (obj === "The AboutMe field is required. (AboutMe)") {
+      errorName = { 'aboutMe': fieldIsRequired }
+    }
+    if (obj === "The FullName field is required. (FullName)") {
+      errorName = { 'fullName': fieldIsRequired }
+    }
+    if (obj === "The LookingForAJobDescription field is required. (LookingForAJobDescription)") {
+      errorName = { 'lookingForAJobDescription': fieldIsRequired }
+    }
+    if (obj === "Invalid url format (Contacts->Facebook)") {
+      errorName = { 'contacts': { 'facebook': invalidUrlFormat } }
+    }
+    if (obj === "Invalid url format (Contacts->Website)") {
+      errorName = { 'contacts': { 'website': invalidUrlFormat } }
+    }
+    if (obj === "Invalid url format (Contacts->Vk)") {
+      errorName = { 'contacts': { 'vk': invalidUrlFormat } }
+    }
+    if (obj === "Invalid url format (Contacts->Twitter)") {
+      errorName = { 'contacts': { 'twitter': invalidUrlFormat } }
+    }
+    if (obj === "Invalid url format (Contacts->Instagram)") {
+      errorName = { 'contacts': { 'instagram': invalidUrlFormat } }
+    }
+    if (obj === "Invalid url format (Contacts->Youtube)") {
+      errorName = { 'contacts': { 'youtube': invalidUrlFormat } }
+    }
+    if (obj === "Invalid url format (Contacts->Github)") {
+      errorName = { 'contacts': { 'github': invalidUrlFormat } }
+    }
+    if (obj === "Invalid url format (Contacts->MainLink)") {
+      errorName = { 'contacts': { 'mainLink': invalidUrlFormat } }
+    }
+    dispatch(stopSubmit("profileUserInfo", errorName))
+    dispatch(profileUpdateSuccess(false))
   }
+  setTimeout(() => {
+    dispatch(profileUpdateSuccess(null))
+  }, 1000);
 }
 
 export default reduceProfile;

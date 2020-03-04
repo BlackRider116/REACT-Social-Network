@@ -75,10 +75,7 @@ export const getUsersThunk = (usersCount, pageNumber) => async (dispatch) => {
   dispatch(setTotalCount(response.totalCount));
 
   dispatch(setLoading(false));
-
-
 }
-
 
 export const postFollowThunk = (userId) => async (dispatch) => {
   const response = await followAPI.postFollow(userId)

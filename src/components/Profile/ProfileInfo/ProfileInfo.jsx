@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import avatarDefault from "../../../assets/image/avatarDefault.jpg";
 import ProfileStatus from "./ProfileStatus";
 import classes from "./ProfileInfo.module.css";
-import ProfileUserInfo from "./ProfileUserInfo";
+import ProfileInfoForm, { ProfileUserInfo } from "./ProfileUserInfo";
 
-const ProfileInfo = props => {
+const ProfileInfo = ({ profileUpdate, ...props }) => {
   const photoSelected = e => {
     if (e.target.files.length) {
       props.savePhoto(e.target.files[0]);
     }
   };
 
-  const[stateProfile, setStateProfile] = useState(props.profile)
+  const [editMode, setEditMode] = useState(false);
 
   const onSubmit = formData => {
-    if (formData !== stateProfile) {
-      setStateProfile(formData)
+    if (formData !== props.profile) {
       props.saveProfile(formData);
+    } else if (profileUpdate !== false) {
+      setEditMode(false);
     }
+  };
+
+  useEffect(() => {
+    if (profileUpdate === true) {
+      setEditMode(false);
+    }
+
+  }, [profileUpdate]);
+
+  const onEditMode = () => {
+    setEditMode(true);
   };
 
   return (
@@ -39,13 +51,21 @@ const ProfileInfo = props => {
         status={props.status}
         updateUserStatus={props.updateUserStatus}
       />
-      <ProfileUserInfo
-        {...props}
-        saveProfile={props.saveProfile}
-        onSubmit={onSubmit}
-        initialValues={props.profile}
-      />
+      {!editMode ? (
+        <ProfileUserInfo
+          onEditMode={onEditMode}
+          profile={props.profile}
+          isOwner={props.isOwner}
+        />
+      ) : (
+        <ProfileInfoForm
+          {...props}
+          onSubmit={onSubmit}
+          initialValues={props.profile}
+        />
+      )}
     </div>
   );
 };
+
 export default ProfileInfo;

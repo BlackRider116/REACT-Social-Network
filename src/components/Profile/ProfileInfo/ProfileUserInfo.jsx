@@ -1,32 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import classes from "./ProfileInfo.module.css";
+import stylesError from "../../../common/FormControl/FormControl.module.css";
 import { reduxForm } from "redux-form";
 import {fieldValue } from "../../../common/FormControl/FormControl";
 import {requiredProfile } from "../../../utilities/validation/validation";
 
-const ProfileUserInfoForm = ({ profile, ...props }) => {
-
-  const [editMode, setEditMode] = useState(false);
-
+const ProfileInfoForm = ({ profile, error, ...props }) => {
   return (
     <form onSubmit={props.handleSubmit}>
-      {!props.isOwner && (!editMode ? <button onClick={()=>{setEditMode(true)}}>Edit</button> 
-                                    : <button onClick={()=>{setEditMode(false)}}>Save</button>)}
+      {!props.isOwner &&  <button>Save</button>}
+
+      <div>
+        {error && <div className={stylesError.errorText}>{error}</div>}
+      </div>
+
       <div>
         <b>Full Name: </b>
-        {!editMode ? profile.fullName : fieldValue(requiredProfile, "fullName", "input",null,null,profile.fullName)}
+        {fieldValue(requiredProfile, "fullName", "input",null,null,profile.fullName)}
       </div>
       <div>
         <b>About me: </b>
-        {!editMode ? profile.aboutMe : fieldValue(requiredProfile, "aboutMe",null)}
+        {fieldValue(requiredProfile, "aboutMe",null)}
       </div>
       <div>
         <b>Looking for a job: </b>
-        {!editMode ? (profile.lookingForAJob ? "Yes" : "No") : fieldValue(requiredProfile, "lookingForAJob", "input",null,"checkbox")}
+        {fieldValue(requiredProfile, "lookingForAJob", "input",null,"checkbox")}
       </div>
       <div>
-        <b>Looking for a job description: </b>
-        {!editMode ? profile.lookingForAJobDescription : fieldValue(requiredProfile, "lookingForAJobDescription",null,null,null)}
+        <b>My professional skills: </b>
+        {fieldValue(requiredProfile, "lookingForAJobDescription",null,null,null)}
       </div>
       <div>
         <b>Contacts: </b>
@@ -34,7 +36,7 @@ const ProfileUserInfoForm = ({ profile, ...props }) => {
           return (
             <div key={contact} className={classes.contact}>
               <b>{contact}: </b>
-              {!editMode ? profile.contacts[contact] : fieldValue(requiredProfile, 'contacts.'+contact, "input", null, null)}
+              {fieldValue(requiredProfile, 'contacts.'+contact, "input", null, null)}
             </div>
           );
         })}
@@ -43,6 +45,38 @@ const ProfileUserInfoForm = ({ profile, ...props }) => {
   );
 };
 
-const ReduxProfileUserInfo = reduxForm({ form: "profileUserInfo" })(ProfileUserInfoForm);
 
-export default ReduxProfileUserInfo;
+export const ProfileUserInfo = ({profile, onEditMode, isOwner}) => {
+  return (
+    <div>
+      {!isOwner && <button onClick={onEditMode}>Edit</button>}
+      <div>
+        <b>Full Name: </b>{profile.fullName}
+      </div>
+      <div>
+        <b>About me: </b>{profile.aboutMe}
+      </div>
+      <div>
+        <b>Looking for a job: </b>{profile.lookingForAJob ? "Yes" : "No"}
+      </div>
+      <div>
+        <b>My professional skills: </b>{profile.lookingForAJobDescription}
+      </div>
+      <div>
+        <b>Contacts: </b>
+        {Object.keys(profile.contacts).map(contact => {
+          return (
+            <div key={contact} className={classes.contact}>
+              <b>{contact}: </b>
+              {profile.contacts[contact]}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  )
+}
+
+const ReduxProfileInfoForm = reduxForm({ form: "profileUserInfo" })(ProfileInfoForm);
+
+export default ReduxProfileInfoForm;

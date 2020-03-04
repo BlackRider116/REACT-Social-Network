@@ -25,7 +25,7 @@ const UserPage = ({ users, deleteFollowThunk, postFollowThunk, ...props }) => {
                     deleteFollowThunk(u.id);
                   }}
                 >
-                  UNFOLLOW
+                  Unsubscribe
                 </button>
               ) : (
                 <button
@@ -33,7 +33,7 @@ const UserPage = ({ users, deleteFollowThunk, postFollowThunk, ...props }) => {
                     postFollowThunk(u.id);
                   }}
                 >
-                  FOLLOW
+                  Subscribe
                 </button>
               )}
             </div>
