@@ -9,10 +9,10 @@
   /* width: 6em */
 
   grid-template-areas:
-    "header header header"
-    "nav content sidebar";
+    "header header"
+    "nav content";
   grid-template-rows: 3.3em 100%;
-  grid-template-columns: 20% 60% 20%;
+  grid-template-columns: 20% 80%;
   grid-gap: 1px;
 }
 

@@ -14,6 +14,12 @@ const Users = props => {
         onNumberPage={props.onNumberPage}
       />
       {props.isLoading ? <Preloader /> : <UserPage {...props} />}
+      <Pagination
+        totalItemsCount={props.totalCount}
+        usersCount={props.usersCount}
+        numberPage={props.numberPage}
+        onNumberPage={props.onNumberPage}
+      />
     </div>
   );
 };

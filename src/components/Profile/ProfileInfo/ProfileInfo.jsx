@@ -38,7 +38,7 @@ const ProfileInfo = ({ profileUpdate, ...props }) => {
         <img
           className={classes.avatar}
           src={
-            props.profile.photos.small !== null
+            props.profile.photos.large !== null
               ? props.profile.photos.large
               : avatarDefault
           }

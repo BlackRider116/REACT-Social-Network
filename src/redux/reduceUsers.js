@@ -70,7 +70,7 @@ export const getUsersThunk = (usersCount, pageNumber) => async (dispatch) => {
   dispatch(setLoading(true));
 
   const response = await usersAPI.getUsers(usersCount, pageNumber)
-
+// debugger
   dispatch(setUsers(response.items));
   dispatch(setTotalCount(response.totalCount));
 

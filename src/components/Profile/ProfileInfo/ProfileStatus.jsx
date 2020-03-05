@@ -30,13 +30,14 @@ const ProfileStatus = props => {
       {!editMode && (
         <div>
           <b>Status: </b>
-          <span onDoubleClick={activatedEditMode}>
+          <span onClick={activatedEditMode}>
             {props.status || "<<<Not indicated>>>"}
           </span>
         </div>
       )}
       {editMode && (
         <div>
+          <b>Status: </b>
           <input
             onChange={onStatusChange}
             onBlur={() => {

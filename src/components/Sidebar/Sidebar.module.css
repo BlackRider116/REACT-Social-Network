@@ -1,6 +1,0 @@
-.sidebar {
-    grid-area: sidebar;
-    background-color: rgb(37, 4, 255); 
-    padding: 5%; /*отступ от краев*/
-    height: 100vh;
-  }
