@@ -1,8 +1,7 @@
 import React from "react";
 import classes from "./News.module.css";
 
-const News = ({ posts, ...props }) => {
-  // console.log(props.textPost)
+const News = ({ ...props }) => {
   const typePost = post => {
     if (post.type === "") {
       return null;
@@ -15,15 +14,18 @@ const News = ({ posts, ...props }) => {
     }
   };
 
-  // const submit = (values) => console.log('values');
-  const addPost = (ev) => {
-    ev.preventDefault()
-    props.addPostThunk(props.textPost)
-  }
+  const addPost = ev => {
+    ev.preventDefault();
+    props.addPostThunk(props.textPost);
+  };
 
   const onPostChange = ev => {
     let body = ev.target.value;
-    props.textPostAdd(body)
+    props.textPostAdd(body);
+  };
+
+  const previousPosts = () => {
+    props.getMyPosts(props.lastSeenId);
   };
 
   return (
@@ -35,32 +37,38 @@ const News = ({ posts, ...props }) => {
         <button onClick={addPost}>Add</button>
       </form>
 
-      {posts.map(post => (
-        <div key={post.id}>
-          {typePost(post)}
-          <div>
-            <p>{post.content}</p>
-            <button>{`💗 ${post.likes}`}</button>
-            <button
-              onClick={() => {
-                props.likePost(post.id);
-              }}
-            >{`👍`}</button>
-            <button
-              onClick={() => {
-                props.dislikePost(post.id);
-              }}
-            >{`👎`}</button>
-            <button
-              onClick={() => {
-                props.deletePost(post.id);
-              }}
-            >
-              Delete
-            </button>
+      {props.lastSeenId !== 0 &&
+        props.posts.map(post => (
+          <div key={post.id}>
+            {typePost(post)}
+            <div>
+              <p>{post.content}</p>
+              <button>{`💗 ${post.likes}`}</button>
+              <button
+                onClick={() => {
+                  props.likePost(post.id);
+                }}
+              >{`👍`}</button>
+              <button
+                onClick={() => {
+                  props.dislikePost(post.id);
+                }}
+              >{`👎`}</button>
+              <button
+                onClick={() => {
+                  props.deletePost(post.id);
+                }}
+              >
+                Delete
+              </button>
+
+              <button>{post.id}</button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      <div>
+        <button onClick={previousPosts}>Previous posts</button>
+      </div>
     </div>
   );
 };

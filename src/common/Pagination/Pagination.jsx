@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "./Pagination.module.css";
 
-const Pagination = ({totalItemsCount, usersCount, numberPage, onNumberPage, portionSize = 10}) => {
+const Pagination = ({totalCount, usersCount, numberPage, onNumberPage, portionSize = 10}) => {
 
-  let pagesCount = Math.ceil(totalItemsCount / usersCount);
+  let pagesCount = Math.ceil(totalCount / usersCount);
   let pages = [];
   for (let i = 1; i <= pagesCount; i++) {
     pages.push(i);
@@ -42,7 +42,7 @@ const Pagination = ({totalItemsCount, usersCount, numberPage, onNumberPage, port
 
   return (
     <>
-   { totalItemsCount !== 0 ? 
+   { totalCount !== 0 ? 
     <div className={styles.pagination}>
       {<button className={portionNumber > 1 ? styles.jump : styles.displayNone } onClick={() => {setPortionNumber(portionNumber-1)}}>JUMP</button>}
       {<button className={numberPage !== 1 ? styles.jump :  styles.displayNone } onClick={() => {prev()}}>PREV</button>}

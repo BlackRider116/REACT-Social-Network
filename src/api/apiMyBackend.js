@@ -6,7 +6,7 @@ const instance = axios.create({
 })
 
 export const postsAPI = {
-    startGet(lastSeenId = 0) {
+    getPosts(lastSeenId) {
         return instance.get(`/posts/seenPosts/${lastSeenId}`)
         .then(response => response.data)
         .catch(error => {

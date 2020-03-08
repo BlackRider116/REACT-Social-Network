@@ -1,6 +1,7 @@
 import { postsAPI, likeDislikeDeleteAPI } from "../api/apiMyBackend";
 
 const START_GET_POST = "/posts/seenPosts/START_GET_POST"
+const LAST_SEEN_ID = "/posts/seenPosts/LAST_SEEN_ID"
 const SET_LIKES = "/posts//likes/SET_LIKES"
 const DELETE_POST = "/posts//DELETE_POST"
 const ADD_POST = "/posts/ADD_POST"
@@ -25,6 +26,15 @@ const reduceNews = (state = initialState, action) => {
         ...state,
         ...action.payload
       };
+    case LAST_SEEN_ID:
+      return {
+        ...state,
+        posts: [
+          ...state.posts,
+          ...action.posts
+        ],
+        lastSeenId: action.lastSeenId
+      };
     case SET_LIKES:
       return {
         ...state,
@@ -36,13 +46,19 @@ const reduceNews = (state = initialState, action) => {
         posts: deletePostFilter(state.posts, action.postId)
       }
     case ADD_POST:
-console.log(action.payload)
+      if (!state.posts) {
+        return {
+          ...state,
+          posts: [
+            action.post,
+          ],
+          textPost: ''
+        }
+      }
       return {
         ...state,
         posts: [
-          {
-           ...action.payload.post
-          },
+          action.post,
           ...state.posts
         ],
         textPost: ''
@@ -52,13 +68,20 @@ console.log(action.payload)
   }
 };
 
-const setStartPosts = (posts, lastSeenId) => ({ type: START_GET_POST, payload: { posts, lastSeenId } });
+const setPosts = (posts, lastSeenId) => ({ type: START_GET_POST, payload: { posts, lastSeenId } });
 
-export const startGetPosts = () => async (dispatch) => {
-  const data = await postsAPI.startGet()
-  if (data.length !== 0) {
-    if (data.length >= 5) {
-      dispatch(setStartPosts(data.reverse(), data[data.length - 5].id))
+const setLastPosts = (posts, lastSeenId) => ({ type: LAST_SEEN_ID, posts, lastSeenId });
+
+export const getMyPosts = (lastSeenId = 0) => async (dispatch) => {
+  const data = await postsAPI.getPosts(lastSeenId)
+  if (lastSeenId !== 0) {
+    dispatch(setLastPosts(data.reverse(), data[data.length - 1].id))
+  }
+  else {
+    if (data.length !== 0) {
+      dispatch(setPosts(data.reverse(), data[data.length - 1].id))
+    } else {
+      dispatch(setPosts(null, 0))
     }
   }
 }
@@ -96,17 +119,19 @@ export const deletePost = (postId) => async (dispatch) => {
 }
 
 
-export const textPostAdd = textPost => ({type: TEXT, textPost})
-const addPost = post => ({type: ADD_POST, payload: {post}})
+export const textPostAdd = textPost => ({ type: TEXT, textPost })
+const addPost = post => ({ type: ADD_POST, post })
 export const addPostThunk = (content) => async (dispatch) => {
   const post = {
     id: 0,
     content,
     // type: undefined,
     // file: undefined,
-}
+  }
+
   const promise = await postsAPI.addPost(post)
   dispatch(addPost(promise))
 }
+
 
 export default reduceNews;

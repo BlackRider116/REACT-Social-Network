@@ -3,7 +3,7 @@ import News from "./News";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import {
-  startGetPosts,
+  getMyPosts,
   likePost,
   dislikePost,
   deletePost,
@@ -13,17 +13,20 @@ import {
 import Preloader from "../../../common/Preloader/Preloader";
 
 class NewsContainer extends React.Component {
+  
   componentDidMount() {
-    this.props.startGetPosts();
+    this.props.getMyPosts();
   }
   // componentDidUpdate() {
-  //   this.props.startGetPosts();
+    // console.log(this.props.lastSeenId)
+  //   if (this.props.lastSeenId!==0 && this.props.posts.length < 5) {
+  //     this.props.getMyPosts();
+  //   }
   // }
 
-
   render() {
-    if (!this.props.posts) return <Preloader />;
-    return <News {...this.props}  />;
+    if (this.props.lastSeenId!==0 && !this.props.posts) return <Preloader />;
+    return <News {...this.props}/>;
   }
 }
 
@@ -38,7 +41,7 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps, {
-    startGetPosts,
+    getMyPosts,
     likePost,
     dislikePost,
     deletePost,
