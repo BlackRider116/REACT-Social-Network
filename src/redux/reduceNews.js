@@ -1,16 +1,17 @@
 import { postsAPI, likeDislikeDeleteAPI } from "../api/apiMyBackend";
 
-const START_GET_POST = "/posts/seenPosts/START_GET_POST"
-const LAST_SEEN_ID = "/posts/seenPosts/LAST_SEEN_ID"
+const GET_POSTS = "/posts/seenPosts/GET_POSTS"
+const SET_POSTS = "/posts/seenPosts/SET_POSTS"
 const SET_LIKES = "/posts//likes/SET_LIKES"
 const DELETE_POST = "/posts//DELETE_POST"
 const ADD_POST = "/posts/ADD_POST"
 const TEXT = "/posts/TEXT"
 
 const initialState = {
-  posts: null,
+  posts: [],
   firstSeenId: null,
   lastSeenId: null,
+  prevPostsButton: false,
   textPost: ""
 }
 
@@ -21,19 +22,20 @@ const reduceNews = (state = initialState, action) => {
         ...state,
         textPost: action.textPost
       };
-    case START_GET_POST:
+    case GET_POSTS:
       return {
         ...state,
         ...action.payload
-      };
-    case LAST_SEEN_ID:
+      }
+    case SET_POSTS:
       return {
         ...state,
         posts: [
           ...state.posts,
           ...action.posts
         ],
-        lastSeenId: action.lastSeenId
+        lastSeenId: action.lastSeenId,
+        prevPostsButton: action.prevPostsButton
       };
     case SET_LIKES:
       return {
@@ -46,15 +48,6 @@ const reduceNews = (state = initialState, action) => {
         posts: deletePostFilter(state.posts, action.postId)
       }
     case ADD_POST:
-      if (!state.posts) {
-        return {
-          ...state,
-          posts: [
-            action.post,
-          ],
-          textPost: ''
-        }
-      }
       return {
         ...state,
         posts: [
@@ -68,20 +61,25 @@ const reduceNews = (state = initialState, action) => {
   }
 };
 
-const setPosts = (posts, lastSeenId) => ({ type: START_GET_POST, payload: { posts, lastSeenId } });
-
-const setLastPosts = (posts, lastSeenId) => ({ type: LAST_SEEN_ID, posts, lastSeenId });
+const setPosts = (posts, lastSeenId, prevPostsButton) => ({ type: SET_POSTS, posts, lastSeenId, prevPostsButton });
+const getFirstPosts = (posts, lastSeenId, prevPostsButton) => ({ type: GET_POSTS, payload: {posts, lastSeenId, prevPostsButton} });
 
 export const getMyPosts = (lastSeenId = 0) => async (dispatch) => {
-  const data = await postsAPI.getPosts(lastSeenId)
-  if (lastSeenId !== 0) {
-    dispatch(setLastPosts(data.reverse(), data[data.length - 1].id))
-  }
-  else {
-    if (data.length !== 0) {
-      dispatch(setPosts(data.reverse(), data[data.length - 1].id))
+  const promise = await postsAPI.getPosts(lastSeenId)
+  if (promise.length !== 0) {
+    const data = [promise.reverse(), promise[promise.length - 1].id]
+    if (lastSeenId === 0) {
+      if (promise.length < 5) {
+        dispatch(getFirstPosts(...data, false))
+      } else {
+        dispatch(getFirstPosts(...data, true))
+      }
     } else {
-      dispatch(setPosts(null, 0))
+      if (promise.length < 5) {
+        dispatch(setPosts(...data, false))
+      } else {
+        dispatch(setPosts(...data, true))
+      }
     }
   }
 }

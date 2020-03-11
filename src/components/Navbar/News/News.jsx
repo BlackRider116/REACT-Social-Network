@@ -67,7 +67,12 @@ const News = ({ ...props }) => {
           </div>
         ))}
       <div>
-        <button onClick={previousPosts}>Previous posts</button>
+        <button
+          className={!props.prevPostsButton ? classes.displayNone : ""}
+          onClick={previousPosts}
+        >
+          Previous posts
+        </button>
       </div>
     </div>
   );

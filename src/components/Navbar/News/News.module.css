@@ -1,4 +1,8 @@
 .video{
-    width: 960px;
-    height: 540;
+    width: 500;
+    height: 300;
 }
+
+.displayNone {
+    display: none;
+  }
