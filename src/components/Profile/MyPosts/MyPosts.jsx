@@ -3,12 +3,16 @@ import classes from "../../../styles/Profile.module.scss";
 import Post from "./Post/Post";
 import { Field, reduxForm } from "redux-form";
 import { withRouter } from "react-router-dom";
+import {reset} from 'redux-form';
 
 const MyPosts = props => {
   const posts = props.posts.map(post => <Post posts={post} key={post.id} />);
   const myProfile = props.match.params.userId;
-  const onSubmit = postText => {
+
+  const onSubmit = (postText, dispatch) => {
+    console.log(postText, dispatch)
     props.addNewPost(postText);
+    dispatch(reset("myNewPost"))
   };
 
   return (

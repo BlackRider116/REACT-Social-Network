@@ -3,6 +3,7 @@ import classes from "../../../styles/Dialogs.module.css";
 import UsersDialog from "./UsersDialog/UsersDialog";
 import MessagesItems from "./Messages/Messages";
 import { Field, reduxForm } from "redux-form";
+import {reset} from 'redux-form';
 
 const Dialogs = props => {
   const messagesItems = props.messagesItems.map(message => (
@@ -13,8 +14,9 @@ const Dialogs = props => {
     <UsersDialog state={user} key={user.id} />
   ));
 
-  const onSubmit = messageText => {
+  const onSubmit = (messageText, dispatch) => {
     props.addNewMessage(messageText);
+    dispatch(reset("newMessage"))
   };
 
   return (
