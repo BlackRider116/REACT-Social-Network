@@ -3,7 +3,7 @@ import classes from "./App.module.css";
 import { Route, withRouter, Switch, Redirect } from "react-router-dom";
 import Setting from "./components/Setting/Setting";
 import Music from "./components/Navbar/Music/Music";
-import NavbarContainer from "./components/Navbar/NavbarContainer";
+import Navbar from "./components/Navbar/Navbar";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
 import { compose } from "redux";
@@ -43,7 +43,7 @@ class App extends React.Component {
         return (
             <div className={classes.wrapper}>
                 <HeaderContainer />
-                <NavbarContainer />
+                <Navbar />
                 <div className={classes.content}>
                     <Switch>
                         <Route exact path="/"><Redirect to="/profile" /></Route>

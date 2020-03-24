@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./Dialogs.module.css";
+import classes from "../../../styles/Dialogs.module.css";
 import UsersDialog from "./UsersDialog/UsersDialog";
 import MessagesItems from "./Messages/Messages";
 import { Field, reduxForm } from "redux-form";

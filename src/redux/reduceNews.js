@@ -1,4 +1,4 @@
-import { postsAPI, likeDislikeDeleteAPI } from "../api/apiMyBackend";
+import { postsAPI, likeDislikeDeleteAPI, mediaApi } from "../api/apiMyBackend";
 
 const GET_POSTS = "/posts/seenPosts/GET_POSTS"
 const SET_POSTS = "/posts/seenPosts/SET_POSTS"
@@ -10,6 +10,7 @@ const TEXT = "/posts/TEXT"
 const initialState = {
   posts: [],
   firstSeenId: null,
+  newPostsButton: true,
   lastSeenId: null,
   prevPostsButton: false,
   textPost: ""
@@ -62,7 +63,7 @@ const reduceNews = (state = initialState, action) => {
 };
 
 const setPosts = (posts, lastSeenId, prevPostsButton) => ({ type: SET_POSTS, posts, lastSeenId, prevPostsButton });
-const getFirstPosts = (posts, lastSeenId, prevPostsButton) => ({ type: GET_POSTS, payload: {posts, lastSeenId, prevPostsButton} });
+const getFirstPosts = (posts, lastSeenId, prevPostsButton) => ({ type: GET_POSTS, payload: { posts, lastSeenId, prevPostsButton } });
 
 export const getMyPosts = (lastSeenId = 0) => async (dispatch) => {
   const promise = await postsAPI.getPosts(lastSeenId)
@@ -83,6 +84,7 @@ export const getMyPosts = (lastSeenId = 0) => async (dispatch) => {
     }
   }
 }
+
 
 const setLikes = (postId, likes) => ({ type: SET_LIKES, postId, likes });
 
@@ -131,5 +133,8 @@ export const addPostThunk = (content) => async (dispatch) => {
   dispatch(addPost(promise))
 }
 
+export const saveMediaFile = (file) => async (dispatch) => {
+  const response = await mediaApi.downloadFile(file)
+}
 
 export default reduceNews;

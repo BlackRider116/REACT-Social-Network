@@ -6,7 +6,6 @@ import {
   postFollowThunk,
   deleteFollowThunk
 } from "../../../redux/reduceUsers";
-// import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
 import { compose } from "redux";
 import { getUsers, getUsersCount, getTotalCount, getNumberPage, getIsLoading } from "../../../redux/selectorUsers";
 
@@ -51,5 +50,4 @@ export default compose(
     deleteFollowThunk,
     getUsersThunk
   })
-  // withAuthRedirect
 )(UsersContainer);

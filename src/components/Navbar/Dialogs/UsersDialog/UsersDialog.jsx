@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./../Dialogs.module.css";
+import classes from "../../../../styles/Dialogs.module.css";
 import { NavLink } from "react-router-dom";
 
 

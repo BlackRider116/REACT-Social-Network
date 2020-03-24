@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { login } from "../../redux/reduceAuth";
 import { Redirect } from "react-router-dom";
 import styles from "../../common/FormControl/FormControl.module.css";
-import stylesLogin from "./Login.module.css";
+import stylesLogin from "../../styles/Login.module.css";
 
 const maxLength30 = maxLengthCreator(30);
 
@@ -57,7 +57,8 @@ const Login = props => {
       <h1>Login</h1>
       <ReduxLoginForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
       <div>
-        <b>Test account:</b>
+        <div>Логинизация может не пройти в Хроме из за политики безопасности CORS, защиты куки с помощью атрибута SameSite (доступа к серверу у меня нет).  Используйте другие браузеры, например как я Мозилу</div>
+        <b>Тестовый аккаунт:</b>
         <div className={stylesLogin.tests}>
           <b>Email:</b> free@samuraijs.com
         </div>

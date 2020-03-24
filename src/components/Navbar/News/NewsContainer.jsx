@@ -8,7 +8,8 @@ import {
   dislikePost,
   deletePost,
   addPostThunk,
-  textPostAdd
+  textPostAdd,
+  saveMediaFile,
 } from "../../../redux/reduceNews";
 import Preloader from "../../../common/Preloader/Preloader";
 
@@ -22,7 +23,6 @@ class NewsContainer extends React.Component {
       this.props.posts.length !== prevState.posts.length &&
       this.props.posts.length < 5
     ) {
-      console.log('111111111')
       this.props.getMyPosts(0);
     }
   }
@@ -36,7 +36,6 @@ class NewsContainer extends React.Component {
 const mapStateToProps = state => {
   return {
     posts: state.news.posts,
-    firstSeenId: state.news.firstSeenId,
     lastSeenId: state.news.lastSeenId,
     prevPostsButton: state.news.prevPostsButton,
     textPost: state.news.textPost
@@ -50,7 +49,8 @@ export default compose(
     dislikePost,
     deletePost,
     addPostThunk,
-    textPostAdd
+    textPostAdd,
+    saveMediaFile
   })
   // withAuthRedirect
 )(NewsContainer);

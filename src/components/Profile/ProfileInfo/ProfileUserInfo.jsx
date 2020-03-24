@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./ProfileInfo.module.css";
+import classes from "../../../styles/Profile.module.scss";
 import stylesError from "../../../common/FormControl/FormControl.module.css";
 import { reduxForm } from "redux-form";
 import {fieldValue } from "../../../common/FormControl/FormControl";
@@ -34,7 +34,7 @@ const ProfileInfoForm = ({ profile, error, ...props }) => {
         <b>Contacts: </b>
         {Object.keys(profile.contacts).map(contact => {
           return (
-            <div key={contact} className={classes.contact}>
+            <div key={contact} className={classes.profileInfoContact}>
               <b>{contact}: </b>
               {fieldValue([], 'contacts.'+contact, "input", null, null)}
             </div>
@@ -66,7 +66,7 @@ export const ProfileUserInfo = ({profile, onEditMode, isOwner}) => {
         <b>Contacts: </b>
         {Object.keys(profile.contacts).map(contact => {
           return (
-            <div key={contact} className={classes.contact}>
+            <div key={contact} className={classes.profileInfoContact}>
               <b>{contact}: </b>
               {profile.contacts[contact]}
             </div>

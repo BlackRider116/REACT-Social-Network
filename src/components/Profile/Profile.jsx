@@ -1,5 +1,4 @@
 import React from "react";
-import classes from "./Profile.module.css";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 import MyPostsContainer from "./MyPosts/MyPostsContainer";
 import Preloader from "../../common/Preloader/Preloader";
@@ -9,7 +8,7 @@ const Profile = props => {
     return <Preloader />;
   }
   return (
-    <div className={classes.content}>
+    <div>
       <ProfileInfo
         {...props}
         isOwner={props.isOwner}
@@ -19,7 +18,7 @@ const Profile = props => {
         updateUserStatus={props.updateUserStatus}
         profileUpdateSuccess={props.profileUpdateSuccess}
       />
-      <MyPostsContainer state={props.state} dispatch={props.dispatch} />
+      <MyPostsContainer />
     </div>
   );
 };

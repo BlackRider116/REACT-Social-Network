@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./News.module.css";
+import classes from "../../../styles/News.module.scss";
 
 const News = ({ ...props }) => {
   const typePost = post => {
@@ -28,10 +28,17 @@ const News = ({ ...props }) => {
     props.getMyPosts(props.lastSeenId);
   };
 
+  const fileSelected = e => {
+    if (e.target.files.length) {
+      props.saveMediaFile(e.target.files[0]);
+    }
+  };
+
   return (
     <div>
       <form>
         <input onChange={onPostChange} value={props.textPost} />
+        <input onChange={fileSelected} type={"file"} />
         <button>Download</button>
         <button>Record</button>
         <button onClick={addPost}>Add</button>

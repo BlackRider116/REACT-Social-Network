@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import avatarDefault from "../../../assets/image/avatarDefault.jpg";
 import ProfileStatus from "./ProfileStatus";
-import classes from "./ProfileInfo.module.css";
+import classes from "../../../styles/Profile.module.scss";
 import ProfileInfoForm, { ProfileUserInfo } from "./ProfileUserInfo";
 
 const ProfileInfo = ({ profileUpdate, ...props }) => {
+  
   const photoSelected = e => {
     if (e.target.files.length) {
       props.savePhoto(e.target.files[0]);
@@ -25,18 +26,18 @@ const ProfileInfo = ({ profileUpdate, ...props }) => {
     if (profileUpdate === true) {
       setEditMode(false);
     }
-
   }, [profileUpdate]);
 
   const onEditMode = () => {
     setEditMode(true);
   };
 
+
   return (
     <div>
-      <div className={classes.item}>
+      <div className={classes.profileInfoItem}>
         <img
-          className={classes.avatar}
+          className={classes.profileInfoAvatar}
           src={
             props.profile.photos.large !== null
               ? props.profile.photos.large
@@ -45,6 +46,7 @@ const ProfileInfo = ({ profileUpdate, ...props }) => {
           alt="AvaPhoto"
         />
         {!props.isOwner && <input type={"file"} onChange={photoSelected} />}
+        {/* {!props.isOwner && <button>Upload photo</button>} */}
       </div>
       <ProfileStatus
         {...props}

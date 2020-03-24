@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { compose } from "redux";
 import Profile from "./Profile";
 import {
   getProfileThunk,
@@ -11,7 +12,7 @@ import {
   profileUpdateSuccess
 } from "../../redux/reduceProfile";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
-import { compose } from "redux";
+
 
 class ProfileContainer extends React.Component {
   userProfileId() {

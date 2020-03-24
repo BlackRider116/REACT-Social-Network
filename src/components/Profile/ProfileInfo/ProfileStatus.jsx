@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import classes from "./ProfileInfo.module.css";
+import classes from "../../../styles/Profile.module.scss";
 
 const ProfileStatus = props => {
   const [editMode, setEditMode] = useState(false);
@@ -26,7 +26,7 @@ const ProfileStatus = props => {
   };
 
   return (
-    <div className={classes.item}>
+    <div className={classes.profileInfoItem}>
       {!editMode && (
         <div>
           <b>Status: </b>

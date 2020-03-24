@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./Header.module.css";
+import classes from "../../styles/Header.module.css";
 import { NavLink } from "react-router-dom";
 
 const Header = props => {
@@ -9,6 +9,7 @@ const Header = props => {
         alt="Logotype"
         src="https://liputan60.files.wordpress.com/2018/02/cropped-00106-3d-company-logo-design-free-logo-online-template-03.png?w=200"
       />
+      <span>Social Network</span>
       <div className={classes.loginBlockPosition}>
         {props.isAuth ? (
           <div className={classes.loginBlockName}>

@@ -1,17 +1,18 @@
 .nav {
     grid-area: nav;
     background-color: rgb(37, 4, 255); 
-    padding: 5%; /*отступ от краев*/
-    height: 100vh;
+    margin-block-start: 54px;
+    padding-inline-start: 10px;
+    padding-block-start: 10px;
+    height: 100%;
+    width: 19.2%;
+    position: fixed;
   }
 
-
   .item a {
-    /* color: white;
-    text-decoration: none;  убрать нижние подчеркивания */
     position: relative;
     display: inline-block;
-    width: 97%;
+    width: 95%;
     height: 2.5em;
     line-height: 2.5em;
     vertical-align: middle;
@@ -35,19 +36,4 @@
 
   .setting {
     margin-top: 2em
-  }
-
-  .friend {
-    padding: 2%;
-    display: grid;
-    grid-template-rows: 4fr 4fr 4fr;
-    grid-template-columns: 4fr 4fr 4fr ;
-    /* margin-top: 2px; */
-    color: rgba(255, 255, 255, 0.884);
-    grid-gap: 10px;
-    border-radius: 5px;
-    border: 1px solid black;
-    margin-inline-start: 1%;
-    margin-inline-end: 2%;
-    block-size: 28%;
   }

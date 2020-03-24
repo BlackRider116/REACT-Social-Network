@@ -1,0 +1,11 @@
+.wrapper {
+  height: 100vh;
+  background-color: cornflowerblue;
+}
+
+.loading {
+  width: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

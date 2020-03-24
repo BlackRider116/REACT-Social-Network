@@ -13,6 +13,13 @@ export const postsAPI = {
             console.log(error);
         });
     },
+    newPosts(firstSeenId) {
+        return instance.get(`/posts/${firstSeenId}`)
+        .then(response => response.data)
+        .catch(error => {
+            console.log(error);
+        });
+    },
     addPost(post) {
         return instance.post(`/posts`, JSON.stringify(post) )
         .then(response => response.data)
@@ -44,4 +51,10 @@ export const likeDislikeDeleteAPI = {
             console.log(error);
         });
     }
+}
+
+export const mediaApi = {
+    downloadFile(file) {
+        return instance.post(`/upload`, file)
+    },
 }
