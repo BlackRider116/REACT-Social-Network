@@ -10,7 +10,6 @@ const MyPosts = props => {
   const myProfile = props.match.params.userId;
 
   const onSubmit = (postText, dispatch) => {
-    console.log(postText, dispatch)
     props.addNewPost(postText);
     dispatch(reset("myNewPost"))
   };

@@ -4,7 +4,7 @@ const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0',
     withCredentials: true,
     headers:
-        { "API-KEY": "fc98c8d1-fcc0-4027-a270-97c3e19bdaad" },  
+        { "API-KEY": "fc98c8d1-fcc0-4027-a270-97c3e19bdaad" }
 })
 
 export const usersAPI = {
@@ -72,3 +72,26 @@ export const profileAPI = {
             .put(`/profile`, profileInfo)
     }
 }
+
+export const dialogsAPI = {
+    startDialogs(userId) {
+        return (
+            instance.put(`dialogs/${userId}`)
+        )
+    },
+    getAllDialogs() {
+        return (
+            instance.get(`dialogs`)
+        )
+    },
+    getListMessages(userId) {
+        return (
+            instance.get(`dialogs/${userId}/messages`)
+        )
+    },
+    sendMessage(userId, message) {
+        return (
+            instance.post(`dialogs/${userId}/messages`, {body: message})
+        )
+    }
+};

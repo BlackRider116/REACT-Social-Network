@@ -6,11 +6,11 @@ const News = ({ ...props }) => {
     if (post.type === "") {
       return null;
     } else if (post.type === "image") {
-      return <img className={classes.video} src={post.file} alt=""></img>;
+      return <img className={classes.img} src={post.file} alt=""></img>;
     } else if (post.type === "audio") {
       return <audio src={post.file} controls></audio>;
     } else if (post.type === "video") {
-      return <video className={classes.video} src={post.file} controls></video>;
+      return <video className={classes.img} src={post.file} controls></video>;
     }
   };
 
