@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./App.module.css";
+import classes from "./App.module.scss";
 import { Route, withRouter, Switch, Redirect } from "react-router-dom";
 import Setting from "./components/Setting/Setting";
 import Music from "./components/Navbar/Music/Music";
@@ -61,6 +61,7 @@ class App extends React.Component {
         );
     };
 }
+
 const mapStateToProps = (state) => {
     return {
         initialized: state.app.initialized

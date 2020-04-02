@@ -1,4 +1,4 @@
-import { postsAPI, likeDislikeDeleteAPI, mediaApi } from "../api/apiMyBackend";
+import { postsAPI, likeDislikeDeleteAPI, mediaApi, baseURL } from "../api/apiMyBackend";
 
 const GET_POSTS = "/posts/seenPosts/GET_POSTS"
 const SET_POSTS = "/posts/seenPosts/SET_POSTS"
@@ -6,6 +6,11 @@ const SET_LIKES = "/posts//likes/SET_LIKES"
 const DELETE_POST = "/posts//DELETE_POST"
 const ADD_POST = "/posts/ADD_POST"
 const TEXT = "/posts/TEXT"
+
+let addPostFormData = {}
+//   type: '',
+//   file: ''
+// }
 
 const initialState = {
   posts: [],
@@ -118,23 +123,29 @@ export const deletePost = (postId) => async (dispatch) => {
   dispatch(deletePostOfState(postId))
 }
 
-
 export const textPostAdd = textPost => ({ type: TEXT, textPost })
 const addPost = post => ({ type: ADD_POST, post })
 export const addPostThunk = (content) => async (dispatch) => {
+
   const post = {
     id: 0,
     content,
-    // type: undefined,
-    // file: undefined,
+    type: addPostFormData.type || '',
+    file: addPostFormData.file || '',
   }
+
+  addPostFormData = {}
 
   const promise = await postsAPI.addPost(post)
   dispatch(addPost(promise))
 }
 
-export const saveMediaFile = (file) => async (dispatch) => {
+export const saveMediaFile = async (file) => {
   const response = await mediaApi.downloadFile(file)
+  addPostFormData = {
+    type: response.data.types,
+    file: `${baseURL}/static/${response.data.name}`
+  }
 }
 
 export default reduceNews;

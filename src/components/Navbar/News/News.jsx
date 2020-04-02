@@ -1,85 +1,51 @@
 import React from "react";
 import classes from "../../../styles/News.module.scss";
+import Preloader from "../../../common/Preloader/Preloader";
+import { Card, Button } from "react-bootstrap";
 
 const News = ({ ...props }) => {
   const typePost = post => {
     if (post.type === "") {
       return null;
     } else if (post.type === "image") {
-      return <img className={classes.img} src={post.file} alt=""></img>;
+      return <Card.Img variant="top" src={post.file} alt="" />;
     } else if (post.type === "audio") {
-      return <audio src={post.file} controls></audio>;
+      return <audio style={{width: "100%"}}  src={post.file} controls/>;
     } else if (post.type === "video") {
-      return <video className={classes.img} src={post.file} controls></video>;
+      return <video style={{width: "100%"}}  src={post.file} controls />;
     }
-  };
-
-  const addPost = ev => {
-    ev.preventDefault();
-    props.addPostThunk(props.textPost);
-  };
-
-  const onPostChange = ev => {
-    let body = ev.target.value;
-    props.textPostAdd(body);
   };
 
   const previousPosts = () => {
     props.getMyPosts(props.lastSeenId);
   };
 
-  const fileSelected = e => {
-    if (e.target.files.length) {
-      props.saveMediaFile(e.target.files[0]);
-    }
-  };
-
+  if (!props.posts.length) return <Preloader />;
   return (
     <div>
-      <form>
-        <input onChange={onPostChange} value={props.textPost} />
-        <input onChange={fileSelected} type={"file"} />
-        <button>Download</button>
-        <button>Record</button>
-        <button onClick={addPost}>Add</button>
-      </form>
-
       {props.lastSeenId !== 0 &&
         props.posts.map(post => (
           <div key={post.id}>
-            {typePost(post)}
-            <div>
-              <p>{post.content}</p>
-              <button>{`💗 ${post.likes}`}</button>
-              <button
-                onClick={() => {
-                  props.likePost(post.id);
-                }}
-              >{`👍`}</button>
-              <button
-                onClick={() => {
-                  props.dislikePost(post.id);
-                }}
-              >{`👎`}</button>
-              <button
-                onClick={() => {
-                  props.deletePost(post.id);
-                }}
-              >
-                Delete
-              </button>
+            <Card style={{ margin: "5px", borderColor: "black" }}>
+              {typePost(post)}
+              <Card.Body style={{ backgroundColor: "rgb(215, 215, 215)" }} >
+                <Card.Text style={{fontSize: "20px"}} >{post.content}</Card.Text>
+                <span style={{marginRight: "10px", fontSize: "20px"}} >{`💗 ${post.likes}`}</span>
+                <Button variant="outline-success" onClick={() => {props.likePost(post.id) }}>{`👍`}</Button>
+                <Button variant="outline-warning" onClick={() => {props.dislikePost(post.id)}}>{`👎`}</Button>
+                <Button variant="outline-danger" onClick={() => {props.deletePost(post.id)}}>Удалить</Button>
+              </Card.Body>
+            </Card>
 
-              <button>{post.id}</button>
-            </div>
           </div>
         ))}
       <div>
-        <button
+        <Button variant="secondary" block
           className={!props.prevPostsButton ? classes.displayNone : ""}
           onClick={previousPosts}
         >
           Previous posts
-        </button>
+        </Button>
       </div>
     </div>
   );

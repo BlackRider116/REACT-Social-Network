@@ -4,11 +4,6 @@ export const getUsers = (state) => {
     return state.usersPage.users
 }
 
-// export const getUsersSelector = createSelector(getUsers, 
-//     (users)=>{
-//         return users.filter(u => true)
-// })
-
 export const getUsersCount = (state) => {
     return state.usersPage.usersCount
 }
