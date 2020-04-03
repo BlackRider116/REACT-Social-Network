@@ -72,19 +72,21 @@ const getFirstPosts = (posts, lastSeenId, prevPostsButton) => ({ type: GET_POSTS
 
 export const getMyPosts = (lastSeenId = 0) => async (dispatch) => {
   const promise = await postsAPI.getPosts(lastSeenId)
-  if (promise.length !== 0) {
-    const data = [promise.reverse(), promise[promise.length - 1].id]
-    if (lastSeenId === 0) {
-      if (promise.length < 5) {
-        dispatch(getFirstPosts(...data, false))
+  if (promise) {
+    if (promise.length !== 0) {
+      const data = [promise.reverse(), promise[promise.length - 1].id]
+      if (lastSeenId === 0) {
+        if (promise.length < 5) {
+          dispatch(getFirstPosts(...data, false))
+        } else {
+          dispatch(getFirstPosts(...data, true))
+        }
       } else {
-        dispatch(getFirstPosts(...data, true))
-      }
-    } else {
-      if (promise.length < 5) {
-        dispatch(setPosts(...data, false))
-      } else {
-        dispatch(setPosts(...data, true))
+        if (promise.length < 5) {
+          dispatch(setPosts(...data, false))
+        } else {
+          dispatch(setPosts(...data, true))
+        }
       }
     }
   }
@@ -140,11 +142,13 @@ export const addPostThunk = (content) => async (dispatch) => {
   dispatch(addPost(promise))
 }
 
-export const saveMediaFile = async (file) => {
+export const saveMediaFile = async (file, type) => {
   const response = await mediaApi.downloadFile(file)
+  const postType = !type ? response.types : type
+
   addPostFormData = {
-    type: response.data.types,
-    file: `${baseURL}/static/${response.data.name}`
+    type: postType,
+    file: `${baseURL}/static/${response.name}`
   }
 }
 

@@ -52,9 +52,8 @@ class NewsContainer extends React.Component {
   fileSelected = ev => {
     this.setState({ recordBtn: true, addBtn: true, uploadBtn: true });
     const [first] = Array.from(ev.currentTarget.files);
-    const formData = new FormData();
-    formData.append("media", first);
-    saveMediaFile(formData).finally(() => {
+
+    saveMediaFile(first).finally(() => {
       this.setState({ addBtn: false, uploadBtn: false });
     });
   };
@@ -68,7 +67,7 @@ class NewsContainer extends React.Component {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(stream => {
-          console.log("audio");
+          recordStream(stream, 'audio');
         })
         .catch(err => {
           console.log("Нет доступного микрофона");
@@ -78,11 +77,28 @@ class NewsContainer extends React.Component {
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: true })
         .then(stream => {
-          console.log("video");
+          recordStream(stream, 'video');
         })
         .catch(err => {
-          console.log("Нет доступной камеры");
+          console.log("Нет доступной камеры или микрофона");
         });
+    }
+
+    function recordStream(stream, type) {
+      const mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = ev => {
+        const blob = new Blob([ev.data]);
+        saveMediaFile(blob, type);
+      };
+
+      mediaRecorder.start();
+
+      setTimeout(() => {
+        mediaRecorder.stop();
+
+      }, 5000);
+
     }
   };
 
@@ -122,7 +138,7 @@ class NewsContainer extends React.Component {
             <DropdownButton
               title="Запись"
               variant="secondary"
-              style={{ marginLeft: "2px" }}
+              style={{ margin: "2px" }}
               disabled={this.state.recordBtn}
             >
               <Dropdown.Item onClick={() => this.recordMediaUser("video")}>

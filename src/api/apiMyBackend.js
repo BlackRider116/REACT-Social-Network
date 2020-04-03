@@ -1,10 +1,12 @@
 import * as axios from 'axios';
 
-export const baseURL = 'https://backend-dz11.herokuapp.com'
+// export const baseURL = 'https://backend-dz11.herokuapp.com'
+export const baseURL = 'http://localhost:9999'
 
 const instance = axios.create({
     baseURL,
-    headers: { 'Content-Type': 'application/json' },
+    headers:
+        { 'Content-Type': 'application/json' },
 })
 
 export const postsAPI = {
@@ -57,6 +59,10 @@ export const likeDislikeDeleteAPI = {
 
 export const mediaApi = {
     downloadFile(file) {
-        return instance.post(`/upload`, file)
+        const formData = new FormData();
+        formData.append("media", file);
+        return instance.post(`/upload`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        }).then(response => response.data)
     },
 }
