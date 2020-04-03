@@ -12,7 +12,7 @@ const News = ({ ...props }) => {
     } else if (post.type === "audio") {
       return <audio style={{width: "100%"}}  src={post.file} controls/>;
     } else if (post.type === "video") {
-      return <video style={{width: "100%"}}  src={post.file} controls />;
+      return <video style={{width: "100%", maxHeight: "640px"}}  src={post.file} controls />;
     }
   };
 

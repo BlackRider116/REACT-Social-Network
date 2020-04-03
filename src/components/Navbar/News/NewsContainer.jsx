@@ -11,7 +11,14 @@ import {
   textPostAdd,
   saveMediaFile
 } from "../../../redux/reduceNews";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import {
+  InputGroup,
+  FormControl,
+  Button,
+  DropdownButton,
+  Dropdown
+} from "react-bootstrap";
+import loadMedia from "../../../assets/image/loadMedia.gif";
 
 class NewsContainer extends React.Component {
   constructor(props) {
@@ -43,16 +50,41 @@ class NewsContainer extends React.Component {
 
   fileUpload = React.createRef();
   fileSelected = ev => {
-    this.setState({ recordBtn: true, addBtn: true });
+    this.setState({ recordBtn: true, addBtn: true, uploadBtn: true });
     const [first] = Array.from(ev.currentTarget.files);
     const formData = new FormData();
     formData.append("media", first);
     saveMediaFile(formData).finally(() => {
-      this.setState({ addBtn: false });
+      this.setState({ addBtn: false, uploadBtn: false });
     });
   };
 
- 
+  recordMediaUser = typeMedia => {
+    if (!navigator.mediaDevices || !window.MediaRecorder) {
+      alert("Нет подключенных медиа устройств");
+      return;
+    }
+    if (typeMedia === "audio") {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then(stream => {
+          console.log("audio");
+        })
+        .catch(err => {
+          console.log("Нет доступного микрофона");
+        });
+    }
+    if (typeMedia === "video") {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: true })
+        .then(stream => {
+          console.log("video");
+        })
+        .catch(err => {
+          console.log("Нет доступной камеры");
+        });
+    }
+  };
 
   render() {
     return (
@@ -77,15 +109,30 @@ class NewsContainer extends React.Component {
               variant="secondary"
               style={{ marginLeft: "2px" }}
             >
-              Загрузить
+              {!this.state.uploadBtn ? (
+                " Загрузить"
+              ) : (
+                <div>
+                  <img src={loadMedia} alt="Loading" />
+                  <span> Ждите...</span>{" "}
+                </div>
+              )}
             </Button>
-            <Button
-              disabled={this.state.recordBtn}
+
+            <DropdownButton
+              title="Запись"
               variant="secondary"
               style={{ marginLeft: "2px" }}
+              disabled={this.state.recordBtn}
             >
-              Запись
-            </Button>
+              <Dropdown.Item onClick={() => this.recordMediaUser("video")}>
+                Видео
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => this.recordMediaUser("audio")}>
+                Аудио
+              </Dropdown.Item>
+            </DropdownButton>
+
             <Button
               disabled={this.state.addBtn}
               style={{ marginLeft: "2px" }}
