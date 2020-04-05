@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 
-// export const baseURL = 'https://backend-dz11.herokuapp.com'
-export const baseURL = 'http://localhost:9999'
+export const baseURL = 'https://backend-dz11.herokuapp.com'
+// export const baseURL = 'http://localhost:9999'
 
 const instance = axios.create({
     baseURL,

@@ -145,7 +145,7 @@ export const addPostThunk = (content) => async (dispatch) => {
 export const saveMediaFile = async (file, type) => {
   const response = await mediaApi.downloadFile(file)
   const postType = !type ? response.types : type
-console.log(response)
+
   addPostFormData = {
     type: postType,
     file: `${baseURL}/static/${response.name}`

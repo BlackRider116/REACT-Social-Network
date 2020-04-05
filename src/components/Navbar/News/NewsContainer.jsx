@@ -47,6 +47,10 @@ class NewsContainer extends React.Component {
     ) {
       this.props.getMyPosts(0);
     }
+
+
+
+    
   }
 
   addPost = () => {
@@ -109,10 +113,10 @@ class NewsContainer extends React.Component {
     }
 
     const recordStream = (stream, type) => {
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
+      this.mediaRecorder = new MediaRecorder(stream);
+      this.mediaRecorder.start();
 
-      mediaRecorder.ondataavailable = ev => {
+      this.mediaRecorder.ondataavailable = ev => {
         stream.getTracks().forEach(o => o.stop());
         this.setState({ recordBtnDisable: false, recordVideo: false });
         const blob = new Blob([ev.data]);
@@ -122,14 +126,14 @@ class NewsContainer extends React.Component {
       };
 
       setTimeout(() => {
-        mediaRecorder.stop();
-      }, 10000);
+        if(this.mediaRecorder.state === 'recording') {
+          this.mediaRecorder.stop()
+        }
+      }, 60000);
+
     };
   };
 
-  // stopRecorder = () => {
-  //   mediaRecorder.stop();
-  // }
 
   render() {
     return (
@@ -186,7 +190,7 @@ class NewsContainer extends React.Component {
               </Dropdown.Item>
             </DropdownButton>
           ) : (
-            <Button variant="warning" onClick={() => this.mediaRecorder.stop()}>
+            <Button variant="warning" onClick={() =>  this.mediaRecorder.stop()}>
               <Timer /> Стоп
             </Button>
           )}
