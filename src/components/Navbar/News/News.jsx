@@ -20,7 +20,7 @@ const News = ({ ...props }) => {
     props.getMyPosts(props.lastSeenId);
   };
 
-  if (!props.posts.length) return <Preloader />;
+  if (!props.posts.length) return <Preloader /> ;
   return (
     <div>
       {props.lastSeenId !== 0 &&

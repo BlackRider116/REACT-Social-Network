@@ -16,14 +16,24 @@ import {
   FormControl,
   Button,
   DropdownButton,
-  Dropdown
+  Dropdown,
+  Card
 } from "react-bootstrap";
 import loadMedia from "../../../assets/image/loadMedia.gif";
+import classes from "../../../styles/News.module.scss";
+import Timer from "react.timer";
 
 class NewsContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { uploadBtn: false, recordBtn: false, addBtn: false };
+    this.state = {
+      uploadBtn: false,
+      uploadBtnLoading: false,
+      recordVideo: false,
+      recordBtn: false,
+      recordBtnDisable: false,
+      addBtn: false
+    };
   }
 
   componentDidMount() {
@@ -41,7 +51,12 @@ class NewsContainer extends React.Component {
 
   addPost = () => {
     this.props.addPostThunk(this.props.textPost);
-    this.setState({ uploadBtn: false, recordBtn: false, addBtn: false });
+    this.setState({
+      uploadBtn: false,
+      uploadBtnLoading: false,
+      recordBtn: false,
+      addBtn: false
+    });
   };
 
   onPostChange = ev => {
@@ -50,11 +65,11 @@ class NewsContainer extends React.Component {
 
   fileUpload = React.createRef();
   fileSelected = ev => {
-    this.setState({ recordBtn: true, addBtn: true, uploadBtn: true });
+    this.setState({ recordBtn: true, uploadBtnLoading: true, addBtn: true });
     const [first] = Array.from(ev.currentTarget.files);
 
     saveMediaFile(first).finally(() => {
-      this.setState({ addBtn: false, uploadBtn: false });
+      this.setState({ addBtn: false, uploadBtnLoading: false });
     });
   };
 
@@ -63,82 +78,104 @@ class NewsContainer extends React.Component {
       alert("Нет подключенных медиа устройств");
       return;
     }
+    this.setState({
+      uploadBtn: true,
+      addBtn: true,
+      recordBtnDisable: true,
+      recordBtn: true
+    });
     if (typeMedia === "audio") {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(stream => {
-          recordStream(stream, 'audio');
+          recordStream(stream, typeMedia);
         })
         .catch(err => {
-          console.log("Нет доступного микрофона");
+          console.log("Нет доступа к микрофону");
         });
     }
     if (typeMedia === "video") {
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: true })
         .then(stream => {
-          recordStream(stream, 'video');
+          recordStream(stream, typeMedia);
+          this.video.srcObject = stream;
+          this.video.play();
+          this.setState({ recordVideo: true });
         })
         .catch(err => {
-          console.log("Нет доступной камеры или микрофона");
+          console.log("Нет доступа к камере и/или к микрофону");
         });
     }
 
-    function recordStream(stream, type) {
+    const recordStream = (stream, type) => {
       const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
 
       mediaRecorder.ondataavailable = ev => {
+        stream.getTracks().forEach(o => o.stop());
+        this.setState({ recordBtnDisable: false, recordVideo: false });
         const blob = new Blob([ev.data]);
-        saveMediaFile(blob, type);
+        saveMediaFile(blob, type).finally(() => {
+          this.setState({ addBtn: false, recordBtn: false });
+        });
       };
-
-      mediaRecorder.start();
 
       setTimeout(() => {
         mediaRecorder.stop();
-
-      }, 5000);
-
-    }
+      }, 10000);
+    };
   };
+
+  // stopRecorder = () => {
+  //   mediaRecorder.stop();
+  // }
 
   render() {
     return (
       <div>
-        <InputGroup>
+        <InputGroup
+          style={{
+            position: "fixed",
+            width: "60%",
+            marginTop: "5px",
+            zIndex: "100"
+          }}
+        >
           <FormControl
             value={this.props.textPost}
             placeholder="Введите текст вашего поста"
             onChange={this.onPostChange}
           />
-          <InputGroup.Append>
-            <input
-              ref={this.fileUpload}
-              type="file"
-              onChange={this.fileSelected}
-              style={{ display: "none" }}
-            />
 
-            <Button
-              onClick={() => this.fileUpload.current.click()}
-              disabled={this.state.uploadBtn}
-              variant="secondary"
-              style={{ marginLeft: "2px" }}
-            >
-              {!this.state.uploadBtn ? (
-                " Загрузить"
-              ) : (
-                <div>
-                  <img src={loadMedia} alt="Loading" />
-                  <span> Ждите...</span>{" "}
-                </div>
-              )}
-            </Button>
+          <input
+            ref={this.fileUpload}
+            type="file"
+            onChange={this.fileSelected}
+            style={{ display: "none" }}
+          />
 
+          <Button
+            onClick={() => this.fileUpload.current.click()}
+            disabled={this.state.uploadBtn}
+            variant="secondary"
+            style={{ marginLeft: "2px" }}
+          >
+            {!this.state.uploadBtnLoading ? (
+              " Загрузить"
+            ) : (
+              <div>
+                <img src={loadMedia} alt="Loading" />
+                <span> Ждите...</span>{" "}
+              </div>
+            )}
+          </Button>
+
+          {!this.state.recordBtnDisable ? (
             <DropdownButton
               title="Запись"
               variant="secondary"
-              style={{ margin: "2px" }}
+              style={{ paddingLeft: "2px" }}
               disabled={this.state.recordBtn}
             >
               <Dropdown.Item onClick={() => this.recordMediaUser("video")}>
@@ -148,19 +185,44 @@ class NewsContainer extends React.Component {
                 Аудио
               </Dropdown.Item>
             </DropdownButton>
-
-            <Button
-              disabled={this.state.addBtn}
-              style={{ marginLeft: "2px" }}
-              variant="success"
-              onClick={this.addPost}
-            >
-              Добавить
+          ) : (
+            <Button variant="warning" onClick={() => this.mediaRecorder.stop()}>
+              <Timer /> Стоп
             </Button>
-          </InputGroup.Append>
+          )}
+
+          <Button
+            disabled={this.state.addBtn}
+            style={{ marginLeft: "2px" }}
+            variant="success"
+            onClick={this.addPost}
+          >
+            Добавить
+          </Button>
         </InputGroup>
 
-        <News {...this.props} />
+        <div
+          style={{
+            position: "fixed",
+            width: "60%",
+            marginTop: "50px",
+            zIndex: "100"
+          }}
+        >
+          <Card className={!this.state.recordVideo && classes.displayNone}>
+            <video
+              style={{ width: "100%", maxHeight: "640px" }}
+              muted={true}
+              ref={a => {
+                this.video = a;
+              }}
+            />
+          </Card>
+        </div>
+
+        <div style={{ paddingTop: "50px" }}>
+          <News {...this.props} />
+        </div>
       </div>
     );
   }

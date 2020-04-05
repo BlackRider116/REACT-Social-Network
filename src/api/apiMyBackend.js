@@ -61,8 +61,6 @@ export const mediaApi = {
     downloadFile(file) {
         const formData = new FormData();
         formData.append("media", file);
-        return instance.post(`/upload`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        }).then(response => response.data)
+        return instance.post(`/upload`, formData).then(response => response.data)
     },
 }
