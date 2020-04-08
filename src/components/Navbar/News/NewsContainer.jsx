@@ -17,7 +17,8 @@ import {
   Button,
   DropdownButton,
   Dropdown,
-  Card
+  Card,
+  Modal
 } from "react-bootstrap";
 import loadMedia from "../../../assets/image/loadMedia.gif";
 import classes from "../../../styles/News.module.scss";
@@ -32,6 +33,8 @@ class NewsContainer extends React.Component {
       recordVideo: false,
       recordBtn: false,
       recordBtnDisable: false,
+      error: false,
+      errorText: "",
       addBtn: false
     };
   }
@@ -47,10 +50,6 @@ class NewsContainer extends React.Component {
     ) {
       this.props.getMyPosts(0);
     }
-
-
-
-    
   }
 
   addPost = () => {
@@ -79,15 +78,13 @@ class NewsContainer extends React.Component {
 
   recordMediaUser = typeMedia => {
     if (!navigator.mediaDevices || !window.MediaRecorder) {
-      alert("Нет подключенных медиа устройств");
+      this.setState({
+        error: true,
+        errorText: "Нет подключенных медиа устройств"
+      });
       return;
     }
-    this.setState({
-      uploadBtn: true,
-      addBtn: true,
-      recordBtnDisable: true,
-      recordBtn: true
-    });
+
     if (typeMedia === "audio") {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
@@ -95,7 +92,7 @@ class NewsContainer extends React.Component {
           recordStream(stream, typeMedia);
         })
         .catch(err => {
-          console.log("Нет доступа к микрофону");
+          this.setState({ error: true, errorText: "Нет доступа к микрофону" });
         });
     }
     if (typeMedia === "video") {
@@ -108,11 +105,20 @@ class NewsContainer extends React.Component {
           this.setState({ recordVideo: true });
         })
         .catch(err => {
-          console.log("Нет доступа к камере и/или к микрофону");
+          this.setState({
+            error: true,
+            errorText: "Нет доступа к камере и/или к микрофону"
+          });
         });
     }
 
     const recordStream = (stream, type) => {
+      this.setState({
+        uploadBtn: true,
+        addBtn: true,
+        recordBtnDisable: true,
+        recordBtn: true
+      });
       this.mediaRecorder = new MediaRecorder(stream);
       this.mediaRecorder.start();
 
@@ -126,14 +132,12 @@ class NewsContainer extends React.Component {
       };
 
       setTimeout(() => {
-        if(this.mediaRecorder.state === 'recording') {
-          this.mediaRecorder.stop()
+        if (this.mediaRecorder.state === "recording") {
+          this.mediaRecorder.stop();
         }
       }, 60000);
-
     };
   };
-
 
   render() {
     return (
@@ -190,7 +194,7 @@ class NewsContainer extends React.Component {
               </Dropdown.Item>
             </DropdownButton>
           ) : (
-            <Button variant="warning" onClick={() =>  this.mediaRecorder.stop()}>
+            <Button variant="warning" onClick={() => this.mediaRecorder.stop()}>
               <Timer /> Стоп
             </Button>
           )}
@@ -215,7 +219,7 @@ class NewsContainer extends React.Component {
         >
           <Card className={!this.state.recordVideo && classes.displayNone}>
             <video
-              style={{ width: "100%", maxHeight: "640px" }}
+              style={{ width: "100%" }}
               muted={true}
               ref={a => {
                 this.video = a;
@@ -223,6 +227,24 @@ class NewsContainer extends React.Component {
             />
           </Card>
         </div>
+
+        <Modal
+          show={this.state.error}
+          onHide={() => this.setState({ error: false })}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Ошибка !</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this.state.errorText}</Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => this.setState({ error: false })}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <div style={{ paddingTop: "50px" }}>
           <News {...this.props} />
