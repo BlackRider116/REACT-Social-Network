@@ -1,0 +1,69 @@
+.dialogs {
+  display: grid;
+  grid-template-columns: 3fr 9fr; /* деление по фракциям */
+}
+
+.dialogItem a {
+  color: white;
+  text-decoration: none;
+}
+.dialogItem a.active {
+  color: gold;
+  text-decoration: none;
+}
+
+.message {
+  display: flow-root;
+  &_card {
+    cursor: pointer;
+    margin: 1px 20% 1px 20%;
+    background-color: rgb(230, 230, 230);
+    max-width: 80%;
+    padding: 5px 10px 5px 10px;
+    &_select {
+      background-color: rgb(76, 236, 47);
+    }
+  }
+  &_delete {
+    color: red;
+    font-size: 20px;
+    float: right;
+    padding: 3px 0 3px 5px;
+  }
+  &_left {
+    float: left;
+  }
+  &_right {
+    float: right;
+  }
+  &_data_right {
+    font-size: 11px;
+    text-align: right;
+  }
+  &_data_left {
+    font-size: 11px;
+    text-align: left;
+  }
+  &_viewed {
+    color: red;
+    font-size: 13px;
+    text-align: right;
+  }
+}
+
+.user img {
+  margin-inline-start: 10%;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  margin-top: 10px;
+}
+
+.input {
+  position: absolute;
+  height: 43px;
+  bottom: 0;
+  width: 43%;
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+}

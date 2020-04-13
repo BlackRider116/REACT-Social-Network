@@ -13,29 +13,21 @@ const initialState = {
       id: 4,
       postText: "helo, how are you?",
       likes: 10,
-      src:
-        "https://avatars.mds.yandex.net/get-pdb/1378807/02efeda4-5dd6-4f01-aa37-65eba04f077b/s1200"
     },
     {
       id: 3,
       postText: "hdfghghdfhdfh",
       likes: 15,
-      src:
-        "https://avatars.mds.yandex.net/get-pdb/1378807/02efeda4-5dd6-4f01-aa37-65eba04f077b/s1200"
     },
     {
       id: 2,
       postText: "551++596",
       likes: 7,
-      src:
-        "https://avatars.mds.yandex.net/get-pdb/1378807/02efeda4-5dd6-4f01-aa37-65eba04f077b/s1200"
     },
     {
       id: 1,
       postText: "helo",
       likes: 9,
-      src:
-        "https://avatars.mds.yandex.net/get-pdb/1378807/02efeda4-5dd6-4f01-aa37-65eba04f077b/s1200"
     }
   ],
   profile: null,
@@ -46,16 +38,14 @@ const initialState = {
 const reduceProfile = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST:
-      const postId = state.posts[0].id;
       return {
         ...state,
         posts: [
           {
-            id: postId + 1,
+            id: state.posts[0].id + 1,
             postText: action.postText.newPost,
             likes: 0,
-            src:
-              "https://www.nastol.com.ua/download.php?img=201112/1280x1024/nastol.com.ua-12179.jpg"
+            src: action.photo
           },
           ...state.posts
         ],
@@ -88,7 +78,7 @@ const reduceProfile = (state = initialState, action) => {
   }
 };
 
-export const addNewPost = (postText) => ({ type: ADD_POST, postText });
+export const addNewPost = (postText, photo) => ({ type: ADD_POST, postText, photo });
 
 const setUserProfile = profile => ({
   type: SET_USER_PROFILE,
@@ -115,10 +105,10 @@ export const getUserStatus = (userId) => async (dispatch) => {
 }
 
 export const updateUserStatus = (status) => async (dispatch) => {
-    const response = await profileAPI.updateUserStatus(status)
-    if (response.data.resultCode === 0) {
-      dispatch(setUserStatus(status));
-    }
+  const response = await profileAPI.updateUserStatus(status)
+  if (response.data.resultCode === 0) {
+    dispatch(setUserStatus(status));
+  }
 }
 
 const saveProtoSuccess = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos })

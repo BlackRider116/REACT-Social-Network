@@ -57,7 +57,7 @@ const Login = props => {
       <h1>Login</h1>
       <ReduxLoginForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
       <div>
-        <div>Логинизация может не пройти в Хроме из за политики безопасности CORS, защиты куки с помощью атрибута SameSite (доступа к серверу у меня нет).  Используйте другие браузеры, например как я Мозилу</div>
+        <div>Если не можете залогиниться, значит ваш браузер блокирует файлы cookie</div>
         <b>Тестовый аккаунт:</b>
         <div className={stylesLogin.tests}>
           <b>Email:</b> free@samuraijs.com

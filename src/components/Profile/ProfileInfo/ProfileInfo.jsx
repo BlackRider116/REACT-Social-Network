@@ -3,9 +3,11 @@ import avatarDefault from "../../../assets/image/avatarDefault.jpg";
 import ProfileStatus from "./ProfileStatus";
 import classes from "../../../styles/Profile.module.scss";
 import ProfileInfoForm, { ProfileUserInfo } from "./ProfileUserInfo";
+import { Button } from "react-bootstrap";
 
 const ProfileInfo = ({ profileUpdate, ...props }) => {
   
+  const fileUpload = React.createRef();
   const photoSelected = e => {
     if (e.target.files.length) {
       props.savePhoto(e.target.files[0]);
@@ -45,8 +47,8 @@ const ProfileInfo = ({ profileUpdate, ...props }) => {
           }
           alt="AvaPhoto"
         />
-        {!props.isOwner && <input type={"file"} onChange={photoSelected} />}
-        {/* {!props.isOwner && <button>Upload photo</button>} */}
+        <input ref={fileUpload} type={"file"} onChange={photoSelected} style={{display:'none'}}/>
+        {!props.isOwner && <div style={{paddingTop: '3px'}}><Button style={{width: '250px'}} onClick={() => fileUpload.current.click()} variant='secondary'>Загрузить фото</Button></div> }
       </div>
       <ProfileStatus
         {...props}

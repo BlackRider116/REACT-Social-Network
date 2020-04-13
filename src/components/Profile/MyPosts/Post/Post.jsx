@@ -4,7 +4,7 @@ import classes from "../../../../styles/Profile.module.scss";
 const Post = props => {
   return (
     <div className={classes.profilePostItem}>
-      <img alt='Post' src={props.posts.src} />
+      <img alt='Post' src={props.avaPhoto} />
       {props.posts.postText}
       <div className={classes.profilePostLikes}>
         {props.posts.likes}

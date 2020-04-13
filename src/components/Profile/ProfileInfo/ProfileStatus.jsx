@@ -28,16 +28,16 @@ const ProfileStatus = props => {
   return (
     <div className={classes.profileInfoItem}>
       {!editMode && (
-        <div>
-          <b>Status: </b>
-          <span onClick={activatedEditMode}>
-            {props.status || "<<<Not indicated>>>"}
+        <div onClick={activatedEditMode} style={{cursor: 'pointer'}}>
+          <b>Статус: </b>
+          <span >
+            {props.status }
           </span>
         </div>
       )}
       {editMode && (
-        <div>
-          <b>Status: </b>
+        <div style={{cursor: 'pointer'}}>
+          <b>Статус: </b>
           <input
             onChange={onStatusChange}
             onBlur={() => {

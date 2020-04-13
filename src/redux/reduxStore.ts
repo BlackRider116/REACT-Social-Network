@@ -5,11 +5,12 @@ import reduceProfile from "./reduceProfile";
 import reduceUsers from "./reduceUsers";
 import reduceAuth from "./reduceAuth";
 import thunkMiddleware from "redux-thunk";
+//@ts-ignore
 import { reducer as formReducer } from 'redux-form';
 import reduceApp from "./reduceApp";
 import reduceNews from "./reduceNews";
 
-let reducers = combineReducers({
+let rootReducer = combineReducers({
   messagesPage: reduceDialogs,
   profilePage: reduceProfile,
   usersPage: reduceUsers,
@@ -19,9 +20,12 @@ let reducers = combineReducers({
   news: reduceNews
 });
 
+type RootReducerType = typeof rootReducer
+export type GlobalStateType = ReturnType<RootReducerType>
 
-let store = createStore(reducers, applyMiddleware(thunkMiddleware));
+let store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
+//@ts-ignore
 window.store = store;
 
 export default store;

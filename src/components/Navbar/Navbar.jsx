@@ -8,32 +8,32 @@ const Navbar = () => {
     <nav className={classes.nav}>
       <div className={classes.item}>
         <NavLink to="/profile" activeClassName={classes.active}>
-          Profile
+          Профиль
         </NavLink>
       </div>
       <div className={classes.item}>
         <NavLink to="/dialogs" activeClassName={classes.active}>
-          Messages
+          Сообщения
         </NavLink>
       </div>
       <div className={classes.item}>
         <NavLink to="/news" activeClassName={classes.active}>
-          My news
+          Новости
         </NavLink>
       </div>
       <div className={classes.item}>
         <NavLink to="/music" activeClassName={classes.active}>
-          Music
+          Музыка
         </NavLink>
       </div>
       <div className={`${classes.item} ${classes.setting}`}>
         <NavLink to="/setting" activeClassName={classes.active}>
-          Setting
+          Настройки
         </NavLink>
       </div>
       <div className={`${classes.item} ${classes.setting}`}>
         <NavLink to="/users" activeClassName={classes.active}>
-          Users
+          Пользователи
         </NavLink>
       </div>
     </nav>

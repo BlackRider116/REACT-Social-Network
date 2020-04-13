@@ -74,24 +74,24 @@ export const profileAPI = {
 }
 
 export const dialogsAPI = {
-    startDialogs(userId) {
-        return (
-            instance.put(`dialogs/${userId}`)
-        )
-    },
     getAllDialogs() {
         return (
-            instance.get(`dialogs`)
+            instance.get(`dialogs/`).then(response => response.data)
         )
     },
     getListMessages(userId) {
         return (
-            instance.get(`dialogs/${userId}/messages`)
+            instance.get(`dialogs/${userId}/messages`).then(response => response.data)
         )
     },
     sendMessage(userId, message) {
         return (
-            instance.post(`dialogs/${userId}/messages`, {body: message})
+            instance.post(`dialogs/${userId}/messages`, {body: message}).then(response => response.data)
+        )
+    },
+    deleteMessage(messageId) {
+        return (
+            instance.delete(`dialogs/messages/${messageId}`).then(response => response.data)
         )
     }
 };

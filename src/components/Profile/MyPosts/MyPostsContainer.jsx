@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 const mapStateToProps = state => {
   return {
     posts: state.profilePage.posts,
+    avaPhoto: state.profilePage.profile.photos.small
   };
 };
 

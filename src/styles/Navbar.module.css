@@ -29,7 +29,7 @@
   }
 
   .item a.active {
-    color: rgb(8, 172, 2);
+    color:gold;
     text-decoration: none;
     box-shadow: 0 0 0 60px rgba(0,0,0,.05) inset;
   }

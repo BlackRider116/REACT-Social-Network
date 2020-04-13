@@ -48,7 +48,7 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path="/"><Redirect to="/profile" /></Route>
                         <Route path="/profile/:userId?" render={withSuspense(ProfileContainer)} />
-                        <Route path="/dialogs" render={withSuspense(DialogsContainer)} />
+                        <Route path="/dialogs/:userId?" render={withSuspense(DialogsContainer)} />
                         <Route path="/news" render={withSuspense(NewsContainer)} />
                         <Route path="/music" render={() => <Music />} />
                         <Route path="/setting" render={() => <Setting />} />

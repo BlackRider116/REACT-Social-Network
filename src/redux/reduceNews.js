@@ -8,9 +8,6 @@ const ADD_POST = "/posts/ADD_POST"
 const TEXT = "/posts/TEXT"
 
 let addPostFormData = {}
-//   type: '',
-//   file: ''
-// }
 
 const initialState = {
   posts: [],

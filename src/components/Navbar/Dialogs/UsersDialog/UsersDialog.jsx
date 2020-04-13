@@ -1,15 +1,21 @@
 import React from "react";
-import classes from "../../../../styles/Dialogs.module.css";
+import classes from "../../../../styles/Dialogs.module.scss";
 import { NavLink } from "react-router-dom";
-
+import avatarDefault from "../../../../assets/image/avatarDefault.jpg";
 
 const UsersDialog = props => {
-  // console.log(props.state.id)
+  const user = props.userInfo;
+
   return (
     <div className={`${classes.user} ${classes.dialogItem}`}>
-      <NavLink to={`/dialogs/id${props.state.id}`} activeClassName={classes.active}>
-        <img alt={props.state.id} src={props.state.src} />
-        {props.state.name}
+      <NavLink to={`/profile/${user.id}`}>
+        <img
+          alt={user.id}
+          src={user.photos.small ? user.photos.small : avatarDefault}
+        />
+      </NavLink>
+      <NavLink to={`/dialogs/${user.id}`} activeClassName={classes.active}>
+        <div onClick={() => props.userMessages(user.id)}>{user.userName}</div>
       </NavLink>
     </div>
   );
