@@ -5,11 +5,12 @@
   grid-template-areas:
     "header header header"
     "nav content content2";
-  grid-template-rows: 3.3em 100%;
+  grid-template-rows: 60px 90%;
   grid-template-columns: 20% 60% 20%;
   grid-gap: 1px;
   background-color: cornflowerblue;
   min-height: 100vh;
+  // position: relative;
 }
 
 .content {

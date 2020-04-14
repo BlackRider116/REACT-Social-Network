@@ -1,59 +1,68 @@
 import React from "react";
 import styles from "../../../../styles/Dialogs.module.scss";
-import { Card } from "react-bootstrap";
 import Moment from "react-moment";
 import { Field, reduxForm } from "redux-form";
-import { Button } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { DeleteFilled } from "@ant-design/icons";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const Messages = ({ myId, ...props }) => {
   let messageItem = props.userMessages.items || [];
 
-  // console.log(messageItem);
+  // console.log(props.openUserDialogsId);
   return (
-    <>
-      {messageItem.map(item => (
-        <div key={item.id} className={`${styles.message}`}>
-          <Card
-            className={`${
-              item.senderId === myId
-                ? styles.message_right
-                : styles.message_left
-            } ${
-              item.isSelect
-                ? `${styles.message_card_select} ${styles.message_card}`
-                : styles.message_card
-            }`}
-            onClick={() => props.selectMessageThunk(item.id)}
-          >
-            {item.body.replace("<br />", "")}
-            {item.isSelect && item.senderId === myId && (
-              <span>
-                <DeleteFilled className={styles.message_delete} onClick={()=>props.deleteMessageThunk(item.id)} />
-              </span>
-            )}
+    <Card className={styles.cardMessage}>
+      <div style={{ height: "86vh" }}>
+        <Scrollbars style={{ width: "100%", height: "100%" }}>
+          {messageItem.map(item => (
+            <div key={item.id} className={`${styles.message}`}>
+              <Card
+                className={`${
+                  item.senderId === myId
+                    ? styles.message_right
+                    : styles.message_left
+                } ${
+                  item.isSelect
+                    ? `${styles.message_card_select} ${styles.message_card}`
+                    : styles.message_card
+                }`}
+                onClick={() => props.selectMessageThunk(item.id)}
+              >
+                {item.body.replace("<br />", "")}
+                {item.isSelect && item.senderId === myId && (
+                  <span>
+                    <DeleteFilled
+                      className={styles.message_delete}
+                      onClick={() => props.deleteMessageThunk(item)}
+                    />
+                  </span>
+                )}
 
-            <Moment
-              format="DD-MM-YYYY HH:mm"
-              className={
-                item.senderId === myId
-                  ? styles.message_data_right
-                  : styles.message_data_left
-              }
-            >
-              {item.addedAt}
-            </Moment>
-            {item.senderId === myId && !item.viewed && (
-              <div className={styles.message_viewed} >не прочитано</div>
-            )}
-          </Card>
-        </div>
-      ))}
-      <NewMessageFormRedux
-        sendMessageThunk={props.sendMessageThunk}
-        userId={props.userId}
-      />
-    </>
+                <Moment
+                  format="DD-MM-YYYY HH:mm"
+                  className={
+                    item.senderId === myId
+                      ? styles.message_data_right
+                      : styles.message_data_left
+                  }
+                >
+                  {item.addedAt}
+                </Moment>
+                {item.senderId === myId && !item.viewed && (
+                  <div className={styles.message_viewed}>не прочитано</div>
+                )}
+              </Card>
+            </div>
+          ))}
+        </Scrollbars>
+      </div>
+      {messageItem.length > 0 && (
+        <NewMessageFormRedux
+          sendMessageThunk={props.sendMessageThunk}
+          userId={props.openUserDialogsId}
+        />
+      )}
+    </Card>
   );
 };
 
@@ -65,10 +74,14 @@ const NewMessageForm = props => {
 
   return (
     <form onSubmit={props.handleSubmit(submit)}>
-      <div className={`${styles.input}`}>
-        <Field name="newMessage" component="textarea" />
+      <div className={styles.input}>
+        <Field
+          name="newMessage"
+          component="textarea"
+          placeholder=" Введите сообщение"
+        />
         <Button variant="secondary" type="submit">
-          Отправить
+          Ok
         </Button>
       </div>
     </form>

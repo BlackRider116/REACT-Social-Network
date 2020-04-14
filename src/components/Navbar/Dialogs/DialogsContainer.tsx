@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
 import { compose } from "redux";
 import styles from "../../../styles/Dialogs.module.scss";
-import { getAllDialogsThunk, getUserMessagesThunk, UserMessagesType, sendMessageThunk, deleteMessageThunk, selectMessageThunk } from "../../../redux/reduceDialogs";
+import { getAllDialogsThunk, getUserMessagesThunk, UserMessagesType, sendMessageThunk, deleteMessageThunk, selectMessageThunk, MessagesType } from "../../../redux/reduceDialogs";
 import { UserInfoType } from '../../../redux/reduceDialogs'
 import { GlobalStateType } from "../../../redux/reduxStore";
 import UsersDialog from "./UsersDialog/UsersDialog";
@@ -23,23 +23,22 @@ class DialogsContainer extends React.Component<PropsType> {
   }
 
   componentDidUpdate() {
-    // console.log(this.props.userMessages)
+
+    console.log()
   }
 
   render() {
     return (
-      <div className={styles.dialogs}>
+      <div className={styles.dialogsPage}>
         <div>
-          {this.props.usersInfo.map((user: UserInfoType) => (
-            <UsersDialog key={user.id} userInfo={user} userMessages={this.props.getUserMessagesThunk} />
-          ))}
+          <UsersDialog userInfo={this.props.usersInfo} userMessages={this.props.getUserMessagesThunk}/>
         </div>
 
         <div>
           <Messages
             userMessages={this.props.userMessages}
+            openUserDialogsId={this.props.openUserDialogsId}
             myId={this.props.myId}
-            userId={this.userId}
             sendMessageThunk={this.props.sendMessageThunk}
             selectMessageThunk={this.props.selectMessageThunk}
             deleteMessageThunk={this.props.deleteMessageThunk} />
@@ -54,12 +53,14 @@ class DialogsContainer extends React.Component<PropsType> {
 type MapStateToPropsType = {
   usersInfo: Array<UserInfoType>
   userMessages: UserMessagesType
+  openUserDialogsId: number 
   myId: number | null
 }
 const mapStateToProps = (state: GlobalStateType): MapStateToPropsType => {
   return {
     usersInfo: state.messagesPage.usersInfo,
     userMessages: state.messagesPage.userMessages,
+    openUserDialogsId: state.messagesPage.openUserDialogsId,
     myId: state.auth.userId
   };
 };
@@ -68,7 +69,7 @@ type MapDispatchToPropsType = {
   getAllDialogsThunk: () => void
   getUserMessagesThunk: (userId: number) => void
   sendMessageThunk: (userId: number, message: string) => void
-  deleteMessageThunk: (messageID: string) => void
+  deleteMessageThunk: (message: MessagesType) => void
   selectMessageThunk: (messageId: string) => void
 }
 export default compose(
