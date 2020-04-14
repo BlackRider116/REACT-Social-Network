@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "dcc8c0ff08fb6c1747453fd2ca14e3e8",
+    "revision": "fd4cbc477604cc4188e6c28475af4637",
     "url": "/REACT-first-progect/index.html"
   },
   {
@@ -8,15 +8,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/REACT-first-progect/static/css/4.a8df7a9d.chunk.css"
   },
   {
-    "revision": "c470e4a728d9999eef6a",
-    "url": "/REACT-first-progect/static/css/5.3a6c7c74.chunk.css"
+    "revision": "fa74ab4a346369b42fc6",
+    "url": "/REACT-first-progect/static/css/5.0518fad6.chunk.css"
   },
   {
     "revision": "917008bc48dc98741708",
     "url": "/REACT-first-progect/static/css/6.e1d43ee6.chunk.css"
   },
   {
-    "revision": "dfc075a5a399deb9fb4b",
+    "revision": "289157db28c7d91bbaff",
     "url": "/REACT-first-progect/static/css/main.e6dc0dce.chunk.css"
   },
   {
@@ -28,32 +28,32 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/REACT-first-progect/static/js/2.62ed9a41.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "3fff9935f44f171ff05c",
-    "url": "/REACT-first-progect/static/js/3.3b5aa910.chunk.js"
+    "revision": "a1f044a2af3096c905fe",
+    "url": "/REACT-first-progect/static/js/3.839a89b2.chunk.js"
   },
   {
     "revision": "362cd232e6b400756e3bc1723069a8cd",
-    "url": "/REACT-first-progect/static/js/3.3b5aa910.chunk.js.LICENSE.txt"
+    "url": "/REACT-first-progect/static/js/3.839a89b2.chunk.js.LICENSE.txt"
   },
   {
     "revision": "50596a16dfe6a8b8e399",
     "url": "/REACT-first-progect/static/js/4.3ce5e2c1.chunk.js"
   },
   {
-    "revision": "c470e4a728d9999eef6a",
-    "url": "/REACT-first-progect/static/js/5.df3de0f3.chunk.js"
+    "revision": "fa74ab4a346369b42fc6",
+    "url": "/REACT-first-progect/static/js/5.837e0355.chunk.js"
   },
   {
     "revision": "917008bc48dc98741708",
     "url": "/REACT-first-progect/static/js/6.a920b74d.chunk.js"
   },
   {
-    "revision": "dfc075a5a399deb9fb4b",
-    "url": "/REACT-first-progect/static/js/main.9efa91b2.chunk.js"
+    "revision": "289157db28c7d91bbaff",
+    "url": "/REACT-first-progect/static/js/main.95235bc6.chunk.js"
   },
   {
-    "revision": "350d05c1b8d6310843db",
-    "url": "/REACT-first-progect/static/js/runtime-main.5854140d.js"
+    "revision": "55efc2a55e1cd51cd281",
+    "url": "/REACT-first-progect/static/js/runtime-main.616a980f.js"
   },
   {
     "revision": "6c93098b589f3a22809de7d933bbef61",
