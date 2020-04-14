@@ -1,38 +1,42 @@
 .dialogsPage {
   display: grid;
-  grid-template-columns: 3fr 9fr;
+  grid-template-columns: 30% 70%;
 }
 
-.cardMessage {
+.cardDialogs {
   background-color: rgb(230, 230, 230);
   height: 93vh;
   position: relative;
 }
 
 .dialogUser {
-  position: relative;
-  background-color: rgb(230, 230, 230);
+  background-color: rgb(212, 212, 212);
+  margin: 2px 10px 2px 3px;
   &:hover {
     background-color: rgb(167, 167, 167);
   }
-  &.active {
+  &_active {
     background-color: rgb(167, 167, 167);
   }
-  & img {
-    margin-inline-start: 5px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-top: 10px;
-  }
-  & a {
-    color: black;
-    text-decoration: none;
-    min-width: 220px;
-    &.activeName {
-      color: gold;
+  &_Item {
+    display: grid;
+    grid-template-columns: 2fr 10fr;
+    width: 100%;
+    & img {
+      padding: 5px 5px 5px 5px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+    & a {
+      color: black;
       text-decoration: none;
-      background: rgb(167, 167, 167);
+      padding-right: 5px;
+      text-align: center;
+      &.activeName {
+        color: gold;
+        text-decoration: none;
+      }
     }
   }
 }
@@ -41,12 +45,12 @@
   display: flow-root;
   &_card {
     cursor: pointer;
-    margin: 1px 20% 1px 20%;
-    background-color: rgb(230, 230, 230);
+    margin: 2px 10px 2px 10px;
+    background-color: rgb(212, 212, 212);
     max-width: 80%;
     padding: 5px 10px 5px 10px;
     &_select {
-      background-color: rgb(76, 236, 47);
+    background-color: rgb(167, 167, 167);
     }
   }
   &_delete {

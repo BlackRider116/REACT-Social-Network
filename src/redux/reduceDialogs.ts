@@ -4,6 +4,7 @@ import { dialogsAPI } from '../api/api';
 
 const GET_ALL_DIALOGS = "/dialogs/GET_ALL_DIALOGS";
 const GET_USER_MESSAGES = "/dialogs/GET_USER_MESSAGES";
+const DELETE_GET_USER_MESSAGES = "/dialogs/DELETE_GET_USER_MESSAGES";
 const SEND_MESSAGE = "/dialogs/SEND_MESSAGE";
 const DELETE_MESSAGE = "/dialogs/DELETE_MESSAGE";
 const SELECT_MESSAGE = '/dialogs/SELECT_MESSAGE'
@@ -44,7 +45,8 @@ export type UserMessagesType = {
 const initialState = {
   usersInfo: [] as Array<UserInfoType>,
   userMessages: {} as UserMessagesType,
-  openUserDialogsId: 0 as number
+  //@ts-ignore
+  openUserDialogsId: Number(window.location.hash.replace("#/dialogs/", "")) as number
 }
 type InitialStateType = typeof initialState
 
@@ -71,15 +73,22 @@ const reduceDialogs = (state = initialState, action: ActionsTypes): InitialState
         ...state,
         userMessages: { items: state.userMessages.items.filter(item => item.id !== action.messageId) }
       }
+    case DELETE_GET_USER_MESSAGES:
+      return {
+        ...state,
+        userMessages: { items: [] },
+        openUserDialogsId: action.openUserDialogsId
+      }
     default:
       return state;
   }
 };
-type ActionsTypes = GetAllDialogsType | GetUserMessagesType | SendMessageType | DeleteMessageType | SelectMessageType
+type ActionsTypes = GetAllDialogsType | GetUserMessagesType | SendMessageType | DeleteMessageType | SelectMessageType | DeleteGetUserMessagesType
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
 type GetAllDialogsType = { type: typeof GET_ALL_DIALOGS, payload: { usersInfo: Array<UserInfoType> } }
-const getAllDialogsAC = (usersInfo: Array<UserInfoType>): GetAllDialogsType => ({ type: GET_ALL_DIALOGS, payload: { usersInfo } })
+const getAllDialogsAC = (usersInfo: Array<UserInfoType>): GetAllDialogsType =>
+  ({ type: GET_ALL_DIALOGS, payload: { usersInfo } })
 
 export const getAllDialogsThunk = (): ThunkType => async dispatch => {
   const data = await dialogsAPI.getAllDialogs()
@@ -91,9 +100,13 @@ type GetUserMessagesType = { type: typeof GET_USER_MESSAGES, payload: { userMess
 const getUserMessagesAC = (userMessages: UserMessagesType, openUserDialogsId: number): GetUserMessagesType =>
   ({ type: GET_USER_MESSAGES, payload: { userMessages, openUserDialogsId } })
 
+type DeleteGetUserMessagesType = { type: typeof DELETE_GET_USER_MESSAGES, openUserDialogsId: number }
+const deleteGetUserMessagesAC = (openUserDialogsId: number): DeleteGetUserMessagesType =>
+  ({ type: DELETE_GET_USER_MESSAGES, openUserDialogsId })
+
 export const getUserMessagesThunk = (userId: number): ThunkType => async dispatch => {
   const data = await dialogsAPI.getListMessages(userId)
-  dispatch(getUserMessagesAC(data, userId))
+  userId !== -1 ? dispatch(getUserMessagesAC(data, userId)) : dispatch(deleteGetUserMessagesAC(userId))
 }
 
 type SendMessageType = { type: typeof SEND_MESSAGE, message: MessagesType }

@@ -9,9 +9,8 @@ import { Scrollbars } from "react-custom-scrollbars";
 const Messages = ({ myId, ...props }) => {
   let messageItem = props.userMessages.items || [];
 
-  // console.log(props.openUserDialogsId);
   return (
-    <Card className={styles.cardMessage}>
+    <Card className={styles.cardDialogs}>
       <div style={{ height: "86vh" }}>
         <Scrollbars style={{ width: "100%", height: "100%" }}>
           {messageItem.map(item => (
@@ -28,15 +27,17 @@ const Messages = ({ myId, ...props }) => {
                 }`}
                 onClick={() => props.selectMessageThunk(item.id)}
               >
-                {item.body.replace("<br />", "")}
-                {item.isSelect && item.senderId === myId && (
-                  <span>
-                    <DeleteFilled
-                      className={styles.message_delete}
-                      onClick={() => props.deleteMessageThunk(item)}
-                    />
-                  </span>
-                )}
+                <div>
+                  {item.body.replace("<br />", "")}
+                  {item.isSelect && item.senderId === myId && (
+                    <span>
+                      <DeleteFilled
+                        className={styles.message_delete}
+                        onClick={() => props.deleteMessageThunk(item)}
+                      />
+                    </span>
+                  )}
+                </div>
 
                 <Moment
                   format="DD-MM-YYYY HH:mm"
@@ -56,7 +57,7 @@ const Messages = ({ myId, ...props }) => {
           ))}
         </Scrollbars>
       </div>
-      {messageItem.length > 0 && (
+      {props.openUserDialogsId !== -1 && (
         <NewMessageFormRedux
           sendMessageThunk={props.sendMessageThunk}
           userId={props.openUserDialogsId}

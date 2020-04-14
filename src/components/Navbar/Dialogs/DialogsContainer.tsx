@@ -1,5 +1,4 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
 import { compose } from "redux";
@@ -13,25 +12,23 @@ import Messages from "./Messages/Messages";
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType
 class DialogsContainer extends React.Component<PropsType> {
-  //@ts-ignore
-  userId = this.props.match.params.userId
   componentDidMount() {
     this.props.getAllDialogsThunk();
-    if (this.userId) {
-      this.props.getUserMessagesThunk(this.userId)
-    }
+    this.props.getUserMessagesThunk(this.props.openUserDialogsId)
   }
 
-  componentDidUpdate() {
-
-    console.log()
+  componentWillUnmount() {
+    this.props.getUserMessagesThunk(-1)
   }
 
   render() {
     return (
       <div className={styles.dialogsPage}>
         <div>
-          <UsersDialog userInfo={this.props.usersInfo} userMessages={this.props.getUserMessagesThunk}/>
+          <UsersDialog
+            userInfo={this.props.usersInfo}
+            userMessages={this.props.getUserMessagesThunk}
+            openUserDialogsId={this.props.openUserDialogsId} />
         </div>
 
         <div>
@@ -53,7 +50,7 @@ class DialogsContainer extends React.Component<PropsType> {
 type MapStateToPropsType = {
   usersInfo: Array<UserInfoType>
   userMessages: UserMessagesType
-  openUserDialogsId: number 
+  openUserDialogsId: number
   myId: number | null
 }
 const mapStateToProps = (state: GlobalStateType): MapStateToPropsType => {
@@ -81,6 +78,5 @@ export default compose(
       deleteMessageThunk,
       selectMessageThunk
     }),
-  withRouter,
   withAuthRedirect
 )(DialogsContainer);
