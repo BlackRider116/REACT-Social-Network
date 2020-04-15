@@ -1,97 +1,84 @@
 import { usersAPI, followAPI } from "../api/api";
+import { filterPagesNumbers } from "../common/Pagination/Pagination";
 
-const FOLLOW = "/users/FOLLOW";
-const UNFOLLOW = "/users/UNFOLLOW";
+const FOLLOW_UNFOLLOW = "/users/FOLLOW_UNFOLLOW";
 const SET_USERS = "/users/SET_USERS";
 const SET_NUMBER_PAGE = "/users/SET_NUMBER_PAGE";
-const SET_TOTAL_COUNT = "/users/SET_TOTAL_COUNT";
-const SET_LOADING = "/users/SET_LOADING";
+const PAGES_NUMBERS = "/users/PAGES_NUMBERS";
 
 const initialState = {
   users: [],
   usersCount: 10,
   totalCount: 0,
   numberPage: 1,
-  isLoading: false
+  isLoading: false,
+  pagesNumbers: [],
+  portionPagesNumbers: 1
 };
 
 
 
 const reduceUsers = (state = initialState, action) => {
   switch (action.type) {
-    case FOLLOW:
-     
+    case FOLLOW_UNFOLLOW:
       return {
         ...state,
-        users: followUnfollow(state.users, action.userId, true)
+        users: followUnFollow(state.users, action.userId)
       };
-
-    case UNFOLLOW:
-      return {
-        ...state,
-        users: followUnfollow(state.users, action.userId, false)
-      };
-
     case SET_USERS:
-      return { ...state, users: action.users };
-
     case SET_NUMBER_PAGE:
-      return { ...state, numberPage: action.numberPage };
-
-    case SET_TOTAL_COUNT:
-      return { ...state, totalCount: action.totalCount };
-
-    case SET_LOADING:
-      return { ...state, isLoading: action.isLoading };
-
+    case PAGES_NUMBERS:
+      return { ...state, ...action.payload };
     default:
       return state;
   }
 };
 
-const followUnfollow = (users, userId, boolean) => {
+const followUnFollow = (users, userId) => {
   return users.map(u => {
-      if (u.id === userId) {
-        return { ...u, followed: boolean };
-      }
-      return u;
-    })
+    if (u.id === userId) {
+      const boolean = u.followed ? false : true
+      return { ...u, followed: boolean };
+    }
+    return u;
+  })
 }
 
-const follow = userId => ({ type: FOLLOW, userId });
-const unFollow = userId => ({ type: UNFOLLOW, userId });
-const setUsers = users => ({ type: SET_USERS, users });
-const setNumberPage = numberPage => ({ type: SET_NUMBER_PAGE, numberPage });
-const setTotalCount = totalCount => ({ type: SET_TOTAL_COUNT, totalCount });
-const setLoading = isLoading => ({ type: SET_LOADING, isLoading });
 
-export const getUsersThunk = (usersCount, pageNumber) => async (dispatch) => {
-  if(pageNumber){dispatch(setNumberPage(pageNumber))}
-  dispatch(setLoading(true));
+const setUsers = (users, totalCount, isLoading, pagesNumbers, portionPagesNumbers) => 
+({ type: SET_USERS, payload: { users, totalCount, isLoading, pagesNumbers, portionPagesNumbers } });
+const setNumberPage = (numberPage, isLoading) => ({ type: SET_NUMBER_PAGE, payload: { numberPage, isLoading } });
+
+export const getUsersThunk = (pageNumber = 1, portionPagesNumbers = 1) => async (dispatch, getState) => {
+  const usersCount = getState().usersPage.usersCount
+  dispatch(setNumberPage(pageNumber, true))
 
   const response = await usersAPI.getUsers(usersCount, pageNumber)
-// debugger
-  dispatch(setUsers(response.items));
-  dispatch(setTotalCount(response.totalCount));
-
-  dispatch(setLoading(false));
-}
-
-export const postFollowThunk = (userId) => async (dispatch) => {
-  const response = await followAPI.postFollow(userId)
-
-  if (response.data.resultCode === 0) {
-    dispatch(follow(userId));
+  if (response.error === null) {
+    const pagesNumbers = filterPagesNumbers(response.totalCount, usersCount, portionPagesNumbers)
+    dispatch(setUsers(response.items, response.totalCount, false, pagesNumbers, portionPagesNumbers));
   }
 }
 
 
-export const deleteFollowThunk = (userId) => async (dispatch) => {
-  const response = await followAPI.deleteFollow(userId)
+const followUnFollowAC = userId => ({ type: FOLLOW_UNFOLLOW, userId });
 
+export const followUnFollowThunk = (userId, followed) => async (dispatch) => {
+  const response = !followed ? await followAPI.postFollow(userId) : await followAPI.deleteFollow(userId)
   if (response.data.resultCode === 0) {
-    dispatch(unFollow(userId));
+    dispatch(followUnFollowAC(userId));
   }
 }
+
+
+const pagesNumbersAC = (pagesNumbers, portionPagesNumbers) => ({ type: PAGES_NUMBERS, payload: { pagesNumbers, portionPagesNumbers } })
+
+export const pagesNumbersThunk = portionNumber =>  (dispatch, getState) => {
+  const usersCount = getState().usersPage.usersCount
+  const totalCount = getState().usersPage.totalCount
+  const pagesNumbers =  filterPagesNumbers(totalCount, usersCount, portionNumber)
+  dispatch(pagesNumbersAC(pagesNumbers, portionNumber))
+}
+
 
 export default reduceUsers;

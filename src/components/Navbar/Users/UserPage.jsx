@@ -25,7 +25,7 @@ const UserPage = props => {
                 variant="outline-danger"
                 className={styles.user_followBtn}
                 onClick={() => {
-                  props.deleteFollowThunk(user.id);
+                  props.followUnFollowThunk(user.id, user.followed);
                 }}
               >
                 Отписаться
@@ -35,7 +35,7 @@ const UserPage = props => {
                 variant="outline-success"
                 className={styles.user_followBtn}
                 onClick={() => {
-                  props.postFollowThunk(user.id);
+                  props.followUnFollowThunk(user.id, user.followed);
                 }}
               >
                 Подписаться
