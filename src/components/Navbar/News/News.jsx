@@ -40,11 +40,11 @@ const News = ({ ...props }) => {
           </div>
         ))}
       <div>
-        <Button variant="secondary" block
-          className={!props.prevPostsButton ? classes.displayNone : ""}
+        <Button variant="secondary"
+          className={!props.prevPostsButton ? classes.displayNone : classes.prevBtn}
           onClick={previousPosts}
         >
-          Previous posts
+          Показать еще
         </Button>
       </div>
     </div>

@@ -8,13 +8,16 @@ import { UserInfoType } from '../../../redux/reduceDialogs'
 import { GlobalStateType } from "../../../redux/reduxStore";
 import UsersDialog from "./UsersDialog/UsersDialog";
 import Messages from "./Messages/Messages";
+import Preloader from "../../../common/Preloader/Preloader";
 
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType
 class DialogsContainer extends React.Component<PropsType> {
   componentDidMount() {
     this.props.getAllDialogsThunk();
-    this.props.getUserMessagesThunk(this.props.openUserDialogsId)
+    if (this.props.openUserDialogsId !== -1) {
+      this.props.getUserMessagesThunk(this.props.openUserDialogsId)
+    }
   }
 
   componentWillUnmount() {
@@ -22,6 +25,7 @@ class DialogsContainer extends React.Component<PropsType> {
   }
 
   render() {
+    if(this.props.usersInfo.length === 0) return <Preloader />
     return (
       <div className={styles.dialogsPage}>
         <div>

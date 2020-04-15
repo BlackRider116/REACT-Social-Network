@@ -1,5 +1,27 @@
 .avatar {
-    width: 100px;
-    height: 100px;
+  width: 120px;
+  height: 120px;
+  margin: 7px;
+  &:hover {
+    border: 2px solid rgb(0, 190, 0)
+  }
+  &:active {
+    border: 2px solid blue
+  }
 }
 
+.user {
+  background-color: rgb(230, 230, 230);
+  display: grid;
+  grid-template-columns: 135px 10fr;
+  margin-bottom: 5px;
+  &_followBtn {
+    margin: 0 0 7px 7px;
+    width: 120px;
+  }
+  &_startMesBtn {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 7px;
+  }
+}

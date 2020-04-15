@@ -7,6 +7,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import Moment from "react-moment";
 
 const UsersDialog = props => {
+  // console.log(props.userInfo)
   return (
     <Card className={styles.cardDialogs}>
       <Scrollbars style={{ width: "100%", height: "100%" }}>
@@ -49,7 +50,7 @@ const UsersDialog = props => {
                       color: "red"
                     }}
                   >
-                    Новое сообщение
+                    Новых сообщений: {user.newMessagesCount}
                   </span>
                 )}
               </NavLink>

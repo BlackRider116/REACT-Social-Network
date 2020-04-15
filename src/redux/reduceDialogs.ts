@@ -8,6 +8,7 @@ const DELETE_GET_USER_MESSAGES = "/dialogs/DELETE_GET_USER_MESSAGES";
 const SEND_MESSAGE = "/dialogs/SEND_MESSAGE";
 const DELETE_MESSAGE = "/dialogs/DELETE_MESSAGE";
 const SELECT_MESSAGE = '/dialogs/SELECT_MESSAGE'
+const START_DIALOG = '/dialogs/START_DIALOG'
 
 export type UserInfoType = {
   id: number
@@ -45,8 +46,7 @@ export type UserMessagesType = {
 const initialState = {
   usersInfo: [] as Array<UserInfoType>,
   userMessages: {} as UserMessagesType,
-  //@ts-ignore
-  openUserDialogsId: Number(window.location.hash.replace("#/dialogs/", "")) as number
+  openUserDialogsId: Number(window.location.hash.replace("#/dialogs/", "")) || -1 as number
 }
 type InitialStateType = typeof initialState
 
@@ -83,7 +83,7 @@ const reduceDialogs = (state = initialState, action: ActionsTypes): InitialState
       return state;
   }
 };
-type ActionsTypes = GetAllDialogsType | GetUserMessagesType | SendMessageType | DeleteMessageType | SelectMessageType | DeleteGetUserMessagesType
+type ActionsTypes = GetAllDialogsType | GetUserMessagesType | SendMessageType | DeleteMessageType | SelectMessageType | DeleteGetUserMessagesType 
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
 type GetAllDialogsType = { type: typeof GET_ALL_DIALOGS, payload: { usersInfo: Array<UserInfoType> } }
@@ -149,6 +149,13 @@ export const selectMessageThunk = (messageId: string): ThunkType => async (dispa
 
   dispatch(selectMessageAC(newStateMessage))
   localStorage.setItem("SelectMessage", JSON.stringify(arr));
+}
+
+export const startDialogThunk = (userId: number): ThunkType => async dispatch => {
+  const response = await dialogsAPI.startDialogs(userId)
+  if (response.resultCode === 0) {
+    dispatch(getUserMessagesThunk(userId))
+  }
 }
 
 export default reduceDialogs;

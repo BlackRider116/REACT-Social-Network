@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./Pagination.module.css";
+import styles from "./Pagination.module.scss";
 
 const Pagination = ({totalCount, usersCount, numberPage, onNumberPage, portionSize = 10}) => {
 

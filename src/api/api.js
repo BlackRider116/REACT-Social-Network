@@ -74,6 +74,11 @@ export const profileAPI = {
 }
 
 export const dialogsAPI = {
+    startDialogs(userId) {
+        return (
+            instance.put(`dialogs/${userId}`).then(response => response.data)
+        )
+    },
     getAllDialogs() {
         return (
             instance.get(`dialogs/`).then(response => response.data)

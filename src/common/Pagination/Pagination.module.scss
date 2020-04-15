@@ -1,8 +1,7 @@
 .pagination {
-  width: 650px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 10px 5px 0;
+  display: flex;
+  justify-content: center;
 }
 
 .displayNone {
@@ -12,20 +11,32 @@
 .buttonsColor {
   margin-inline-end: 1px;
   margin-inline-start: 1px;
-  background-color: rgb(184, 183, 183);
+  background-color: rgb(204, 204, 204);
   border: 1px solid rgb(156, 156, 156);
+  &:hover {
+    background-color: rgb(165, 165, 165);
+  }
+  &:active {
+    color: gold;
+  }
 }
 
 .jump {
   margin-inline-end: 3px;
   margin-inline-start: 3px;
-  background-color: rgb(8, 172, 2);
+  background-color: rgb(7, 200, 1);
   border: 1px solid rgb(0, 0, 0);
+  &:hover {
+    background-color: rgb(6, 173, 0);
+  }
+  &:active {
+    color: gold;
+  }
 }
 
 .pageNumber {
   font-weight: bold;
-  background-color: rgb(8, 172, 2);
+  background-color: rgb(165, 165, 165);
   border: 2px solid black;
   color: black;
   transition: all 0.3s linear 0s;
