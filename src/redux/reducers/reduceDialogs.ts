@@ -43,7 +43,7 @@ export type UserMessagesType = {
 }
 
 const initialState = {
-  usersInfo: [] as Array<UserInfoType>,
+  usersInfo: null as Array<UserInfoType> | null,
   userMessages: {} as UserMessagesType,
   openUserDialogsId: Number(window.location.hash.replace("#/dialogs/", "")) || -1 as number
 }

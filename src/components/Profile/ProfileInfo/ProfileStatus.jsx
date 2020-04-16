@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import classes from "../../../styles/Profile.module.scss";
+import styles from "../../../styles/Profile.module.scss";
 
 const ProfileStatus = props => {
   const [editMode, setEditMode] = useState(false);
@@ -26,19 +26,18 @@ const ProfileStatus = props => {
   };
 
   return (
-    <div className={classes.profileInfoItem}>
+    <div className={styles.profileInfoItem}>
       {!editMode && (
-        <div onClick={activatedEditMode} style={{cursor: 'pointer'}}>
-          <b>Статус: </b>
-          <span >
-            {props.status }
-          </span>
+        <div className={styles.status__text}
+          onClick={activatedEditMode}
+        >
+          {props.status}
         </div>
       )}
       {editMode && (
-        <div style={{cursor: 'pointer'}}>
-          <b>Статус: </b>
+        <div style={{ cursor: "pointer" }}>
           <input
+            placeholder="Введите Ваш статус"
             onChange={onStatusChange}
             onBlur={() => {
               setTimeout(() => {

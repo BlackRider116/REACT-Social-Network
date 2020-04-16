@@ -1,10 +1,11 @@
-import { profileAPI } from "../../api/api";
+import { profileAPI, followAPI } from "../../api/api";
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk';
 import { GlobalStateType } from '../reduxStore';
 
 const ADD_POST = "/profile/ADD-POST";
 const SET_USER_PROFILE = "/profile/SET_USER_PROFILE";
+const ON_FOLLOW = "/profile/ON_FOLLOW";
 const SET_USER_STATUS = "/profile/SET_USER_STATUS"
 const SAVE_PHOTO_SUCCESS = "/profile/SAVE_PHOTO_SUCCESS"
 const PROFILE_UPDATE_SUCCESS = "/profile/PROFILE_UPDATE_SUCCESS"
@@ -50,7 +51,8 @@ const initialState = {
   ] as Array<PostType>,
   profile: null as ProfileType | null,
   profileUpdate: null as boolean | null,
-  status: "" as string
+  status: "" as string,
+  isFollow: false as boolean
 };
 type InitialStateType = typeof initialState
 
@@ -73,6 +75,7 @@ const reduceProfile = (state = initialState, action: ActionsTypes): InitialState
     case SET_USER_PROFILE:
     case PROFILE_UPDATE_SUCCESS:
     case SET_USER_STATUS:
+    case ON_FOLLOW:
       return {
         ...state,
         ...action.payload
@@ -88,18 +91,21 @@ const reduceProfile = (state = initialState, action: ActionsTypes): InitialState
   }
 };
 
-type ActionsTypes = AddNewPostType | SetUserProfileType | SetUserStatusType | SaveProtoSuccessType | ProfileUpdateSuccessType
+type ActionsTypes = AddNewPostType | SetUserProfileType | SetUserStatusType | SaveProtoSuccessType | ProfileUpdateSuccessType | OnFollowType
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
 type AddNewPostType = { type: typeof ADD_POST, postText: string, photo: string }
 export const addNewPost = (postText: string, photo: string): AddNewPostType => ({ type: ADD_POST, postText, photo });
 
-type SetUserProfileType = { type: typeof SET_USER_PROFILE, payload: { profile: ProfileType } }
-const setUserProfile = (profile: ProfileType): SetUserProfileType => ({ type: SET_USER_PROFILE, payload: { profile } });
+type SetUserProfileType = { type: typeof SET_USER_PROFILE, payload: { profile: ProfileType, isFollow: boolean } }
+const setUserProfile = (profile: ProfileType, isFollow: boolean): SetUserProfileType => ({ type: SET_USER_PROFILE, payload: { profile, isFollow } });
 
 export const getProfileThunk = (userId: number): ThunkType => async (dispatch) => {
   const response = await profileAPI.getProfile(userId)
-  dispatch(setUserProfile(response.data));
+  const isFollow = await profileAPI.getIsFollow(userId)
+  if (response.status === 200 && isFollow.status === 200) {
+    dispatch(setUserProfile(response.data, isFollow.data));
+  }
 }
 
 type SetUserStatusType = { type: typeof SET_USER_STATUS, payload: { status: string } }
@@ -109,6 +115,14 @@ export const getUserStatus = (userId: number): ThunkType => async (dispatch) => 
   const response = await profileAPI.getUserStatus(userId)
   dispatch(setUserStatus(response.data));
 }
+
+type OnFollowType = { type: typeof ON_FOLLOW, payload: { isFollow: boolean } }
+const onFollowAC = (isFollow: boolean): OnFollowType => ({ type: ON_FOLLOW, payload: { isFollow } })
+export const onFollowThunk = (userId: number, isFollow: boolean): ThunkType => async dispatch => {
+  const response = !isFollow ? await followAPI.postFollow(userId) : await followAPI.deleteFollow(userId)
+  if(response.status === 200) dispatch(onFollowAC(!isFollow))
+}
+
 
 export const updateUserStatus = (status: string): ThunkType => async (dispatch) => {
   const response = await profileAPI.updateUserStatus(status)

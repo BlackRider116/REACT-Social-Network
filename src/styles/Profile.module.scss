@@ -1,16 +1,39 @@
-.profileInfo {
-  &Item {
-    padding: 10px;
-  }
+.global {
+  background-color: rgb(230, 230, 230);
+  margin-bottom: 7px;
+}
 
-  &Avatar {
+.profileInfoCard {
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+}
+
+.profileInfo {
+  margin: 10px;
+  & img {
     width: 250px;
     height: 250px;
   }
+}
 
-  &Contact {
-    padding-left: 10px;
+.status__text {
+  display: block;
+  max-width: 100%;
+  min-height: 25px;
+  border: 1px solid #c3d2db;
+  border-radius: 5px;
+  padding: 0 5px;
+  cursor: pointer;
+  word-wrap: break-word;
+  margin-top: 3px;
+  z-index: 99;
+  &:hover {
+    border: 1px solid #7fa9db;
   }
+}
+
+.aboutMe {
+  text-align: left;
 }
 
 .profilePost {
@@ -26,15 +49,54 @@
   }
 }
 
-.myPosts{
-    &Content {
-        grid-area: content;
-      }
-    
-    &Input {
-        padding-inline-start: 10px;
-        padding-inline-end: 10px;
-        display: grid;
-        grid-template-columns: 10fr 2fr;
+.myPosts {
+  &Content {
+    grid-area: content;
+  }
+
+  &Input {
+    padding-inline-start: 10px;
+    padding-inline-end: 10px;
+    display: grid;
+    grid-template-columns: 10fr 2fr;
+  }
+}
+
+.inputStyle {
+  &_Name {
+    display: flex;
+    align-items: center;
+    & b {
+      width: 115px;
     }
+    & input {
+      width: 200px;
+    }
+  }
+  & b {
+    width: 100px;
+  }
+  & input {
+    width: 200px;
+  }
+  & span {
+    margin-left: 15px;
+  }
+}
+
+.aboutMe {
+  & textarea {
+    padding: 7px;
+    margin-left: 10px;
+    width: 60%;
+  }
+  & input {
+    margin-left: 7px;
+    transform: scale(1.3);
+    opacity: 0.9;
+    cursor: pointer;
+  }
+  & b {
+    margin-left: 10px;
+  }
 }

@@ -1,15 +1,17 @@
 import React from 'react';
 import styles from './FormControl.module.css'
 import { Field } from "redux-form";
+import { Input } from 'antd';
+const { TextArea } = Input;
 
 const InputType = ({ input, meta, ...props }) => {
     const hasError = meta.touched && meta.error
     return (
-        <span className={`${styles.formControl} ${hasError ? styles.error : ''}`}>
-            {props.types === "input" ? <input {...input} {...props} />
-                : <textarea {...input} {...props} />}
+        <div className={`${styles.formControl} ${hasError ? styles.error : ''}`}>
+            {props.types === "input" ? <Input  {...input} {...props} />
+                : <TextArea  {...input} {...props} autoSize />}
             {hasError && <span className={styles.errorText}>{meta.error}</span>}
-        </span>
+        </div>
     )
 }
 

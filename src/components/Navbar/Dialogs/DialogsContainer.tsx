@@ -9,6 +9,8 @@ import { GlobalStateType } from "../../../redux/reduxStore";
 import UsersDialog from "./UsersDialog/UsersDialog";
 import Messages from "./Messages/Messages";
 import Preloader from "../../../common/Preloader/Preloader";
+import { Card } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType
@@ -25,7 +27,10 @@ class DialogsContainer extends React.Component<PropsType> {
   }
 
   render() {
-    if(this.props.usersInfo.length === 0) return <Preloader />
+    if (this.props.usersInfo === null) return <Preloader />
+    if (this.props.usersInfo.length === 0) return <Card style={{ textAlign: 'center', fontSize: '20px', height: '100px' }}>
+      У Вас нет начатых диалогов. Чтобы начать диалог перейдите на страницу<NavLink to="/users"> пользователей</NavLink>
+    </Card>
     return (
       <div className={styles.dialogsPage}>
         <div>
@@ -52,7 +57,7 @@ class DialogsContainer extends React.Component<PropsType> {
 
 
 type MapStateToPropsType = {
-  usersInfo: Array<UserInfoType>
+  usersInfo: Array<UserInfoType> | null
   userMessages: UserMessagesType
   openUserDialogsId: number
   myId: number | null

@@ -156,7 +156,7 @@ class NewsContainer extends React.Component {
             onChange={this.onPostChange}
           />
 
-          <input
+          <textarea
             ref={this.fileUpload}
             type="file"
             onChange={this.fileSelected}

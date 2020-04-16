@@ -9,10 +9,11 @@ import {
   updateUserStatus,
   savePhoto,
   saveProfile,
-  profileUpdateSuccess
+  profileUpdateSuccess,
+  onFollowThunk
 } from "../../redux/reducers/reduceProfile";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
-
+import { startDialogThunk } from "../../redux/reducers/reduceDialogs";
 
 class ProfileContainer extends React.Component {
   userProfileId() {
@@ -48,6 +49,9 @@ class ProfileContainer extends React.Component {
         savePhoto={this.props.savePhoto}
         saveProfile={this.props.saveProfile}
         profileUpdateSuccess={this.props.profileUpdateSuccess}
+        startDialogThunk={this.props.startDialogThunk}
+        isFollow={this.props.isFollow}
+        onFollowThunk={this.props.onFollowThunk}
       />
     );
   }
@@ -58,8 +62,9 @@ const mapStateToProps = state => {
     profile: state.profilePage.profile,
     status: state.profilePage.status,
     profileUpdate: state.profilePage.profileUpdate,
+    isFollow: state.profilePage.isFollow,
     authUserId: state.auth.userId,
-    isAuth: state.auth.isAuth,
+    isAuth: state.auth.isAuth
   };
 };
 
@@ -70,7 +75,9 @@ export default compose(
     updateUserStatus,
     savePhoto,
     saveProfile,
-    profileUpdateSuccess
+    profileUpdateSuccess,
+    startDialogThunk,
+    onFollowThunk
   }),
   withRouter,
   withAuthRedirect
