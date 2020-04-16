@@ -54,6 +54,9 @@ export const profileAPI = {
         return instance
             .get(`/profile/status/${userId}`)
     },
+    getIsFollow(userId: number) {
+        return instance.get(`/follow/${userId}`)
+    },
     updateUserStatus(status: string) {
         return instance
             .put(`/profile/status/`, {status})
