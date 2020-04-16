@@ -3,8 +3,16 @@ import styles from "../../../styles/Users.module.scss";
 import avatarDefault from "./../../../assets/image/avatarDefault.jpg";
 import { NavLink } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
+import { UsersType } from "../../../redux/reducers/reduceUsers";
 
-const UserPage = props => {
+type PropsType = {
+  users: Array<UsersType>
+  isAuth: boolean
+  followUnFollowThunk: (userId: number, boolean: boolean) => void
+  startDialogThunk: (userId: number) => void
+}
+
+const UserPage: React.FC<PropsType> = props => {
   return (
     <div>
       {props.users.map(user => (
@@ -31,21 +39,21 @@ const UserPage = props => {
                 Отписаться
               </Button>
             ) : (
-              <Button
-                variant="outline-success"
-                className={styles.user_followBtn}
-                onClick={() => {
-                  props.followUnFollowThunk(user.id, user.followed);
-                }}
-              >
-                Подписаться
+                <Button
+                  variant="outline-success"
+                  className={styles.user_followBtn}
+                  onClick={() => {
+                    props.followUnFollowThunk(user.id, user.followed);
+                  }}
+                >
+                  Подписаться
               </Button>
-            )}
+              )}
           </div>
 
           <div>
-            <h4 style={{marginTop: '5px'}}> {user.name}</h4>
-            <div style={{fontSize: '17px'}}>sdfgsdfgsdfg{user.status}</div>
+            <h4 style={{ marginTop: '5px' }}> {user.name}</h4>
+            <div style={{ fontSize: '17px' }}>sdfgsdfgsdfg{user.status}</div>
 
             <NavLink to={props.isAuth ? `/dialogs/${user.id}` : "/login"}>
               <Button

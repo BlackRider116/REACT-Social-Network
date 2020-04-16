@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
 import { compose } from "redux";
 import styles from "../../../styles/Dialogs.module.scss";
-import { getAllDialogsThunk, getUserMessagesThunk, UserMessagesType, sendMessageThunk, deleteMessageThunk, selectMessageThunk, MessagesType } from "../../../redux/reduceDialogs";
-import { UserInfoType } from '../../../redux/reduceDialogs'
+import { getAllDialogsThunk, getUserMessagesThunk, UserMessagesType, sendMessageThunk, deleteMessageThunk, selectMessageThunk, MessagesType } from "../../../redux/reducers/reduceDialogs";
+import { UserInfoType } from '../../../redux/reducers/reduceDialogs'
 import { GlobalStateType } from "../../../redux/reduxStore";
 import UsersDialog from "./UsersDialog/UsersDialog";
 import Messages from "./Messages/Messages";

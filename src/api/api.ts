@@ -1,4 +1,5 @@
-import * as axios from 'axios';
+import axios from 'axios';
+import { ProfileType } from '../redux/reducers/reduceProfile';
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0',
@@ -8,18 +9,18 @@ const instance = axios.create({
 })
 
 export const usersAPI = {
-    getUsers(usersCount, numberPage) {
+    getUsers(usersCount: number, numberPage: number) {
         return instance.get(`/users?count=${usersCount}&page=${numberPage}`)
             .then(response => response.data)
     }
 }
 
 export const followAPI = {
-    postFollow(userId) {
+    postFollow(userId: number) {
         return instance
             .post(`/follow/${userId}`)
     },
-    deleteFollow(userId) {
+    deleteFollow(userId: number) {
         return instance
             .delete(`/follow/${userId}`)
     }
@@ -30,7 +31,7 @@ export const authAPI = {
         return instance
             .get(`/auth/me`)
     },
-    login(email, password, rememberMe, captcha) {
+    login(email: string, password: string, rememberMe: boolean, captcha: string | null) {
         return instance
             .post(`/auth/login`, {email, password, rememberMe, captcha})
     },
@@ -45,19 +46,19 @@ export const authAPI = {
 }
 
 export const profileAPI = {
-    getProfile(userId) {
+    getProfile(userId: number) {
         return instance
             .get(`/profile/${userId}`)
     },
-    getUserStatus(userId) {
+    getUserStatus(userId: number) {
         return instance
             .get(`/profile/status/${userId}`)
     },
-    updateUserStatus(status) {
+    updateUserStatus(status: string) {
         return instance
             .put(`/profile/status/`, {status})
     },
-    saveAvatarPhoto(photoFile) {
+    saveAvatarPhoto(photoFile: any) {
         const formData = new FormData();
         formData.append('image', photoFile)
         return instance
@@ -67,14 +68,14 @@ export const profileAPI = {
                 }
             })
     },
-    saveProfileInfo(profileInfo) {
+    saveProfileInfo(profileInfo: ProfileType) {
         return instance
             .put(`/profile`, profileInfo)
     }
 }
 
 export const dialogsAPI = {
-    startDialogs(userId) {
+    startDialogs(userId: number) {
         return (
             instance.put(`dialogs/${userId}`).then(response => response.data)
         )
@@ -84,17 +85,17 @@ export const dialogsAPI = {
             instance.get(`dialogs/`).then(response => response.data)
         )
     },
-    getListMessages(userId) {
+    getListMessages(userId: number) {
         return (
             instance.get(`dialogs/${userId}/messages`).then(response => response.data)
         )
     },
-    sendMessage(userId, message) {
+    sendMessage(userId: number, message: string) {
         return (
             instance.post(`dialogs/${userId}/messages`, {body: message}).then(response => response.data)
         )
     },
-    deleteMessage(messageId) {
+    deleteMessage(messageId: string) {
         return (
             instance.delete(`dialogs/messages/${messageId}`).then(response => response.data)
         )

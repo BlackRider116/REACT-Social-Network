@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./Pagination.module.scss";
 
-let pages = [];
-let maxPortionPages
+let pages = [] as Array<number>;
+let maxPortionPages: number
 
 export const filterPagesNumbers = (
-  totalCount,
-  usersCount,
+  totalCount: number,
+  usersCount: number,
   portionNumber = 1,
   portionSize = 10
 ) => {
@@ -26,7 +26,15 @@ export const filterPagesNumbers = (
   );
 };
 
-const Pagination = ({
+type PropsType = {
+  numberPage: number
+  pagesNumbers: Array<number>
+  portionPagesNumbers: number
+  onNumberPage: (number: number, portionPagesNumbers: number) => void
+  onPagesNumbers: (portionPagesNumbers: number) => void
+}
+
+const Pagination: React.FC<PropsType> = ({
   numberPage,
   onNumberPage,
   pagesNumbers,

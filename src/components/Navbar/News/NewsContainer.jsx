@@ -10,18 +10,18 @@ import {
   addPostThunk,
   textPostAdd,
   saveMediaFile
-} from "../../../redux/reduceNews";
+} from "../../../redux/reducers/reduceNews";
 import {
   InputGroup,
   FormControl,
   Button,
   DropdownButton,
   Dropdown,
-  Card,
+  Card as div,
   Modal
 } from "react-bootstrap";
 import loadMedia from "../../../assets/image/loadMedia.gif";
-import classes from "../../../styles/News.module.scss";
+import styles from "../../../styles/News.module.scss";
 import Timer from "react.timer";
 
 class NewsContainer extends React.Component {
@@ -141,16 +141,16 @@ class NewsContainer extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.global}>
         <InputGroup
           style={{
             position: "fixed",
             width: "60%",
-            marginTop: "5px",
-            zIndex: "100"
+            zIndex: "100",
           }}
         >
           <FormControl
+          style={{border: '1px solid black', height: '40px'}}
             value={this.props.textPost}
             placeholder="Введите текст вашего поста"
             onChange={this.onPostChange}
@@ -167,13 +167,13 @@ class NewsContainer extends React.Component {
             onClick={() => this.fileUpload.current.click()}
             disabled={this.state.uploadBtn}
             variant="secondary"
-            style={{ marginLeft: "2px" }}
+            style={{ marginLeft: "2px", border: '1px solid black' }}
           >
             {!this.state.uploadBtnLoading ? (
               " Загрузить"
             ) : (
               <div>
-                <img src={loadMedia} alt="Loading" />
+                <img style={{height: '20px'}} src={loadMedia} alt="Loading" />
                 <span> Ждите...</span>{" "}
               </div>
             )}
@@ -183,7 +183,7 @@ class NewsContainer extends React.Component {
             <DropdownButton
               title="Запись"
               variant="secondary"
-              style={{ paddingLeft: "2px" }}
+              style={{ marginLeft: "2px", border: '1px solid black', borderRadius: '5px' }}
               disabled={this.state.recordBtn}
             >
               <Dropdown.Item onClick={() => this.recordMediaUser("video")}>
@@ -201,7 +201,7 @@ class NewsContainer extends React.Component {
 
           <Button
             disabled={this.state.addBtn}
-            style={{ marginLeft: "2px" }}
+            style={{ marginLeft: "2px", border: '1px solid black' }}
             variant="success"
             onClick={this.addPost}
           >
@@ -211,21 +211,19 @@ class NewsContainer extends React.Component {
 
         <div
           style={{
-            position: "fixed",
-            width: "60%",
-            marginTop: "50px",
-            zIndex: "100"
+            width: "100%",
+            paddingTop: "42px",
           }}
         >
-          <Card className={!this.state.recordVideo && classes.displayNone}>
+          <div className={!this.state.recordVideo && styles.displayNone}>
             <video
-              style={{ width: "100%" }}
+              style={{ width: "100%", border: '3px solid red' }}
               muted={true}
               ref={a => {
                 this.video = a;
               }}
             />
-          </Card>
+          </div>
         </div>
 
         <Modal
@@ -246,9 +244,9 @@ class NewsContainer extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        <div style={{ paddingTop: "50px" }}>
+ 
           <News {...this.props} />
-        </div>
+
       </div>
     );
   }

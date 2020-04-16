@@ -1,6 +1,6 @@
-import { GlobalStateType } from './reduxStore';
+import { GlobalStateType } from '../reduxStore';
 import { ThunkAction } from 'redux-thunk';
-import { dialogsAPI } from '../api/api';
+import { dialogsAPI } from '../../api/api';
 
 const GET_ALL_DIALOGS = "/dialogs/GET_ALL_DIALOGS";
 const GET_USER_MESSAGES = "/dialogs/GET_USER_MESSAGES";
@@ -8,7 +8,6 @@ const DELETE_GET_USER_MESSAGES = "/dialogs/DELETE_GET_USER_MESSAGES";
 const SEND_MESSAGE = "/dialogs/SEND_MESSAGE";
 const DELETE_MESSAGE = "/dialogs/DELETE_MESSAGE";
 const SELECT_MESSAGE = '/dialogs/SELECT_MESSAGE'
-const START_DIALOG = '/dialogs/START_DIALOG'
 
 export type UserInfoType = {
   id: number

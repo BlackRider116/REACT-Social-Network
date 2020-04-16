@@ -10,7 +10,7 @@ import {
   savePhoto,
   saveProfile,
   profileUpdateSuccess
-} from "../../redux/reduceProfile";
+} from "../../redux/reducers/reduceProfile";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 
 

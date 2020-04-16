@@ -1,14 +1,14 @@
 
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import reduceDialogs from "./reduceDialogs";
-import reduceProfile from "./reduceProfile";
-import reduceUsers from "./reduceUsers";
-import reduceAuth from "./reduceAuth";
+import reduceDialogs from "./reducers/reduceDialogs";
+import reduceProfile from "./reducers/reduceProfile";
+import reduceUsers from "./reducers/reduceUsers";
+import reduceAuth from "./reducers/reduceAuth";
 import thunkMiddleware from "redux-thunk";
 //@ts-ignore
 import { reducer as formReducer } from 'redux-form';
-import reduceApp from "./reduceApp";
-import reduceNews from "./reduceNews";
+import reduceApp from "./reducers/reduceApp";
+import reduceNews from "./reducers/reduceNews";
 
 let rootReducer = combineReducers({
   messagesPage: reduceDialogs,
