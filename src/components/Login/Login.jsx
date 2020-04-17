@@ -8,34 +8,53 @@ import { fieldValue } from "../../common/FormControl/FormControl";
 import { connect } from "react-redux";
 import { login } from "../../redux/reducers/reduceAuth";
 import { Redirect } from "react-router-dom";
-import styles from "../../common/FormControl/FormControl.module.css";
-import stylesLogin from "../../styles/Login.module.css";
+import { Card, Button, ListGroup } from "react-bootstrap";
+import styles from "../../styles/Login.module.scss";
 
 const maxLength30 = maxLengthCreator(30);
 
 const LoginForm = props => {
   return (
     <form onSubmit={props.handleSubmit}>
-      <div>
-        {fieldValue([required, maxLength30], "email", "input", "Email")}
-      </div>
-      <div>
-        {fieldValue(
-          [required, maxLength30],
-          "password",
-          "input",
-          "Password",
-          "password"
+      <div className={styles.inputForm}>
+        <div className={styles.inputForm_Inputs}>
+          {fieldValue([required, maxLength30], "email", "input", "Email")}
+        </div>
+
+        <div className={styles.inputForm_Inputs}>
+          {fieldValue(
+            [required, maxLength30],
+            "password",
+            "input",
+            "Password",
+            "password"
+          )}
+        </div>
+
+        <div className={styles.rememberMe}>
+          {fieldValue(null, "rememberMe", "input", null, "checkbox")}
+          <span>Запомнить</span>
+        </div>
+
+        <div className={styles.captcha}>
+          {props.captchaUrl && <img src={props.captchaUrl} alt="captcha" />}
+          {props.captchaUrl && (
+            <div className={styles.inputForm_Inputs}>
+              {fieldValue(required, "captcha", "input")}
+            </div>
+          )}
+        </div>
+
+        {props.error && (
+          <div className={styles.error}>
+            <span>{props.error}</span>
+          </div>
         )}
-      </div>
-      <div>
-        {fieldValue(null, "rememberMe", "input", null, "checkbox")} remember me
-      </div>
-      {props.error && <div className={styles.errorText}>{props.error}</div>}
-      {props.captchaUrl && <img className={stylesLogin.captcha} src={props.captchaUrl} alt="captcha"/>}
-      {props.captchaUrl && <div>{fieldValue(required, "captcha", "input")}</div> } 
-      <div>
-        <button>Sign in</button>
+        <div>
+          <Button variant="success" type="submit">
+            Войти
+          </Button>
+        </div>
       </div>
     </form>
   );
@@ -45,7 +64,12 @@ const ReduxLoginForm = reduxForm({ form: "login" })(LoginForm);
 
 const Login = props => {
   const onSubmit = formData => {
-    props.login(formData.email, formData.password, formData.rememberMe, formData.captcha);
+    props.login(
+      formData.email,
+      formData.password,
+      formData.rememberMe,
+      formData.captcha
+    );
   };
 
   if (props.isAuth) {
@@ -53,19 +77,36 @@ const Login = props => {
   }
 
   return (
-    <div>
-      <h1>Login</h1>
-      <ReduxLoginForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
-      <div>
-        <div>Если не можете залогиниться, значит ваш браузер блокирует файлы cookie</div>
-        <b>Тестовый аккаунт:</b>
-        <div className={stylesLogin.tests}>
-          <b>Email:</b> free@samuraijs.com
-        </div>
-        <div className={stylesLogin.tests}>
-          <b>Password:</b> free
-        </div>
-      </div>
+    <div className={styles.login}>
+      <Card style={{ width: "400px" }}>
+        <Card.Header style={{ textAlign: "center" }}>
+          <h3>Логинизация</h3>
+        </Card.Header>
+        <ListGroup>
+          <ListGroup.Item>
+            <ReduxLoginForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <h5 style={{ textAlign: "center" }}>
+              Тестовый аккаунт для просмотра:
+            </h5>
+            <div>
+              <b>Email:</b> <span>free@samuraijs.com</span>
+            </div>
+            <div>
+              <b>Password:</b> <span>free</span>
+            </div>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <h5 style={{ textAlign: "center", color: "gold" }}>Примечание !</h5>
+            <div style={{ textIndent: "25px" }}>
+              Если не можете залогиниться, значит браузер блокирует файлы
+              cookie. Посмотрите в настройках браузера или используйте другой
+              браузер. Связано это с CORS, SameSite.
+            </div>
+          </ListGroup.Item>
+        </ListGroup>
+      </Card>
     </div>
   );
 };

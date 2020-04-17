@@ -1,0 +1,54 @@
+.login {
+  display: flex;
+  justify-content: center;
+}
+
+.inputForm {
+  display: grid;
+  justify-content: center;
+  &_Inputs {
+    & input {
+      @extend %form;
+    }
+    & span {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  & button {
+    @extend %form;
+  }
+}
+
+%form {
+  margin-top: 7px;
+  width: 210px;
+}
+
+.error {
+  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+  & span {
+    color: red;
+  }
+}
+
+.captcha {
+  & input {
+    @extend %form;
+  }
+}
+
+.rememberMe {
+  margin: 7px 0 0 7px;
+  display: flex;
+  align-items: center;
+  & input {
+    transform: scale(1.3);
+    opacity: 0.9;
+  }
+  & span {
+    margin-left: 10px;
+  }
+}

@@ -93,6 +93,11 @@ const reduceProfile = (state = initialState, action: ActionsTypes): InitialState
         ...state,
         posts: state.posts.filter(item => item.id !== action.postId)
       }
+    case "/profile/DELETE_ALL_MY_POSTS":
+      return {
+        ...state,
+        posts: []
+      }
     default:
       return state;
   }
@@ -109,7 +114,8 @@ export const actionsProfile = {
   profileUpdateSuccess: (profileUpdate: boolean | null) => ({ type: '/profile/PROFILE_UPDATE_SUCCESS', payload: { profileUpdate } } as const),
   addNewPost: (postText: string, photo: string) => ({ type: '/profile/ADD_POST', postText, photo } as const),
   likeDislikeMyPost: (postId: number, boolean: boolean) => ({ type: '/profile/LIKE_DISLIKE', postId, boolean } as const),
-  deleteMyPost: (postId: number) => ({ type: '/profile/DELETE_MY_POST', postId } as const)
+  deleteMyPost: (postId: number) => ({ type: '/profile/DELETE_MY_POST', postId } as const),
+  deleteAllMyPosts: () => ({ type: '/profile/DELETE_ALL_MY_POSTS' } as const)
 }
 
 export const getProfileThunk = (userId: number): ThunkType => async (dispatch) => {
@@ -122,7 +128,7 @@ export const getProfileThunk = (userId: number): ThunkType => async (dispatch) =
 
 export const getUserStatus = (userId: number): ThunkType => async (dispatch) => {
   const response = await profileAPI.getUserStatus(userId)
-  if(response.status === 200) dispatch(actionsProfile.setUserStatus(response.data));
+  if (response.status === 200) dispatch(actionsProfile.setUserStatus(response.data));
 }
 
 export const onFollowThunk = (userId: number, isFollow: boolean): ThunkType => async dispatch => {
@@ -184,5 +190,7 @@ const filterLikes = (statePosts: Array<PostType>, postId: number, boolean: boole
     return item
   })
 }
+
+
 
 export default reduceProfile;

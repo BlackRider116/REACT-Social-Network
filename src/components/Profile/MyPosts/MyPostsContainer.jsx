@@ -28,8 +28,9 @@ const MyPostsContainer = props => {
     props.addNewPost(postText.newPost, props.avaPhoto);
     dispatch(reset("myNewPost"));
   };
- 
-  localStorage.setItem('MyPosts', JSON.stringify(props.posts))
+
+  localStorage.setItem("MyPosts", JSON.stringify(props.posts));
+
   return (
     <>
       {!myProfile && (
@@ -37,12 +38,15 @@ const MyPostsContainer = props => {
           <MyPostFormRedux onSubmit={onSubmit} />
           <div style={{ marginBottom: "10px" }}>{myPosts}</div>
           <div className={classes.deleteLocalStorage}>
-            <Button
+            {props.posts.length !== 0 &&<Button
               variant="danger"
-              onClick={() => localStorage.removeItem("MyPosts")}
+              onClick={() => {
+                localStorage.removeItem("MyPosts");
+                props.deleteAllMyPosts();
+              }}
             >
-              Очиcтить localStorage
-            </Button>
+              Очиcтить localStorage и удалить посты
+            </Button>}
           </div>
         </div>
       )}
@@ -74,7 +78,8 @@ export default compose(
   connect(mapStateToProps, {
     addNewPost: actionsProfile.addNewPost,
     likeDislikeMyPost,
-    deleteMyPost: actionsProfile.deleteMyPost
+    deleteMyPost: actionsProfile.deleteMyPost,
+    deleteAllMyPosts: actionsProfile.deleteAllMyPosts
   }),
   withRouter
 )(MyPostsContainer);
