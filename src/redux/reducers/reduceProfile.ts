@@ -102,12 +102,12 @@ type ActionsTypes = InferActionsTypes<typeof actionsProfile>
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
 export const actionsProfile = {
-  addNewPost: (postText: string, photo: string) => ({ type: '/profile/ADD_POST', postText, photo } as const),
   setUserProfile: (profile: ProfileType, isFollow: boolean) => ({ type: '/profile/SET_USER_PROFILE', payload: { profile, isFollow } } as const),
   setUserStatus: (status: string) => ({ type: '/profile/SET_USER_STATUS', payload: { status } } as const),
   onFollowAC: (isFollow: boolean) => ({ type: '/profile/ON_FOLLOW', payload: { isFollow } } as const),
   saveProtoSuccess: (photos: any) => ({ type: '/profile/SAVE_PHOTO_SUCCESS', photos } as const),
   profileUpdateSuccess: (profileUpdate: boolean | null) => ({ type: '/profile/PROFILE_UPDATE_SUCCESS', payload: { profileUpdate } } as const),
+  addNewPost: (postText: string, photo: string) => ({ type: '/profile/ADD_POST', postText, photo } as const),
   likeDislikeMyPost: (postId: number, boolean: boolean) => ({ type: '/profile/LIKE_DISLIKE', postId, boolean } as const),
   deleteMyPost: (postId: number) => ({ type: '/profile/DELETE_MY_POST', postId } as const)
 }
@@ -122,7 +122,7 @@ export const getProfileThunk = (userId: number): ThunkType => async (dispatch) =
 
 export const getUserStatus = (userId: number): ThunkType => async (dispatch) => {
   const response = await profileAPI.getUserStatus(userId)
-  dispatch(actionsProfile.setUserStatus(response.data));
+  if(response.status === 200) dispatch(actionsProfile.setUserStatus(response.data));
 }
 
 export const onFollowThunk = (userId: number, isFollow: boolean): ThunkType => async dispatch => {

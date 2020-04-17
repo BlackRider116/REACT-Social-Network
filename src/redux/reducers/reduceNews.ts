@@ -23,7 +23,7 @@ export type PostType = {
   content: string
   type: string
   file: string
-  likes: number
+  likes?: number
 }
 const initialState = {
   posts: [] as Array<PostType>,

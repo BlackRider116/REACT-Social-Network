@@ -1,0 +1,105 @@
+.header {
+  grid-area: header;
+  background-color: rgb(37, 4, 255);
+  width: 100%;
+  height: 53px;
+  position: fixed;
+  z-index: 101;
+  display: flex;
+  align-items: center;
+}
+
+.logotype {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  float: right;
+  & img {
+    height: 49px;
+    margin-left: 10px;
+  }
+  & span {
+    margin-left: 10px;
+    color: white;
+    font-size: 25px;
+  }
+}
+
+.loginBlockPosition {
+  position: relative;
+  float: right;
+  margin-right: 10px;
+}
+
+.loginBlockName {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  cursor: pointer;
+  & img {
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    margin-left: 10px;
+  }
+  & span {
+    font-size: 27px;
+    color: #fff;
+  }
+}
+
+.loginButton,
+.loginBtn a {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 2.5em;
+  line-height: 2.5em;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 -1px 1px #777;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 0 0 60px rgba(0, 0, 0, 0) inset,
+    0.1em 0.1em 0.2em rgb(0, 2, 136);
+  background: linear-gradient(
+    rgb(117, 117, 251),
+    rgb(69, 56, 244) 48%,
+    rgb(2, 6, 234) 52%,
+    rgb(37, 23, 240)
+  );
+  margin: 2px;
+  &:hover {
+    color: white;
+    transition: 0.75s linear;
+    background-image: linear-gradient(
+      rgb(88, 88, 209),
+      rgb(56, 46, 199) 48%,
+      rgb(3, 7, 190) 52%,
+      rgb(31, 18, 202)
+    );
+  }
+  &.active {
+    @extend %activeBtn;
+  }
+  &:active {
+    @extend %activeBtn;
+  }
+}
+
+%activeBtn {
+  color: gold;
+  text-decoration: none;
+  box-shadow: 0 0 0 60px rgba(0, 0, 0, 0.05) inset;
+  background-image: linear-gradient(
+    rgb(88, 88, 209),
+    rgb(56, 46, 199) 48%,
+    rgb(3, 7, 190) 52%,
+    rgb(31, 18, 202)
+  );
+}

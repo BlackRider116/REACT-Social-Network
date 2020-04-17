@@ -8,11 +8,11 @@ const News = ({ ...props }) => {
     if (post.type === "") {
       return null;
     } else if (post.type === "image") {
-      return <img variant="top" src={post.file} alt="" />;
+      return <img style={{maxHeight: '60vh', width: "100%"}} variant="top" src={post.file} alt="" />;
     } else if (post.type === "audio") {
       return <audio style={{width: "100%"}}  src={post.file} controls/>;
     } else if (post.type === "video") {
-      return <video style={{width: "100%", maxHeight: "640px"}}  src={post.file} controls />;
+      return <video style={{width: "100%", maxHeight: '60vh'}}  src={post.file} controls />;
     }
   };
 

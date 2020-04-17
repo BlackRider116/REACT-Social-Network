@@ -52,7 +52,7 @@ const ProfileInfo = ({ profileUpdate, ...props }) => {
             }
             alt="AvaPhoto"
           />
-          <textarea
+          <input
             ref={fileUpload}
             type={"file"}
             onChange={photoSelected}
