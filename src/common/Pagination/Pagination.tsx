@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Pagination.module.scss";
+import { CaretRightFilled, CaretLeftFilled, BackwardFilled, ForwardFilled } from '@ant-design/icons';
 
 let pages = [] as Array<number>;
 let maxPortionPages: number
@@ -73,61 +74,62 @@ const Pagination: React.FC<PropsType> = ({
   };
 
   return (
-    <>
-      <div className={styles.pagination}>
-        {
+
+    <div className={styles.pagination}>
+
+
+        <button
+          className={
+            portionPagesNumbers > 1 ? styles.jump : styles.displayNone
+          }
+          onClick={jumpPrev}
+        >
+          <span><BackwardFilled /></span>
+        </button>
+
+        <button
+          className={numberPage !== 1 ? styles.nextPrev : styles.displayNone}
+          onClick={prev}
+        >
+          <span><CaretLeftFilled /></span>
+        </button>
+ 
+
+      {pagesNumbers.map(p => {
+        return (
           <button
             className={
-              portionPagesNumbers > 1 ? styles.jump : styles.displayNone
+              numberPage === p ? styles.pageNumber : styles.buttonsColor
             }
-            onClick={jumpPrev}
-          >
-            JUMP PREV
-          </button>
-        }
-        {
-          <button
-            className={numberPage !== 1 ? styles.jump : styles.displayNone}
-            onClick={prev}
-          >
-            PREV
-          </button>
-        }
-        {pagesNumbers.map(p => {
-          return (
-            <button
-              className={
-                numberPage === p ? styles.pageNumber : styles.buttonsColor
-              }
-              key={p}
-              onClick={() => {
-                onNumberPage(p, portionPagesNumbers);
-              }}
-            >{` ${p}`}</button>
-          );
-        })}
-        {
-          <button
-            className={
-              pages.length > numberPage ? styles.jump : styles.displayNone
-            }
-            onClick={next}
-          >
-            NEXT
-          </button>
-        }
-        {
-          <button
-            className={
-              maxPortionPages > portionPagesNumbers ? styles.jump : styles.displayNone
-            }
-            onClick={jumpNext}
-          >
-            JUMP NEXT
-          </button>
-        }
-      </div>
-    </>
+            key={p}
+            onClick={() => {
+              onNumberPage(p, portionPagesNumbers);
+            }}
+          >{` ${p}`}</button>
+        );
+      })}
+
+
+        <button
+          className={
+            pages.length > numberPage ? styles.nextPrev : styles.displayNone
+          }
+          onClick={next}
+        >
+          <span><CaretRightFilled /></span>
+
+        </button>
+        <button
+          className={
+            maxPortionPages > portionPagesNumbers ? styles.jump : styles.displayNone
+          }
+          onClick={jumpNext}
+        >
+          <span><ForwardFilled /></span>
+        </button>
+
+
+    </div>
   );
 };
 

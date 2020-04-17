@@ -9,8 +9,8 @@ import {
   updateUserStatus,
   savePhoto,
   saveProfile,
-  profileUpdateSuccess,
-  onFollowThunk
+  actionsProfile,
+  onFollowThunk,
 } from "../../redux/reducers/reduceProfile";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { startDialogThunk } from "../../redux/reducers/reduceDialogs";
@@ -75,7 +75,7 @@ export default compose(
     updateUserStatus,
     savePhoto,
     saveProfile,
-    profileUpdateSuccess,
+    profileUpdateSuccess: actionsProfile.profileUpdateSuccess,
     startDialogThunk,
     onFollowThunk
   }),

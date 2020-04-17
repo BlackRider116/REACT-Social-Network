@@ -1,42 +1,39 @@
 import React from "react";
 import classes from "../../../styles/Profile.module.scss";
-import Post from "./Post/Post";
-import { Field, reduxForm } from "redux-form";
-import { withRouter } from "react-router-dom";
-import { reset } from "redux-form";
+import { Card, Button } from "react-bootstrap";
+import { DeleteFilled } from "@ant-design/icons";
 
-const MyPosts = (props) => {
-  const posts = props.posts.map(post => <Post avaPhoto={props.avaPhoto} posts={post} key={post.id} />);
-  const myProfile = props.match.params.userId;
-
-  const onSubmit = (postText, dispatch) => {
-    props.addNewPost(postText.newPost, props.avaPhoto);
-    dispatch(reset("myNewPost"));
-  };
-
+const Posts = ({posts, ...props}) => {
   return (
-    <>
-      {!myProfile && (
-        <div>
-          <MyPostFormRedux onSubmit={onSubmit} />
-          <div className={classes.myPostsContent}>{posts}</div>
-        </div>
-      )}
-    </>
-  );
-};
-
-const MyPostForm = props => {
-  return (
-    <form onSubmit={props.handleSubmit}>
-      <div className={classes.myPostsInput}>
-        <Field name="newPost" component="textarea" />
-        <button>Add Post</button>
+    <Card className={classes.profilePost}>
+      <div className={classes.profilePostItem}>
+        <img alt="Post" src={props.avaPhoto} />
+        <span>{posts.postText}</span>
       </div>
-    </form>
+      <div className={classes.profilePostLikes}>
+        <span>{`💗 ${posts.likes}  `}</span>
+        <Button
+          variant="success"
+          onClick={() => props.likeDislikeMyPost(posts.id, true)}
+        >
+          <span>{"👍"}</span>
+        </Button>
+        <Button
+          variant="danger"
+          onClick={() => props.likeDislikeMyPost(posts.id, false)}
+        >
+          <span>{"👎"}</span>
+        </Button>
+        <Button
+          variant="dark"
+          style={{ float: "right" }}
+          onClick={() => props.deleteMyPost(posts.id)}
+        >
+          <DeleteFilled style={{ color: "red" }} />
+        </Button>
+      </div>
+    </Card>
   );
 };
 
-const MyPostFormRedux = reduxForm({ form: "myNewPost" })(MyPostForm);
-
-export default withRouter(MyPosts);
+export default Posts;

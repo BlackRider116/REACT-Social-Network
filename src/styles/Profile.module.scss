@@ -1,6 +1,7 @@
 .global {
   background-color: rgb(230, 230, 230);
   margin-bottom: 7px;
+  min-height: 93vh;
 }
 
 .profileInfoCard {
@@ -32,33 +33,63 @@
   }
 }
 
-.aboutMe {
-  text-align: left;
-}
-
 .profilePost {
-  &Item img {
-    width: 60px;
-    height: 60px;
-    border-radius: 100%;
-    padding: 10px;
+  background-color: rgb(197, 194, 194);
+  margin: 3px 10px 3px 10px;
+  &Item {
+    display: flex;
+    align-items: center;
+    & img {
+      width: 100px;
+      width: 60px;
+      height: 60px;
+      border-radius: 100%;
+      padding: 10px;
+    }
+    & span {
+      width: 90%;
+      font-size: 18px;
+    }
   }
 
   &Likes {
     padding: 10px;
+    & button {
+      position: relative;
+      margin: 1px;
+      width: 35px;
+      height: 30px;
+      & span {
+        position: absolute;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}
+
+.deleteLocalStorage {
+  display: flex;
+  & button {
+    width: 100%;
+    margin: 0 10px 10px 10px;
   }
 }
 
 .myPosts {
-  &Content {
-    grid-area: content;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  & textarea {
+    resize: none;
+    width: 100%;
+    height: 43px;
+    background: #f6f6f6;
+    border: 1px solid rgb(131, 131, 131);
+    border-radius: 4px;
   }
-
-  &Input {
-    padding-inline-start: 10px;
-    padding-inline-end: 10px;
-    display: grid;
-    grid-template-columns: 10fr 2fr;
+  & button {
+    margin-left: 3px;
+    height: 43px;
   }
 }
 

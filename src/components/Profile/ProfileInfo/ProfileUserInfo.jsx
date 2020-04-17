@@ -126,17 +126,27 @@ export const ProfileAboutMe = ({ profile }) => {
     <div>
       <div>
         <b>Обо мне: </b>
-        <div style={{marginLeft: '10px', width: '60%'}}>{profile.aboutMe}</div>
+        <div style={{ marginLeft: "10px", width: "60%" }}>
+          {profile.aboutMe}
+        </div>
       </div>
 
-      <div style={{display: 'flex', alignItem: 'center'}}>
+      <div style={{ display: "flex", alignItem: "center" }}>
         <b>В поиске работы: </b>
-        <h5 style={{marginLeft: '10px'}}>{profile.lookingForAJob ? "Yes" : "No"}</h5>
+        <h5 style={{ marginLeft: "10px" }}>
+          {profile.lookingForAJob ? (
+            <span style={{ color: "green" }}>Yes</span>
+          ) : (
+            <span style={{ color: "red" }}>No</span>
+          )}
+        </h5>
       </div>
 
       <div>
         <b>Мои скиллы: </b>
-        <div style={{marginLeft: '10px', width: '60%'}}>{profile.lookingForAJobDescription}</div>
+        <div style={{ marginLeft: "10px", width: "60%" }}>
+          {profile.lookingForAJobDescription}
+        </div>
       </div>
     </div>
   );
