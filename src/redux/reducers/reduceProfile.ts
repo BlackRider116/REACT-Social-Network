@@ -24,10 +24,11 @@ export type ProfileType = {
   lookingForAJobDescription: string | null
   fullName: string | null
   userId: number
-  photos: {
-    small: string | null
-    large: string | null
-  }
+  photos: PhotosType
+}
+type PhotosType = {
+  small: string | null
+  large: string | null
 }
 
 const localMyPosts = JSON.parse(localStorage.getItem("MyPosts") || "[]")
@@ -111,7 +112,7 @@ export const actionsProfile = {
   setUserProfile: (profile: ProfileType, isFollow: boolean) => ({ type: '/profile/SET_USER_PROFILE', payload: { profile, isFollow } } as const),
   setUserStatus: (status: string) => ({ type: '/profile/SET_USER_STATUS', payload: { status } } as const),
   onFollowAC: (isFollow: boolean) => ({ type: '/profile/ON_FOLLOW', payload: { isFollow } } as const),
-  saveProtoSuccess: (photos: any) => ({ type: '/profile/SAVE_PHOTO_SUCCESS', photos } as const),
+  saveProtoSuccess: (photos: PhotosType) => ({ type: '/profile/SAVE_PHOTO_SUCCESS', photos } as const),
   profileUpdateSuccess: (profileUpdate: boolean | null) => ({ type: '/profile/PROFILE_UPDATE_SUCCESS', payload: { profileUpdate } } as const),
   addNewPost: (postText: string, photo: string | null) => ({ type: '/profile/ADD_POST', postText, photo } as const),
   likeDislikeMyPost: (postId: number, boolean: boolean) => ({ type: '/profile/LIKE_DISLIKE', postId, boolean } as const),

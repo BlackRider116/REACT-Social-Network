@@ -8,8 +8,9 @@ import { MailOutlined } from '@ant-design/icons';
 
 const Navbar = () => {
   const newMessagesCount = useSelector((state: GlobalStateType) => state.messagesPage.newMessagesCount)
+  const isAuth = useSelector((state: GlobalStateType) => state.auth.isAuth)
   const dispatch = useDispatch()
-  dispatch(newMessagesCountThunk());
+  if (isAuth) dispatch(newMessagesCountThunk());
 
   return (
     <nav className={styles.nav}>

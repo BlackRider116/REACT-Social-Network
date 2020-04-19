@@ -3,12 +3,12 @@ import { ThunkAction } from 'redux-thunk';
 import { GlobalStateType, InferActionsTypes } from '../reduxStore';
 
 type AddPostFormDataType = {
-  type: string
-  file: string
+  type: string | null
+  file: string | null
 }
 let addPostFormData: AddPostFormDataType = {
-  type: '',
-  file: ''
+  type: null,
+  file: null
 }
 
 export type NewsPostType = {
@@ -147,16 +147,17 @@ export const addPostThunk = (content: string): ThunkType => async (dispatch) => 
     file: addPostFormData.file || '',
   }
 
-  addPostFormData = {
-    type: '',
-    file: ''
+  if (content || addPostFormData.type !== null) {
+    const promise = await postsAPI.addPost(post)
+    dispatch(actionsNews.addPost(promise))
   }
-
-  const promise = await postsAPI.addPost(post)
-  dispatch(actionsNews.addPost(promise))
+  addPostFormData = {
+    type: null,
+    file: null
+  }
 }
 
-export const saveMediaFile = async (file: any, type: string) => {
+export const saveMediaFile = async (file: File | Blob, type: string) => {
   const response = await mediaApi.downloadFile(file)
   const postType = !type ? response.types : type
 

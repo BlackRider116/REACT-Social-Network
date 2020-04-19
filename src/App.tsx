@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentType } from "react";
 import classes from "./App.module.scss";
 import { Route, withRouter, Switch, Redirect } from "react-router-dom";
 import Setting from "./components/Setting/Setting";
@@ -11,30 +11,33 @@ import { connect } from "react-redux";
 import { initializeApp } from "./redux/reducers/reduceApp";
 import Preloader from "./common/Preloader/Preloader";
 
-import withSuspense from "../src/hoc/withSuspense";
+import withSuspense from "./hoc/withSuspense";
 import NewsContainer from "./components/News/NewsContainer";
+import { GlobalStateType } from "./redux/reduxStore";
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'))
 const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'))
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'))
 
-
-class App extends React.Component {
-    catchAllUnhandledErrors = (reason, promise) => {
+type PropsType = MapStateToPropsType & MapDispatchToPropsType
+class App extends React.Component<PropsType> {
+    catchAllUnhandledErrors = (reason: any, promise: any) => {
         let errorText = ''
-        if(reason.reason.message==='Request failed with status code 403') {
-            errorText='Invalid "API-KEY" in api.js'
+        if (reason.reason.message === 'Request failed with status code 403') {
+            errorText = 'Invalid "API-KEY" in api.js'
         } else (
-            errorText=reason.reason.message
+            errorText = reason.reason.message
         )
-        alert(errorText) 
+        alert(errorText)
     }
 
     componentDidMount() {
         this.props.initializeApp();
+        //@ts-ignore
         window.addEventListener('unhandledrejection', this.catchAllUnhandledErrors)
     }
 
     componentWillUnmount() {
+        //@ts-ignore
         window.removeEventListener('unhandledrejection', this.catchAllUnhandledErrors)
     }
 
@@ -61,14 +64,14 @@ class App extends React.Component {
         );
     };
 }
-
-const mapStateToProps = (state) => {
+type MapStateToPropsType = { initialized: boolean }
+const mapStateToProps = (state: GlobalStateType): MapStateToPropsType => {
     return {
         initialized: state.app.initialized
     }
 }
-
-export default compose(
-    connect(mapStateToProps, { initializeApp }),
+type MapDispatchToPropsType = { initializeApp: () => void }
+export default compose<ComponentType<{}>>(
+    connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps, { initializeApp }),
     withRouter)
     (App);

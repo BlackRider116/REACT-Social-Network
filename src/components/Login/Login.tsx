@@ -1,5 +1,5 @@
 import React from "react";
-import { reduxForm } from "redux-form";
+import { reduxForm, InjectedFormProps } from "redux-form";
 import {
   maxLengthCreator,
   required
@@ -10,15 +10,16 @@ import { login } from "../../redux/reducers/reduceAuth";
 import { Redirect } from "react-router-dom";
 import { Card, Button, ListGroup } from "react-bootstrap";
 import styles from "../../styles/Login.module.scss";
+import { GlobalStateType } from "../../redux/reduxStore";
 
 const maxLength30 = maxLengthCreator(30);
 
-const LoginForm = props => {
+const LoginForm: React.FC<InjectedFormProps<FormDataType, OwnProps> & OwnProps> = props => {
   return (
     <form onSubmit={props.handleSubmit}>
       <div className={styles.inputForm}>
         <div className={styles.inputForm_Inputs}>
-          {fieldValue([required, maxLength30], "email", "input", "Email")}
+          {fieldValue([required, maxLength30], "email", "input", "Email", undefined)}
         </div>
 
         <div className={styles.inputForm_Inputs}>
@@ -32,7 +33,7 @@ const LoginForm = props => {
         </div>
 
         <div className={styles.rememberMe}>
-          {fieldValue(null, "rememberMe", "input", null, "checkbox")}
+          {fieldValue([], "rememberMe", "input", undefined, "checkbox")}
           <span>Запомнить</span>
         </div>
 
@@ -40,7 +41,7 @@ const LoginForm = props => {
           {props.captchaUrl && <img src={props.captchaUrl} alt="captcha" />}
           {props.captchaUrl && (
             <div className={styles.inputForm_Inputs}>
-              {fieldValue(required, "captcha", "input")}
+              {fieldValue(required, "captcha", "input", undefined, undefined)}
             </div>
           )}
         </div>
@@ -59,11 +60,13 @@ const LoginForm = props => {
     </form>
   );
 };
+type OwnProps = { captchaUrl: string | null }
+const ReduxLoginForm = reduxForm<FormDataType, OwnProps>({ form: "login" })(LoginForm);
 
-const ReduxLoginForm = reduxForm({ form: "login" })(LoginForm);
-
-const Login = props => {
-  const onSubmit = formData => {
+type PropsType = MapStateToPropsType & MapDispatchToPropsType
+type FormDataType = { email: string, password: string, rememberMe: boolean, captcha: string }
+const Login: React.FC<PropsType> = props => {
+  const onSubmit = (formData: FormDataType) => {
     props.login(
       formData.email,
       formData.password,
@@ -111,11 +114,17 @@ const Login = props => {
   );
 };
 
-const mapStateToProps = state => {
+type MapStateToPropsType = {
+  captchaUrl: string | null
+  isAuth: boolean
+}
+const mapStateToProps = (state: GlobalStateType): MapStateToPropsType => {
   return {
     captchaUrl: state.auth.captchaUrl,
     isAuth: state.auth.isAuth
   };
 };
-
-export default connect(mapStateToProps, { login })(Login);
+type MapDispatchToPropsType = {
+  login: (email: string, password: string, rememberMe: boolean, captcha: string) => void
+}
+export default connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps, { login })(Login);

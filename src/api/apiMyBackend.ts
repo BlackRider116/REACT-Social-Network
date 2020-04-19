@@ -59,7 +59,7 @@ export const likeDislikeDeleteAPI = {
 }
 
 export const mediaApi = {
-    async downloadFile(file: any) {
+    async downloadFile(file: File | Blob) {
         const formData = new FormData();
         formData.append("media", file);
         return await instance.post(`/upload`, formData).then(response => response.data)

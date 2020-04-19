@@ -7,7 +7,7 @@ const GLOBAL_ERROR = "GLOBAL_ERROR";
 
 const initialState = {
   initialized: false as boolean,
-  globalError: null as null| any
+  globalError: null as null | any
 };
 type InitialStateType = typeof initialState
 
@@ -32,9 +32,8 @@ type ActionsTypes = InferActionsTypes<typeof actionsApp>
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
 const actionsApp = {
-setInitialization: () => ({ type: INITIALIZED_SUCCESS }as const),
-setGlobalError: (globalError: any) => ({ type: GLOBAL_ERROR, globalError }as const)
-
+  setInitialization: () => ({ type: INITIALIZED_SUCCESS } as const),
+  setGlobalError: (globalError: any) => ({ type: GLOBAL_ERROR, globalError } as const)
 }
 
 export const initializeApp = (): ThunkType => async (dispatch) => {

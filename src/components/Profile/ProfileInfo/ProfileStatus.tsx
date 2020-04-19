@@ -17,7 +17,7 @@ const ProfileStatus: React.FC<PropsType> = props => {
   }, [props.status]);
 
   const activatedEditMode = () => {
-    if (props.isOwner === undefined) {
+    if (!props.isOwner) {
       setEditMode(true);
     }
   };

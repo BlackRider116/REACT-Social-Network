@@ -1,3 +1,4 @@
+
 import { authAPI, profileAPI } from "../../api/api";
 import { ThunkAction } from 'redux-thunk';
 import { GlobalStateType, InferActionsTypes } from '../reduxStore';
@@ -39,9 +40,9 @@ export const actionsAuth = {
 
 export const getAuthThunk = (): ThunkType => (dispatch) => {
   return authAPI.getAuth()
-    .then((response: any) => {
-      if (!response.data.resultCode) {
-        const { id, email, login } = response.data.data
+    .then((response) => {
+      if (response.resultCode === 0) {
+        const { id, email, login } = response.data
         dispatch(actionsAuth.setAuthUserData(id, email, login, true));
       }
     });
@@ -52,9 +53,9 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
   if (response.data.resultCode === 0) {
     dispatch(getAuthThunk());
   } else {
-    let error = response.data.messages.length > 0 ? response.data.messages[0] : 'Some Error'
+    let messageErr = response.data.messages.length > 0 ? response.data.messages[0] : 'Some Error'
     //@ts-ignore
-    dispatch(stopSubmit('login', { _error: error }))
+    dispatch(stopSubmit('login', { _error: messageErr }))
     if (response.data.resultCode === 10) {
       dispatch(getCaptha())
     }

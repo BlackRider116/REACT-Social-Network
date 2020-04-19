@@ -25,18 +25,18 @@ import styles from "../../styles/News.module.scss";
 //@ts-ignore
 import Timer from "react.timer";
 import { GlobalStateType } from "../../redux/reduxStore";
+import { RouteComponentProps } from "react-router";
 
 
-type PropsType = MapStateToPropsType & MapDispatchToPropsType & OwnProps
-type OwnProps = {
-  video: any
-}
+type PropsType = MapStateToPropsType & MapDispatchToPropsType & RouteComponentProps
+
 type StateType = {
   uploadBtn: boolean
   uploadBtnLoading: boolean
   recordVideo: boolean
   recordBtn: boolean
   recordBtnDisable: boolean
+  waitRecordBtn: boolean
   error: boolean
   errorText: string
   addBtn: boolean
@@ -50,6 +50,7 @@ class NewsContainer extends React.Component<PropsType, StateType> {
       recordVideo: false,
       recordBtn: false,
       recordBtnDisable: false,
+      waitRecordBtn: false,
       error: false,
       errorText: "",
       addBtn: false
@@ -60,7 +61,7 @@ class NewsContainer extends React.Component<PropsType, StateType> {
     this.props.getMyPosts(0);
   }
 
-  componentDidUpdate(prevState: any) {
+  componentDidUpdate(prevState: PropsType) {
     if (
       this.props.posts.length !== prevState.posts.length &&
       this.props.posts.length < 5
@@ -94,6 +95,7 @@ class NewsContainer extends React.Component<PropsType, StateType> {
     }
   };
 
+  video = (document.getElementById('media-user-stream') as any)
   recordMediaUser = (typeMedia: string) => {
     if (!navigator.mediaDevices || !window.MediaRecorder) {
       this.setState({
@@ -102,7 +104,6 @@ class NewsContainer extends React.Component<PropsType, StateType> {
       });
       return;
     }
-
     if (typeMedia === "audio") {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
@@ -118,8 +119,8 @@ class NewsContainer extends React.Component<PropsType, StateType> {
         .getUserMedia({ audio: true, video: true })
         .then(stream => {
           this.recordStream(stream, typeMedia, false);
-          //@ts-ignore
-          this.video.srcObject = stream; this.video.play();
+          this.video.srcObject = stream
+          this.video.play();
           this.setState({ recordVideo: true });
         })
         .catch(err => {
@@ -131,28 +132,30 @@ class NewsContainer extends React.Component<PropsType, StateType> {
     }
   };
 
-  recordStream = (stream: any, type: string, isStop: boolean) => {
+  mediaRecorder: MediaRecorder | undefined = undefined
+  recordStream = (stream: MediaStream, type: string, isStop: boolean) => {
     this.setState({
       uploadBtn: true,
       addBtn: true,
       recordBtnDisable: true,
-      recordBtn: true
+      recordBtn: true,
+      waitRecordBtn: true
     });
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
 
-    mediaRecorder.ondataavailable = (ev: any) => {
-      stream.getTracks().forEach((o: any) => o.stop());
+    this.mediaRecorder = new MediaRecorder(stream);
+    this.mediaRecorder.start();
+    this.mediaRecorder.ondataavailable = (ev: BlobEvent) => {
+      stream.getTracks().forEach((o) => o.stop());
       this.setState({ recordBtnDisable: false, recordVideo: false });
       const blob = new Blob([ev.data]);
       saveMediaFile(blob, type).finally(() => {
-        this.setState({ addBtn: false, recordBtn: false });
+        this.setState({ addBtn: false, recordBtn: false, waitRecordBtn: false });
       });
     };
-    if (isStop === true) mediaRecorder.stop();
+    if (isStop === true) this.mediaRecorder.stop();
     setTimeout(() => {
-      if (mediaRecorder.state === "recording") {
-        mediaRecorder.stop();
+      if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+        this.mediaRecorder.stop();
       }
     }, 60000);
   };
@@ -186,32 +189,38 @@ class NewsContainer extends React.Component<PropsType, StateType> {
             ) : (
                 <div>
                   <img style={{ height: '20px' }} src={loadMedia} alt="Loading" />
-                  <span> Ждите...</span>{" "}
+                  <span> Ждите...</span>
                 </div>
               )}
           </Button>
 
           {!this.state.recordBtnDisable ? (
-            <DropdownButton
-              key={'Запись'}
-              as={ButtonGroup}
-              title="Запись"
-              id='dropdown-variants-secondary'
-              variant='secondary'
-              style={{ marginLeft: "2px", border: '1px solid black', borderRadius: '5px' }}
-              disabled={this.state.recordBtn}
-            >
-              <Dropdown.Item onClick={() => this.recordMediaUser("video")}>
-                Видео
+            !this.state.waitRecordBtn ?
+              <DropdownButton
+                key={'Запись'}
+                as={ButtonGroup}
+                title="Запись"
+                id='dropdown-variants-secondary'
+                variant='secondary'
+                style={{ marginLeft: "2px", border: '1px solid black', borderRadius: '5px' }}
+                disabled={this.state.recordBtn}
+              >
+                <Dropdown.Item onClick={() => this.recordMediaUser("video")}>
+                  Видео
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => this.recordMediaUser("audio")}>
-                Аудио
+                <Dropdown.Item onClick={() => this.recordMediaUser("audio")}>
+                  Аудио
               </Dropdown.Item>
-            </DropdownButton>
+              </DropdownButton>
+              :
+              <Button style={{ marginLeft: "2px", border: '1px solid black', borderRadius: '5px' }} variant='secondary' disabled>
+                <div>
+                  <img style={{ height: '20px' }} src={loadMedia} alt="Loading" />
+                  <span> Ждите...</span>
+                </div></Button>
           ) : (
-              <Button variant="warning"
-                // onClick={() => this.mediaRecorder.stop()}>
-                onClick={() => this.recordStream([], '', true)}>
+              <Button variant="warning" style={{ marginLeft: "2px", border: '1px solid black' }}
+                onClick={() => { if (this.mediaRecorder) this.mediaRecorder.stop() }}>
                 <Timer /> Стоп
             </Button>
             )}
@@ -234,10 +243,10 @@ class NewsContainer extends React.Component<PropsType, StateType> {
         >
           <div className={!this.state.recordVideo ? styles.displayNone : ''}>
             <video
+              id='media-user-stream'
               style={{ width: "100%", border: '3px solid red' }}
               muted={true}
-              //@ts-ignore
-              ref={a => { this.video = a }}
+              ref={a => this.video = a}
             />
           </div>
         </div>
@@ -291,7 +300,7 @@ type MapDispatchToPropsType = {
   deletePost: (postId: number) => void
   addPostThunk: (content: string) => void
   textPostAdd: (textPost: string) => void
-  saveMediaFile: (file: any, type: string) => void
+  saveMediaFile: (file: File | Blob, type: string) => void
 }
 export default connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps, {
   getMyPosts,

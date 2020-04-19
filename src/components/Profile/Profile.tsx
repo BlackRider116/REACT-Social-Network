@@ -15,7 +15,7 @@ type PropsType = {
 
   updateUserStatus: (status: string) => void
   savePhoto: (file: File) => void
-  saveProfile: (formData: any) => void
+  saveProfile: (formData: ProfileType) => void
   startDialogThunk: (userId: number) => void
   onFollowThunk: (userId: number, isFollow: boolean) => void
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentType } from "react";
 import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { compose } from "redux";
@@ -39,7 +39,7 @@ class ProfileContainer extends React.Component<PropsType> {
     this.userProfileId();
   }
 
-  componentDidUpdate(prevState: any) {
+  componentDidUpdate(prevState: PropsType) {
     if (this.props.match.url !== prevState.match.url) {
       this.userProfileId();
     }
@@ -88,11 +88,11 @@ type MapDispatchToPropsType = {
   getUserStatus: (userId:  number) => void
   updateUserStatus: (status: string) => void
   savePhoto: (file: File) => void
-  saveProfile: (formData: any) => void
+  saveProfile: (formData: ProfileType) => void
   startDialogThunk: (userId: number) => void
   onFollowThunk: (userId: number, isFollow: boolean) => void
 }
-export default compose(
+export default compose<ComponentType<{}>>(
   connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps, {
     getProfileThunk,
     getUserStatus,

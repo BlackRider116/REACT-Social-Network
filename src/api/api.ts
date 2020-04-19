@@ -29,7 +29,7 @@ export const followAPI = {
 export const authAPI = {
     getAuth() {
         return instance
-            .get(`/auth/me`)
+            .get(`/auth/me`).then(response => response.data)
     },
     login(email: string, password: string, rememberMe: boolean, captcha: string | null) {
         return instance
