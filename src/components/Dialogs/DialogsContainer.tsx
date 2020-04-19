@@ -1,14 +1,14 @@
 import React, { ComponentType } from "react";
 import { connect } from "react-redux";
-import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
-import styles from "../../../styles/Dialogs.module.scss";
-import { getAllDialogsThunk, getUserMessagesThunk, UserMessagesType, sendMessageThunk, deleteMessageThunk, selectMessageThunk, MessagesType } from "../../../redux/reducers/reduceDialogs";
-import { UserInfoType } from '../../../redux/reducers/reduceDialogs'
-import { GlobalStateType } from "../../../redux/reduxStore";
+import styles from "../../styles/Dialogs.module.scss";
+import { getAllDialogsThunk, getUserMessagesThunk, UserMessagesType, sendMessageThunk, deleteMessageThunk, selectMessageThunk, MessagesType } from "../../redux/reducers/reduceDialogs";
+import { UserInfoType } from '../../redux/reducers/reduceDialogs'
+import { GlobalStateType } from "../../redux/reduxStore";
 import UsersDialog from "./UsersDialog/UsersDialog";
 import Messages from "./Messages/Messages";
-import Preloader from "../../../common/Preloader/Preloader";
+import Preloader from "../../common/Preloader/Preloader";
 import { Card } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 

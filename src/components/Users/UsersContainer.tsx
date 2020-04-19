@@ -5,13 +5,13 @@ import {
   followUnFollowThunk,
   pagesNumbersThunk,
   UsersType
-} from "../../../redux/reducers/reduceUsers";
+} from "../../redux/reducers/reduceUsers";
 import { compose } from "redux";
-import { startDialogThunk } from "../../../redux/reducers/reduceDialogs";
-import Pagination from "../../../common/Pagination/Pagination";
-import Preloader from "../../../common/Preloader/Preloader";
+import { startDialogThunk } from "../../redux/reducers/reduceDialogs";
+import Pagination from "../../common/Pagination/Pagination";
+import Preloader from "../../common/Preloader/Preloader";
 import UserPage from "./UserPage";
-import { GlobalStateType } from "../../../redux/reduxStore";
+import { GlobalStateType } from "../../redux/reduxStore";
 
 type PropsType = MapStateToPropsType & MapDispatchToPropsType
 class UsersContainer extends React.Component<PropsType> {

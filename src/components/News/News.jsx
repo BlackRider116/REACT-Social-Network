@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../../../styles/News.module.scss";
-import Preloader from "../../../common/Preloader/Preloader";
+import styles from "../../styles/News.module.scss";
+import Preloader from "../../common/Preloader/Preloader";
 import { Card, Button } from "react-bootstrap";
 
 const News = ({ ...props }) => {

@@ -10,7 +10,7 @@ import {
   addPostThunk,
   actionsNews,
   saveMediaFile
-} from "../../../redux/reducers/reduceNews";
+} from "../../redux/reducers/reduceNews";
 import {
   InputGroup,
   FormControl,
@@ -19,8 +19,8 @@ import {
   Dropdown,
   Modal
 } from "react-bootstrap";
-import loadMedia from "../../../assets/image/loadMedia.gif";
-import styles from "../../../styles/News.module.scss";
+import loadMedia from "../../assets/image/loadMedia.gif";
+import styles from "../../styles/News.module.scss";
 import Timer from "react.timer";
 
 class NewsContainer extends React.Component {

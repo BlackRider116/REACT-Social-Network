@@ -1,11 +1,11 @@
 import React from "react";
-import styles from "../../../../styles/Dialogs.module.scss";
+import styles from "../../../styles/Dialogs.module.scss";
 import { NavLink } from "react-router-dom";
-import avatarDefault from "../../../../assets/image/avatarDefault.jpg";
+import avatarDefault from "../../../assets/image/avatarDefault.jpg";
 import { Card } from "react-bootstrap";
 import { Scrollbars } from "react-custom-scrollbars";
 import Moment from "react-moment";
-import { UserInfoType } from "../../../../redux/reducers/reduceDialogs";
+import { UserInfoType } from "../../../redux/reducers/reduceDialogs";
 
 type PropsType = {
   usersInfo: Array<UserInfoType> 

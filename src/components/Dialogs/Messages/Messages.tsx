@@ -1,11 +1,11 @@
-import React, { Dispatch, ComponentType } from "react";
-import styles from "../../../../styles/Dialogs.module.scss";
+import React, { Dispatch } from "react";
+import styles from "../../../styles/Dialogs.module.scss";
 import Moment from "react-moment";
 import { Field, reduxForm, InjectedFormProps, reset } from "redux-form";
 import { Button, Card } from "react-bootstrap";
 import { DeleteFilled } from "@ant-design/icons";
 import { Scrollbars } from "react-custom-scrollbars";
-import { UserMessagesType, MessagesType } from "../../../../redux/reducers/reduceDialogs";
+import { UserMessagesType, MessagesType } from "../../../redux/reducers/reduceDialogs";
 
 type PropsType = {
   myId: number | null

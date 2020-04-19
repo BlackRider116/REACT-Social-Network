@@ -2,7 +2,7 @@ import React from "react";
 import classes from "./App.module.scss";
 import { Route, withRouter, Switch, Redirect } from "react-router-dom";
 import Setting from "./components/Setting/Setting";
-import Music from "./components/Navbar/Music/Music";
+import Music from "./components/Music/Music";
 import Navbar from "./components/Navbar/Navbar";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./components/Login/Login";
@@ -12,9 +12,9 @@ import { initializeApp } from "./redux/reducers/reduceApp";
 import Preloader from "./common/Preloader/Preloader";
 
 import withSuspense from "../src/hoc/withSuspense";
-import NewsContainer from "./components/Navbar/News/NewsContainer";
-const DialogsContainer = React.lazy(() => import('./components/Navbar/Dialogs/DialogsContainer'))
-const UsersContainer = React.lazy(() => import('./components/Navbar/Users/UsersContainer'))
+import NewsContainer from "./components/News/NewsContainer";
+const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'))
+const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'))
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'))
 
 

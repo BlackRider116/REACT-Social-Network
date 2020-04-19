@@ -1,9 +1,9 @@
 import React from "react";
-import styles from "../../../styles/Users.module.scss";
-import avatarDefault from "./../../../assets/image/avatarDefault.jpg";
+import styles from "../../styles/Users.module.scss";
+import avatarDefault from "./../../assets/image/avatarDefault.jpg";
 import { NavLink } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
-import { UsersType } from "../../../redux/reducers/reduceUsers";
+import { UsersType } from "../../redux/reducers/reduceUsers";
 
 type PropsType = {
   users: Array<UsersType>
