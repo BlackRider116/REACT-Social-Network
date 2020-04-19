@@ -1,7 +1,6 @@
 import React from "react";
 import News from "./News";
 import { connect } from "react-redux";
-import { compose } from "redux";
 import {
   getMyPosts,
   likePost,
@@ -9,7 +8,8 @@ import {
   deletePost,
   addPostThunk,
   actionsNews,
-  saveMediaFile
+  saveMediaFile,
+  NewsPostType
 } from "../../redux/reducers/reduceNews";
 import {
   InputGroup,
@@ -17,14 +17,32 @@ import {
   Button,
   DropdownButton,
   Dropdown,
-  Modal
+  Modal,
+  ButtonGroup
 } from "react-bootstrap";
 import loadMedia from "../../assets/image/loadMedia.gif";
 import styles from "../../styles/News.module.scss";
+//@ts-ignore
 import Timer from "react.timer";
+import { GlobalStateType } from "../../redux/reduxStore";
 
-class NewsContainer extends React.Component {
-  constructor(props) {
+
+type PropsType = MapStateToPropsType & MapDispatchToPropsType & OwnProps
+type OwnProps = {
+  video: any
+}
+type StateType = {
+  uploadBtn: boolean
+  uploadBtnLoading: boolean
+  recordVideo: boolean
+  recordBtn: boolean
+  recordBtnDisable: boolean
+  error: boolean
+  errorText: string
+  addBtn: boolean
+}
+class NewsContainer extends React.Component<PropsType, StateType> {
+  constructor(props: PropsType) {
     super(props);
     this.state = {
       uploadBtn: false,
@@ -39,10 +57,10 @@ class NewsContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getMyPosts();
+    this.props.getMyPosts(0);
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevState: any) {
     if (
       this.props.posts.length !== prevState.posts.length &&
       this.props.posts.length < 5
@@ -61,21 +79,22 @@ class NewsContainer extends React.Component {
     });
   };
 
-  onPostChange = ev => {
-    this.props.textPostAdd(ev.target.value);
+  onPostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.textPostAdd(event.currentTarget.value);
   };
 
-  fileUpload = React.createRef();
-  fileSelected = ev => {
+  fileUpload: React.RefObject<HTMLInputElement> = React.createRef();
+  fileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ recordBtn: true, uploadBtnLoading: true, addBtn: true });
-    const [first] = Array.from(ev.currentTarget.files);
-
-    saveMediaFile(first).finally(() => {
-      this.setState({ addBtn: false, uploadBtnLoading: false });
-    });
+    if (event.currentTarget.files !== null) {
+      const [first] = Array.from(event.currentTarget.files);
+      saveMediaFile(first, '').finally(() => {
+        this.setState({ addBtn: false, uploadBtnLoading: false });
+      });
+    }
   };
 
-  recordMediaUser = typeMedia => {
+  recordMediaUser = (typeMedia: string) => {
     if (!navigator.mediaDevices || !window.MediaRecorder) {
       this.setState({
         error: true,
@@ -88,7 +107,7 @@ class NewsContainer extends React.Component {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(stream => {
-          recordStream(stream, typeMedia);
+          this.recordStream(stream, typeMedia, false);
         })
         .catch(err => {
           this.setState({ error: true, errorText: "Нет доступа к микрофону" });
@@ -98,9 +117,9 @@ class NewsContainer extends React.Component {
       navigator.mediaDevices
         .getUserMedia({ audio: true, video: true })
         .then(stream => {
-          recordStream(stream, typeMedia);
-          this.video.srcObject = stream;
-          this.video.play();
+          this.recordStream(stream, typeMedia, false);
+          //@ts-ignore
+          this.video.srcObject = stream; this.video.play();
           this.setState({ recordVideo: true });
         })
         .catch(err => {
@@ -110,46 +129,40 @@ class NewsContainer extends React.Component {
           });
         });
     }
+  };
 
-    const recordStream = (stream, type) => {
-      this.setState({
-        uploadBtn: true,
-        addBtn: true,
-        recordBtnDisable: true,
-        recordBtn: true
+  recordStream = (stream: any, type: string, isStop: boolean) => {
+    this.setState({
+      uploadBtn: true,
+      addBtn: true,
+      recordBtnDisable: true,
+      recordBtn: true
+    });
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+
+    mediaRecorder.ondataavailable = (ev: any) => {
+      stream.getTracks().forEach((o: any) => o.stop());
+      this.setState({ recordBtnDisable: false, recordVideo: false });
+      const blob = new Blob([ev.data]);
+      saveMediaFile(blob, type).finally(() => {
+        this.setState({ addBtn: false, recordBtn: false });
       });
-      this.mediaRecorder = new MediaRecorder(stream);
-      this.mediaRecorder.start();
-
-      this.mediaRecorder.ondataavailable = ev => {
-        stream.getTracks().forEach(o => o.stop());
-        this.setState({ recordBtnDisable: false, recordVideo: false });
-        const blob = new Blob([ev.data]);
-        saveMediaFile(blob, type).finally(() => {
-          this.setState({ addBtn: false, recordBtn: false });
-        });
-      };
-
-      setTimeout(() => {
-        if (this.mediaRecorder.state === "recording") {
-          this.mediaRecorder.stop();
-        }
-      }, 60000);
     };
+    if (isStop === true) mediaRecorder.stop();
+    setTimeout(() => {
+      if (mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+      }
+    }, 60000);
   };
 
   render() {
     return (
       <div className={styles.global}>
-        <InputGroup
-          style={{
-            position: "fixed",
-            width: "60%",
-            zIndex: "100",
-          }}
-        >
+        <InputGroup className={styles.inputGroup}   >
           <FormControl
-          style={{border: '1px solid black', height: '40px'}}
+            style={{ border: '1px solid black', height: '40px' }}
             value={this.props.textPost}
             placeholder="Введите текст вашего поста"
             onChange={this.onPostChange}
@@ -163,7 +176,7 @@ class NewsContainer extends React.Component {
           />
 
           <Button
-            onClick={() => this.fileUpload.current.click()}
+            onClick={() => { if (this.fileUpload.current) this.fileUpload.current.click() }}
             disabled={this.state.uploadBtn}
             variant="secondary"
             style={{ marginLeft: "2px", border: '1px solid black' }}
@@ -171,17 +184,20 @@ class NewsContainer extends React.Component {
             {!this.state.uploadBtnLoading ? (
               " Загрузить"
             ) : (
-              <div>
-                <img style={{height: '20px'}} src={loadMedia} alt="Loading" />
-                <span> Ждите...</span>{" "}
-              </div>
-            )}
+                <div>
+                  <img style={{ height: '20px' }} src={loadMedia} alt="Loading" />
+                  <span> Ждите...</span>{" "}
+                </div>
+              )}
           </Button>
 
           {!this.state.recordBtnDisable ? (
             <DropdownButton
+              key={'Запись'}
+              as={ButtonGroup}
               title="Запись"
-              variant="secondary"
+              id='dropdown-variants-secondary'
+              variant='secondary'
               style={{ marginLeft: "2px", border: '1px solid black', borderRadius: '5px' }}
               disabled={this.state.recordBtn}
             >
@@ -193,10 +209,12 @@ class NewsContainer extends React.Component {
               </Dropdown.Item>
             </DropdownButton>
           ) : (
-            <Button variant="warning" onClick={() => this.mediaRecorder.stop()}>
-              <Timer /> Стоп
+              <Button variant="warning"
+                // onClick={() => this.mediaRecorder.stop()}>
+                onClick={() => this.recordStream([], '', true)}>
+                <Timer /> Стоп
             </Button>
-          )}
+            )}
 
           <Button
             disabled={this.state.addBtn}
@@ -214,13 +232,12 @@ class NewsContainer extends React.Component {
             paddingTop: "42px",
           }}
         >
-          <div className={!this.state.recordVideo && styles.displayNone}>
+          <div className={!this.state.recordVideo ? styles.displayNone : ''}>
             <video
               style={{ width: "100%", border: '3px solid red' }}
               muted={true}
-              ref={a => {
-                this.video = a;
-              }}
+              //@ts-ignore
+              ref={a => { this.video = a }}
             />
           </div>
         </div>
@@ -243,31 +260,45 @@ class NewsContainer extends React.Component {
           </Modal.Footer>
         </Modal>
 
- 
-          <News {...this.props} />
+
+        <News {...this.props} />
 
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
+type MapStateToPropsType = {
+  posts: Array<NewsPostType>
+  lastSeenId: number
+  prevPostsButton: boolean
+  textPost: string
+}
+
+const mapStateToProps = (state: GlobalStateType): MapStateToPropsType => {
   return {
     posts: state.news.posts,
     lastSeenId: state.news.lastSeenId,
     prevPostsButton: state.news.prevPostsButton,
     textPost: state.news.textPost,
-    addPostFormData: state.news.addPostFormData
   };
 };
 
-export default compose(
-  connect(mapStateToProps, {
-    getMyPosts,
-    likePost,
-    dislikePost,
-    deletePost,
-    addPostThunk,
-    textPostAdd: actionsNews.textPostAdd
-  })
-)(NewsContainer);
+type MapDispatchToPropsType = {
+  getMyPosts: (lastSeenId: number) => void
+  likePost: (postId: number) => void
+  dislikePost: (postId: number) => void
+  deletePost: (postId: number) => void
+  addPostThunk: (content: string) => void
+  textPostAdd: (textPost: string) => void
+  saveMediaFile: (file: any, type: string) => void
+}
+export default connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps, {
+  getMyPosts,
+  likePost,
+  dislikePost,
+  deletePost,
+  addPostThunk,
+  textPostAdd: actionsNews.textPostAdd,
+  saveMediaFile
+})(NewsContainer);

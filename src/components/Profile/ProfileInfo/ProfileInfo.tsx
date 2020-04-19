@@ -21,14 +21,11 @@ type PropsType = {
 
   onFollowThunk: (userId: number, isFollow: boolean) => void
   savePhoto: (file: File) => void
-  saveProfile: (formData: any) => void
+  saveProfile: (formData: ProfileType) => void
   updateUserStatus: (status: string) => void
   startDialogThunk: (userId: number) => void
 }
 
-// type FormDataType = {
-
-// }
 
 const ProfileInfo: React.FC<PropsType> = ({ profileUpdate, ...props }) => {
 
@@ -41,7 +38,7 @@ const ProfileInfo: React.FC<PropsType> = ({ profileUpdate, ...props }) => {
   const [editModeName, setEditModeName] = useState(false);
   const [editModeAboutMe, setEditModeAboutMe] = useState(false);
 
-  const onSubmit = (formData: any) => {
+  const onSubmit = (formData: ProfileType) => {
     if (formData !== props.profile) {
       props.saveProfile(formData);
     } else if (profileUpdate !== false) {
@@ -58,7 +55,7 @@ const ProfileInfo: React.FC<PropsType> = ({ profileUpdate, ...props }) => {
   }, [profileUpdate]);
 
   const fileUpload: React.RefObject<HTMLInputElement> = React.createRef();
-  const saveProfileBtn: React.RefObject<HTMLInputElement> = React.createRef();
+  const saveProfileBtn: React.RefObject<HTMLButtonElement> = React.createRef();
 
   return (
     <>
@@ -87,10 +84,10 @@ const ProfileInfo: React.FC<PropsType> = ({ profileUpdate, ...props }) => {
                 Изменить фото
               </Button>
               {!props.isOwner && !editModeName && !editModeAboutMe ? (
-                  <DropdownButton key={'DropdownButton'} as={ButtonGroup} id="dropdown-variant-primary" title="Редактировать профиль" style={{ marginTop: "3px", width: "100%" }}>
-                    <Dropdown.Item style={{ width: "250px" }} onClick={() => setEditModeName(true)}>Имя и контакты</Dropdown.Item>
-                    <Dropdown.Item style={{ width: "250px" }} onClick={() => setEditModeAboutMe(true)}>Обо мне</Dropdown.Item>
-                  </DropdownButton>
+                <DropdownButton key={'DropdownButton'} as={ButtonGroup} id="dropdown-variant-primary" title="Редактировать профиль" style={{ marginTop: "3px", width: "100%" }}>
+                  <Dropdown.Item style={{ width: "250px" }} onClick={() => setEditModeName(true)}>Имя и контакты</Dropdown.Item>
+                  <Dropdown.Item style={{ width: "250px" }} onClick={() => setEditModeAboutMe(true)}>Обо мне</Dropdown.Item>
+                </DropdownButton>
               ) : (
                   <Button
                     style={{ marginTop: "3px", width: "250px" }}
@@ -148,14 +145,13 @@ const ProfileInfo: React.FC<PropsType> = ({ profileUpdate, ...props }) => {
           />
           <div style={{ marginLeft: "10px" }}>
             {!editModeName ? (
-              <ProfileUserInfo profile={props.profile} />
+              <ProfileUserInfo contacts={props.profile.contacts} />
             ) : (
-                //@ts-ignore
                 <ReduxProfileInfoForm
-                  {...props}
                   onSubmit={onSubmit}
+                  profile={props.profile}
                   initialValues={props.profile}
-                // saveProfileBtn={saveProfileBtn}
+                  saveProfileBtn={saveProfileBtn}
                 />
               )}
           </div>
@@ -163,14 +159,16 @@ const ProfileInfo: React.FC<PropsType> = ({ profileUpdate, ...props }) => {
       </div>
       <div style={{ marginLeft: "10px" }}>
         {!editModeAboutMe ? (
-          <ProfileAboutMe profile={props.profile} />
+          <ProfileAboutMe
+            aboutMe={props.profile.aboutMe}
+            lookingForAJob={props.profile.lookingForAJob}
+            lookingForAJobDescription={props.profile.lookingForAJobDescription} />
         ) : (
-            //@ts-ignore
             <ReduxProfileInfoFormAboutMe
-              {...props}
               onSubmit={onSubmit}
+              profile={props.profile}
               initialValues={props.profile}
-            // saveProfileBtn={saveProfileBtn}
+              saveProfileBtn={saveProfileBtn}
             />
           )}
       </div>

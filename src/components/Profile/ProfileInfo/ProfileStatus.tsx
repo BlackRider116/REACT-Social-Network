@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import styles from "../../../styles/Profile.module.scss";
 
+
 type PropsType = {
   status: string
   isOwner: number | undefined

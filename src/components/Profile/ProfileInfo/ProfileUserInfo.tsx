@@ -1,12 +1,18 @@
 import React from "react";
 import styles from "../../../common/FormControl/FormControl.module.css";
-import { reduxForm } from "redux-form";
+import { reduxForm, InjectedFormProps } from "redux-form";
 import { fieldValue } from "../../../common/FormControl/FormControl";
 import { required } from "../../../utilities/validation/validation";
 import stylesProfile from "../../../styles/Profile.module.scss";
-// import { ProfileType } from "../../../redux/reducers/reduceProfile";
+import { ProfileType } from "../../../redux/reducers/reduceProfile";
 
-const ProfileInfoForm = ({ profile, error, ...props }) => {
+type OwnPropsFormType = {
+  saveProfileBtn: React.RefObject<HTMLButtonElement>
+  initialValues: ProfileType
+  profile: ProfileType
+}
+
+const ProfileInfoForm: React.FC<InjectedFormProps<ProfileType, OwnPropsFormType> & OwnPropsFormType> = ({ profile, error, ...props }) => {
   return (
     <form onSubmit={props.handleSubmit}>
       <button
@@ -26,9 +32,8 @@ const ProfileInfoForm = ({ profile, error, ...props }) => {
               required,
               "fullName",
               "input",
-              null,
-              null,
-              profile.fullName
+              undefined,
+              undefined,
             )}
           </div>
         </div>
@@ -50,7 +55,7 @@ const ProfileInfoForm = ({ profile, error, ...props }) => {
                     "contacts." + contact,
                     "input",
                     contact,
-                    null
+                    undefined
                   )}
                 </span>
               );
@@ -62,9 +67,9 @@ const ProfileInfoForm = ({ profile, error, ...props }) => {
   );
 };
 
-export const ReduxProfileInfoForm = reduxForm({ form: "profileUserInfo" })(ProfileInfoForm)
+export const ReduxProfileInfoForm = reduxForm<ProfileType, OwnPropsFormType>({ form: "profileUserInfo" })(ProfileInfoForm)
 
-export const ProfileInfoFormAboutMe = ({ profile, error, ...props }) => {
+export const ProfileInfoFormAboutMe: React.FC<InjectedFormProps<ProfileType, OwnPropsFormType> & OwnPropsFormType> = ({ profile, error, ...props }) => {
   return (
     <form onSubmit={props.handleSubmit}>
       <button
@@ -78,63 +83,82 @@ export const ProfileInfoFormAboutMe = ({ profile, error, ...props }) => {
       <div className={stylesProfile.aboutMe}>
         <div>
           <b>Обо мне: </b>
-          {fieldValue(required, "aboutMe", null)}
+          {fieldValue(required, "aboutMe", undefined, undefined, undefined)}
         </div>
 
         <div style={{ display: "flex", alignItems: "center" }}>
           <b>В поиске работы: </b>{" "}
-          {fieldValue([], "lookingForAJob", "input", null, "checkbox")}
+          {fieldValue([], "lookingForAJob", "input", undefined, "checkbox")}
         </div>
 
         <div>
           <b>Мой скилл: </b>
-          {fieldValue(required, "lookingForAJobDescription", null, null, null)}
+          {fieldValue(required, "lookingForAJobDescription", undefined, undefined, undefined)}
         </div>
       </div>
     </form>
   );
 };
 
-export const ReduxProfileInfoFormAboutMe = reduxForm({
-  form: "profileUserInfoAboutMe"
-})(ProfileInfoFormAboutMe);
+export const ReduxProfileInfoFormAboutMe = reduxForm<ProfileType, OwnPropsFormType>({ form: "profileUserInfoAboutMe" })(ProfileInfoFormAboutMe);
 
+type ProfileUserInfoType = {
+  contacts: KeysType
+}
 
-export const ProfileUserInfo = ({ profile }) => {
+type KeysType = {
+    skype: string | null
+    vk: string | null
+    facebook: string | null
+    icq: string | null
+    email: string | null
+    googlePlus: string | null
+    twitter: string | null
+    instagram: string | null
+    whatsApp: string | null
+}
+
+export const ProfileUserInfo: React.FC<ProfileUserInfoType> = ({ contacts }) => {
   return (
     <div>
       <b>Контакты: </b>
-      {Object.keys(profile.contacts).map(contact => {
+      {Object.keys(contacts).map((contact) => {
         return (
           <div key={contact} style={{ marginLeft: "15px" }}>
-            {profile.contacts[contact] !== null &&
-              profile.contacts[contact] !== "" && (
+            {contacts[contact as keyof KeysType] !== null &&
+              contacts[contact as keyof KeysType] !== "" && (
                 <div>
                   <b>{contact}: </b>
-                  {profile.contacts[contact]}
+                  {contacts[contact as keyof KeysType]}
                 </div>
               )}
           </div>
         );
-      })}
+      })} 
     </div>
   );
 };
 
-export const ProfileAboutMe = ({ profile }) => {
+type ProfileAboutMeType = {
+  aboutMe: string | null
+  lookingForAJob: boolean
+  lookingForAJobDescription: string | null
+}
+
+export const ProfileAboutMe: React.FC<ProfileAboutMeType> = (props) => {
   return (
     <div>
       <div>
         <b>Обо мне: </b>
         <div style={{ marginLeft: "10px", width: "60%" }}>
-          {profile.aboutMe}
+          {props.aboutMe}
         </div>
       </div>
 
-      <div style={{ display: "flex", alignItem: "center" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <b>В поиске работы: </b>
         <h5 style={{ marginLeft: "10px" }}>
-          {profile.lookingForAJob ? (
+          {props.lookingForAJob ? (
             <span style={{ color: "green" }}>Yes</span>
           ) : (
               <span style={{ color: "red" }}>No</span>
@@ -145,7 +169,7 @@ export const ProfileAboutMe = ({ profile }) => {
       <div>
         <b>Мои скиллы: </b>
         <div style={{ marginLeft: "10px", width: "60%" }}>
-          {profile.lookingForAJobDescription}
+          {props.lookingForAJobDescription}
         </div>
       </div>
     </div>

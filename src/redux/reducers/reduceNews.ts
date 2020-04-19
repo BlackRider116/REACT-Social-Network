@@ -11,7 +11,7 @@ let addPostFormData: AddPostFormDataType = {
   file: ''
 }
 
-export type PostType = {
+export type NewsPostType = {
   id: number
   content: string
   type: string
@@ -19,10 +19,10 @@ export type PostType = {
   likes?: number
 }
 const initialState = {
-  posts: [] as Array<PostType>,
+  posts: [] as Array<NewsPostType>,
   firstSeenId: null as number | null,
   newPostsButton: true as boolean,
-  lastSeenId: null as number | null,
+  lastSeenId: 0 as number,
   prevPostsButton: false as boolean,
   textPost: "" as string
 }
@@ -78,12 +78,12 @@ type ActionsTypes = InferActionsTypes<typeof actionsNews>
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
 export const actionsNews = {
-  setPosts: (posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean) => ({ type: '/news/SET_POSTS', posts, lastSeenId, prevPostsButton } as const),
-  getFirstPosts: (posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean) => ({ type: '/news/GET_POSTS', payload: { posts, lastSeenId, prevPostsButton } } as const),
+  setPosts: (posts: Array<NewsPostType>, lastSeenId: number, prevPostsButton: boolean) => ({ type: '/news/SET_POSTS', posts, lastSeenId, prevPostsButton } as const),
+  getFirstPosts: (posts: Array<NewsPostType>, lastSeenId: number, prevPostsButton: boolean) => ({ type: '/news/GET_POSTS', payload: { posts, lastSeenId, prevPostsButton } } as const),
   setLikes: (postId: number, likes: number) => ({ type: '/news/SET_LIKES', postId, likes } as const),
   deletePostOfState: (postId: number) => ({ type: '/news/DELETE_POST', postId } as const),
   textPostAdd: (textPost: string) => ({ type: '/news/TEXT', textPost } as const),
-  addPost: (post: PostType) => ({ type: '/news/ADD_POST', post } as const)
+  addPost: (post: NewsPostType) => ({ type: '/news/ADD_POST', post } as const)
 }
 
 export const getMyPosts = (lastSeenId = 0): ThunkType => async (dispatch) => {
@@ -109,7 +109,7 @@ export const getMyPosts = (lastSeenId = 0): ThunkType => async (dispatch) => {
 
 }
 
-const likeDislikeDeletePost = (posts: Array<PostType>, postId: number, likes: number) => {
+const likeDislikeDeletePost = (posts: Array<NewsPostType>, postId: number, likes: number) => {
   return posts.map(post => {
     if (post.id === postId) {
       return { ...post, likes };
@@ -128,7 +128,7 @@ export const dislikePost = (postId: number): ThunkType => async (dispatch) => {
   dispatch(actionsNews.setLikes(postId, data.likes))
 }
 
-const deletePostFilter = (posts: Array<PostType>, postId: number) => {
+const deletePostFilter = (posts: Array<NewsPostType>, postId: number) => {
   return posts.filter(post => post.id !== postId)
 }
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PostType } from '../redux/reducers/reduceNews';
+import { NewsPostType } from '../redux/reducers/reduceNews';
 
 export const baseURL = 'https://backend-dz11.herokuapp.com'
 // export const baseURL = 'http://localhost:9999'
@@ -25,7 +25,7 @@ export const postsAPI = {
                 console.log(error);
             });
     },
-    async addPost(post: PostType) {
+    async addPost(post: NewsPostType) {
         return await instance.post(`/posts`, JSON.stringify(post))
             .then(response => response.data)
             .catch(error => {

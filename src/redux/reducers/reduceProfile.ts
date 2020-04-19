@@ -8,25 +8,25 @@ import { setAvatarThunk } from './reduceAuth';
 export type PostType = { id: number, postText: string, likes: number, src: string | null }
 
 export type ProfileType = {
-  aboutMe: string,
+  aboutMe: string | null
   contacts: {
-    skype: string
-    vk: string
-    facebook: string
-    icq: string
-    email: string
-    googlePlus: string
-    twitter: string
-    instagram: string
-    whatsApp: string
+    skype: string | null
+    vk: string | null
+    facebook: string | null
+    icq: string | null
+    email: string | null
+    googlePlus: string | null
+    twitter: string | null
+    instagram: string | null
+    whatsApp: string | null
   },
   lookingForAJob: boolean
-  lookingForAJobDescription: string
-  fullName: string
+  lookingForAJobDescription: string | null
+  fullName: string | null
   userId: number
   photos: {
-    small: string
-    large: string
+    small: string | null
+    large: string | null
   }
 }
 
