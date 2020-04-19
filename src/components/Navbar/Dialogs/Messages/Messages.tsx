@@ -1,13 +1,23 @@
-import React from "react";
+import React, { Dispatch, ComponentType } from "react";
 import styles from "../../../../styles/Dialogs.module.scss";
 import Moment from "react-moment";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, InjectedFormProps, reset } from "redux-form";
 import { Button, Card } from "react-bootstrap";
 import { DeleteFilled } from "@ant-design/icons";
 import { Scrollbars } from "react-custom-scrollbars";
+import { UserMessagesType, MessagesType } from "../../../../redux/reducers/reduceDialogs";
 
-const Messages = ({ myId, ...props }) => {
-  let messageItem = props.userMessages.items || [];
+type PropsType = {
+  myId: number | null
+  userMessages: UserMessagesType
+  openUserDialogsId: number
+  sendMessageThunk: (userId: number, message: string) => void
+  deleteMessageThunk: (message: MessagesType) => void
+  selectMessageThunk: (messageId: string) => void
+}
+
+const Messages: React.FC<PropsType> = ({ myId, ...props }) => {
+  const messageItem = props.userMessages.items || [];
 
   return (
     <Card className={styles.cardDialogs}>
@@ -20,11 +30,11 @@ const Messages = ({ myId, ...props }) => {
                   item.senderId === myId
                     ? styles.message_right
                     : styles.message_left
-                } ${
+                  } ${
                   item.isSelect
                     ? `${styles.message_card_select} ${styles.message_card}`
                     : styles.message_card
-                }`}
+                  }`}
                 onClick={() => props.selectMessageThunk(item.id)}
               >
                 <div>
@@ -59,20 +69,25 @@ const Messages = ({ myId, ...props }) => {
       </div>
       {props.openUserDialogsId !== -1 && (
         <NewMessageFormRedux
+          openUserDialogsId={props.openUserDialogsId}
           sendMessageThunk={props.sendMessageThunk}
-          userId={props.openUserDialogsId}
         />
       )}
     </Card>
   );
 };
 
-const NewMessageForm = props => {
-  const submit = async (message, dispatch) => {
-    await props.sendMessageThunk(props.userId, message.newMessage);
-    dispatch(props.reset("newMessage"));
-  };
 
+type BodyValuesType = { newMessage: string }
+type FormType = {
+  openUserDialogsId: number
+  sendMessageThunk: (userId: number, message: string) => void
+}
+const NewMessageForm: React.FC<InjectedFormProps<BodyValuesType, FormType> & FormType> = props => {
+  const submit = (message: BodyValuesType, dispatch: Dispatch<{}>) => {
+    props.sendMessageThunk(props.openUserDialogsId, message.newMessage);
+    dispatch(reset("newMessage"));
+  };
   return (
     <form onSubmit={props.handleSubmit(submit)}>
       <div className={styles.input}>
@@ -89,6 +104,6 @@ const NewMessageForm = props => {
   );
 };
 
-const NewMessageFormRedux = reduxForm({ form: "newMessage" })(NewMessageForm);
+const NewMessageFormRedux = reduxForm<BodyValuesType, FormType>({ form: "newMessage" })(NewMessageForm);
 
 export default Messages;

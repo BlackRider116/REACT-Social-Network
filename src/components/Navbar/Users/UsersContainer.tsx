@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentType } from "react";
 import { connect } from "react-redux";
 import {
   getUsersThunk,
@@ -20,7 +20,6 @@ class UsersContainer extends React.Component<PropsType> {
   }
 
   onNumberPage = (pageNumber: number, portionPagesNumbers: number) => {
-    // console.log(portionPagesNumbers)
     this.props.getUsersThunk(pageNumber, portionPagesNumbers);
   };
 
@@ -76,7 +75,7 @@ type MapDispatchToPropsType = {
   startDialogThunk: (userId: number) => void
   pagesNumbersThunk: (portionNumber: number) => void
 }
-export default compose(
+export default compose<ComponentType<{}>>(
   connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps, {
     followUnFollowThunk,
     getUsersThunk,

@@ -1,12 +1,7 @@
 import { usersAPI, followAPI } from "../../api/api";
 import { filterPagesNumbers } from "../../common/Pagination/Pagination";
 import { ThunkAction } from 'redux-thunk';
-import { GlobalStateType } from '../reduxStore';
-
-const FOLLOW_UNFOLLOW = "/users/FOLLOW_UNFOLLOW";
-const SET_USERS = "/users/SET_USERS";
-const SET_NUMBER_PAGE = "/users/SET_NUMBER_PAGE";
-const PAGES_NUMBERS = "/users/PAGES_NUMBERS";
+import { GlobalStateType, InferActionsTypes } from '../reduxStore';
 
 export type UsersType = {
   name: string
@@ -33,21 +28,21 @@ type InitialStateType = typeof initialState
 
 const reduceUsers = (state = initialState, action: ActionsTypes): InitialStateType => {
   switch (action.type) {
-    case FOLLOW_UNFOLLOW:
+    case '/users/FOLLOW_UNFOLLOW':
       return {
         ...state,
         users: followUnFollow(state.users, action.userId)
       };
-    case SET_USERS:
-    case SET_NUMBER_PAGE:
-    case PAGES_NUMBERS:
+    case '/users/SET_USERS':
+    case '/users/SET_NUMBER_PAGE':
+    case '/users/PAGES_NUMBERS':
       return { ...state, ...action.payload };
     default:
       return state;
   }
 };
 
-type ActionsTypes = SetUsersType | setNumberPageType | FollowUnFollowType | PagesNumbersType
+type ActionsTypes = InferActionsTypes<typeof actionsUser>
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
 const followUnFollow = (users: Array<UsersType>, userId: number) => {
@@ -60,41 +55,37 @@ const followUnFollow = (users: Array<UsersType>, userId: number) => {
   })
 }
 
-type SetUsersType = { type: typeof SET_USERS, payload: { users: Array<UsersType>, totalCount: number, isLoading: boolean, pagesNumbers: Array<number>, portionPagesNumbers: number } }
-const setUsers = (users: Array<UsersType>, totalCount: number, isLoading: boolean, pagesNumbers: Array<number>, portionPagesNumbers: number): SetUsersType =>
-  ({ type: SET_USERS, payload: { users, totalCount, isLoading, pagesNumbers, portionPagesNumbers } });
-type setNumberPageType = { type: typeof SET_NUMBER_PAGE, payload: { numberPage: number, isLoading: boolean } }
-const setNumberPage = (numberPage: number, isLoading: boolean): setNumberPageType => ({ type: SET_NUMBER_PAGE, payload: { numberPage, isLoading } });
+const actionsUser = {
+  setUsers: (users: Array<UsersType>, totalCount: number, isLoading: boolean, pagesNumbers: Array<number>, portionPagesNumbers: number) =>
+    ({ type: '/users/SET_USERS', payload: { users, totalCount, isLoading, pagesNumbers, portionPagesNumbers } } as const),
+  setNumberPage: (numberPage: number, isLoading: boolean) => ({ type: '/users/SET_NUMBER_PAGE', payload: { numberPage, isLoading } } as const),
+  followUnFollowAC: (userId: number) => ({ type: '/users/FOLLOW_UNFOLLOW', userId } as const),
+  pagesNumbersAC: (pagesNumbers: Array<number>, portionPagesNumbers: number) => ({ type: '/users/PAGES_NUMBERS', payload: { pagesNumbers, portionPagesNumbers } } as const)
+}
 
 export const getUsersThunk = (pageNumber = 1, portionPagesNumbers = 1): ThunkType => async (dispatch, getState) => {
   const usersCount = getState().usersPage.usersCount
-  dispatch(setNumberPage(pageNumber, true))
+  dispatch(actionsUser.setNumberPage(pageNumber, true))
 
   const response = await usersAPI.getUsers(usersCount, pageNumber)
   if (response.error === null) {
     const pagesNumbers = filterPagesNumbers(response.totalCount, usersCount, portionPagesNumbers)
-    dispatch(setUsers(response.items, response.totalCount, false, pagesNumbers, portionPagesNumbers));
+    dispatch(actionsUser.setUsers(response.items, response.totalCount, false, pagesNumbers, portionPagesNumbers));
   }
 }
-
-type FollowUnFollowType = { type: typeof FOLLOW_UNFOLLOW, userId: number }
-const followUnFollowAC = (userId: number): FollowUnFollowType => ({ type: FOLLOW_UNFOLLOW, userId });
 
 export const followUnFollowThunk = (userId: number, followed: boolean): ThunkType => async (dispatch) => {
   const response = followed === true ? await followAPI.deleteFollow(userId) : await followAPI.postFollow(userId)
   if (response.data.resultCode === 0) {
-    dispatch(followUnFollowAC(userId));
+    dispatch(actionsUser.followUnFollowAC(userId));
   }
 }
-
-type PagesNumbersType = { type: typeof PAGES_NUMBERS, payload: { pagesNumbers: Array<number>, portionPagesNumbers: number } }
-const pagesNumbersAC = (pagesNumbers: Array<number>, portionPagesNumbers: number): PagesNumbersType => ({ type: PAGES_NUMBERS, payload: { pagesNumbers, portionPagesNumbers } })
 
 export const pagesNumbersThunk = (portionNumber: number): ThunkType => async (dispatch, getState) => {
   const usersCount = getState().usersPage.usersCount
   const totalCount = getState().usersPage.totalCount
   const pagesNumbers = filterPagesNumbers(totalCount, usersCount, portionNumber)
-  dispatch(pagesNumbersAC(pagesNumbers, portionNumber))
+  dispatch(actionsUser.pagesNumbersAC(pagesNumbers, portionNumber))
 }
 
 export default reduceUsers;

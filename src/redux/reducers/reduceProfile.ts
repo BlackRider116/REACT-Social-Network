@@ -3,8 +3,9 @@ import { profileAPI, followAPI } from "../../api/api";
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk';
 import { GlobalStateType } from '../reduxStore';
+import { setAvatarThunk } from './reduceAuth';
 
-type PostType = { id: number, postText: string, likes: number, src: string }
+export type PostType = { id: number, postText: string, likes: number, src: string | null }
 
 export type ProfileType = {
   aboutMe: string,
@@ -112,7 +113,7 @@ export const actionsProfile = {
   onFollowAC: (isFollow: boolean) => ({ type: '/profile/ON_FOLLOW', payload: { isFollow } } as const),
   saveProtoSuccess: (photos: any) => ({ type: '/profile/SAVE_PHOTO_SUCCESS', photos } as const),
   profileUpdateSuccess: (profileUpdate: boolean | null) => ({ type: '/profile/PROFILE_UPDATE_SUCCESS', payload: { profileUpdate } } as const),
-  addNewPost: (postText: string, photo: string) => ({ type: '/profile/ADD_POST', postText, photo } as const),
+  addNewPost: (postText: string, photo: string | null) => ({ type: '/profile/ADD_POST', postText, photo } as const),
   likeDislikeMyPost: (postId: number, boolean: boolean) => ({ type: '/profile/LIKE_DISLIKE', postId, boolean } as const),
   deleteMyPost: (postId: number) => ({ type: '/profile/DELETE_MY_POST', postId } as const),
   deleteAllMyPosts: () => ({ type: '/profile/DELETE_ALL_MY_POSTS' } as const)
@@ -144,10 +145,11 @@ export const updateUserStatus = (status: string): ThunkType => async (dispatch) 
   }
 }
 
-export const savePhoto = (photoFile: any): ThunkType => async (dispatch) => {
+export const savePhoto = (photoFile: File): ThunkType => async (dispatch) => {
   const response = await profileAPI.saveAvatarPhoto(photoFile)
   if (response.data.resultCode === 0) {
-    dispatch(actionsProfile.saveProtoSuccess(response.data.data.photos));
+    dispatch(actionsProfile.saveProtoSuccess(response.data.data.photos))
+    dispatch(setAvatarThunk())
   }
 }
 
@@ -190,7 +192,5 @@ const filterLikes = (statePosts: Array<PostType>, postId: number, boolean: boole
     return item
   })
 }
-
-
 
 export default reduceProfile;

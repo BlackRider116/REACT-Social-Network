@@ -9,39 +9,66 @@
   position: fixed;
 }
 
-.item a {
-  position: relative;
-  display: inline-block;
-  width: 95%;
-  height: 2.5em;
-  line-height: 2.5em;
-  vertical-align: middle;
-  text-align: center;
-  text-decoration: none;
-  text-shadow: 0 -1px 1px #777;
-  color: #fff;
-  outline: none;
-  border: 1px solid black;
-  border-radius: 5px;
-  box-shadow: 0 0 0 60px rgba(0, 0, 0, 0) inset,
-    0.1em 0.1em 0.2em rgb(0, 2, 136);
-  background-image: linear-gradient(rgb(117, 117, 251), rgb(69, 56, 244) 48%, rgb(2, 6, 234) 52%, rgb(37, 23, 240) );
-  margin: 2px;
-  &:hover {
-    transition: 0.75s linear;
-    background-image: linear-gradient(rgb(88, 88, 209), rgb(56, 46, 199) 48%, rgb(3, 7, 190) 52%, rgb(31, 18, 202) );
-  };
-  &.active {
-    color: gold;
+.item {
+  &_NewMessage {
+    color: red;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    & span {
+      margin-left: 10px;
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+    & b {
+      margin-left: 35px;
+    }
+  }
+  & a {
+    position: relative;
+    display: inline-block;
+    width: 95%;
+    height: 2.5em;
+    line-height: 2.5em;
+    vertical-align: middle;
+    text-align: center;
     text-decoration: none;
-    box-shadow: 0 0 0 60px rgba(0, 0, 0, 0.05) inset;
-    background-image: linear-gradient(rgb(88, 88, 209), rgb(56, 46, 199) 48%, rgb(3, 7, 190) 52%, rgb(31, 18, 202) );
+    text-shadow: 0 -1px 1px #777;
+    color: #fff;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 0 0 0 60px rgba(0, 0, 0, 0) inset,
+      0.1em 0.1em 0.2em rgb(0, 2, 136);
+    background-image: linear-gradient(
+      rgb(117, 117, 251),
+      rgb(69, 56, 244) 48%,
+      rgb(2, 6, 234) 52%,
+      rgb(37, 23, 240)
+    );
+    margin: 2px;
+    &:hover {
+      transition: 0.75s linear;
+      background-image: linear-gradient(
+        rgb(88, 88, 209),
+        rgb(56, 46, 199) 48%,
+        rgb(3, 7, 190) 52%,
+        rgb(31, 18, 202)
+      );
+    }
+    &.active {
+      color: gold;
+      text-decoration: none;
+      box-shadow: 0 0 0 60px rgba(0, 0, 0, 0.05) inset;
+      background-image: linear-gradient(
+        rgb(88, 88, 209),
+        rgb(56, 46, 199) 48%,
+        rgb(3, 7, 190) 52%,
+        rgb(31, 18, 202)
+      );
+    }
   }
 }
-
-
-
-
 
 .setting {
   margin-top: 2em;

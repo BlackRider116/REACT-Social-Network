@@ -61,7 +61,7 @@ export const profileAPI = {
         return instance
             .put(`/profile/status/`, {status})
     },
-    saveAvatarPhoto(photoFile: any) {
+    saveAvatarPhoto(photoFile: File) {
         const formData = new FormData();
         formData.append('image', photoFile)
         return instance
@@ -102,5 +102,10 @@ export const dialogsAPI = {
         return (
             instance.delete(`dialogs/messages/${messageId}`).then(response => response.data)
         )
-    }
+    },
+    newMessagesCount() {
+        return (
+            instance.get(`dialogs/messages/new/count`)
+        )
+    },
 };

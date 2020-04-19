@@ -2,12 +2,21 @@ import React from "react";
 import classes from "../../../styles/Profile.module.scss";
 import { Card, Button } from "react-bootstrap";
 import { DeleteFilled } from "@ant-design/icons";
+import avatarDefault from '../../../assets/image/avatarDefault.jpg'
+import { PostType } from "../../../redux/reducers/reduceProfile";
 
-const Posts = ({posts, ...props}) => {
+type PropsType = {
+  avaPhoto: string | null
+  posts: PostType
+  likeDislikeMyPost: (postId: number, boolean: boolean) => void
+  deleteMyPost: (postId: number) => void
+}
+
+export const MyPosts: React.FC<PropsType> = ({posts, ...props}) => {
   return (
     <Card className={classes.profilePost}>
       <div className={classes.profilePostItem}>
-        <img alt="Post" src={props.avaPhoto} />
+        <img alt="Post" src={props.avaPhoto !== null ? props.avaPhoto : avatarDefault } />
         <span>{posts.postText}</span>
       </div>
       <div className={classes.profilePostLikes}>
@@ -35,5 +44,3 @@ const Posts = ({posts, ...props}) => {
     </Card>
   );
 };
-
-export default Posts;

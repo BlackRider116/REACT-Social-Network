@@ -1,13 +1,6 @@
-import { GlobalStateType } from '../reduxStore';
+import { GlobalStateType, InferActionsTypes } from '../reduxStore';
 import { ThunkAction } from 'redux-thunk';
 import { dialogsAPI } from '../../api/api';
-
-const GET_ALL_DIALOGS = "/dialogs/GET_ALL_DIALOGS";
-const GET_USER_MESSAGES = "/dialogs/GET_USER_MESSAGES";
-const DELETE_GET_USER_MESSAGES = "/dialogs/DELETE_GET_USER_MESSAGES";
-const SEND_MESSAGE = "/dialogs/SEND_MESSAGE";
-const DELETE_MESSAGE = "/dialogs/DELETE_MESSAGE";
-const SELECT_MESSAGE = '/dialogs/SELECT_MESSAGE'
 
 export type UserInfoType = {
   id: number
@@ -45,34 +38,36 @@ export type UserMessagesType = {
 const initialState = {
   usersInfo: null as Array<UserInfoType> | null,
   userMessages: {} as UserMessagesType,
-  openUserDialogsId: Number(window.location.hash.replace("#/dialogs/", "")) || -1 as number
+  openUserDialogsId: Number(window.location.hash.replace("#/dialogs/", "")) || -1 as number,
+  newMessagesCount: 0 as number
 }
 type InitialStateType = typeof initialState
 
 const reduceDialogs = (state = initialState, action: ActionsTypes): InitialStateType => {
   switch (action.type) {
-    case GET_ALL_DIALOGS:
-    case GET_USER_MESSAGES:
+    case '/dialogs/GET_ALL_DIALOGS':
+    case '/dialogs/GET_USER_MESSAGES':
+    case '/dialogs/NEW_MESSAGES_COUNT':
       return {
         ...state,
         ...action.payload
       }
-    case SEND_MESSAGE:
+    case '/dialogs/SEND_MESSAGE':
       return {
         ...state,
         userMessages: { items: [...state.userMessages.items, action.message] }
       }
-    case SELECT_MESSAGE:
+    case '/dialogs/SELECT_MESSAGE':
       return {
         ...state,
         userMessages: { items: action.selectMessage }
       }
-    case DELETE_MESSAGE:
+    case '/dialogs/DELETE_MESSAGE':
       return {
         ...state,
         userMessages: { items: state.userMessages.items.filter(item => item.id !== action.messageId) }
       }
-    case DELETE_GET_USER_MESSAGES:
+    case '/dialogs/DELETE_GET_USER_MESSAGES':
       return {
         ...state,
         userMessages: { items: [] },
@@ -82,54 +77,43 @@ const reduceDialogs = (state = initialState, action: ActionsTypes): InitialState
       return state;
   }
 };
-type ActionsTypes = GetAllDialogsType | GetUserMessagesType | SendMessageType | DeleteMessageType | SelectMessageType | DeleteGetUserMessagesType 
+type ActionsTypes = InferActionsTypes<typeof actionsDialogs>
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
-type GetAllDialogsType = { type: typeof GET_ALL_DIALOGS, payload: { usersInfo: Array<UserInfoType> } }
-const getAllDialogsAC = (usersInfo: Array<UserInfoType>): GetAllDialogsType =>
-  ({ type: GET_ALL_DIALOGS, payload: { usersInfo } })
+const actionsDialogs = {
+  getAllDialogsAC: (usersInfo: Array<UserInfoType>) =>  ({ type: '/dialogs/GET_ALL_DIALOGS', payload: { usersInfo } } as const),
+  getUserMessagesAC: (userMessages: UserMessagesType, openUserDialogsId: number) => ({ type: '/dialogs/GET_USER_MESSAGES', payload: { userMessages, openUserDialogsId } } as const),
+  deleteGetUserMessagesAC: (openUserDialogsId: number) => ({ type: '/dialogs/DELETE_GET_USER_MESSAGES', openUserDialogsId } as const),
+  sendMessageAC: (message: MessagesType) => ({ type: '/dialogs/SEND_MESSAGE', message } as const),
+  deleteMessageAC: (messageId: string) => ({ type: '/dialogs/DELETE_MESSAGE', messageId } as const),
+  selectMessageAC: (selectMessage: Array<MessagesType>) => ({ type: '/dialogs/SELECT_MESSAGE', selectMessage } as const),
+  newMessagesCount: (newMessagesCount: number) => ({ type: '/dialogs/NEW_MESSAGES_COUNT', payload: { newMessagesCount } } as const)
+}
 
 export const getAllDialogsThunk = (): ThunkType => async dispatch => {
   const data = await dialogsAPI.getAllDialogs()
-  dispatch(getAllDialogsAC(data))
+  dispatch(actionsDialogs.getAllDialogsAC(data))
   localStorage.removeItem('SelectMessage');
 }
 
-type GetUserMessagesType = { type: typeof GET_USER_MESSAGES, payload: { userMessages: UserMessagesType, openUserDialogsId: number } }
-const getUserMessagesAC = (userMessages: UserMessagesType, openUserDialogsId: number): GetUserMessagesType =>
-  ({ type: GET_USER_MESSAGES, payload: { userMessages, openUserDialogsId } })
-
-type DeleteGetUserMessagesType = { type: typeof DELETE_GET_USER_MESSAGES, openUserDialogsId: number }
-const deleteGetUserMessagesAC = (openUserDialogsId: number): DeleteGetUserMessagesType =>
-  ({ type: DELETE_GET_USER_MESSAGES, openUserDialogsId })
-
 export const getUserMessagesThunk = (userId: number): ThunkType => async dispatch => {
   const data = await dialogsAPI.getListMessages(userId)
-  userId !== -1 ? dispatch(getUserMessagesAC(data, userId)) : dispatch(deleteGetUserMessagesAC(userId))
+  userId !== -1 ? dispatch(actionsDialogs.getUserMessagesAC(data, userId)) : dispatch(actionsDialogs.deleteGetUserMessagesAC(userId))
 }
-
-type SendMessageType = { type: typeof SEND_MESSAGE, message: MessagesType }
-const sendMessageAC = (message: MessagesType): SendMessageType => ({ type: SEND_MESSAGE, message })
 
 export const sendMessageThunk = (userId: number, message: string): ThunkType => async dispatch => {
   if (message) {
     const response = await dialogsAPI.sendMessage(userId, message)
-    dispatch(sendMessageAC(response.data.message))
+    dispatch(actionsDialogs.sendMessageAC(response.data.message))
   }
 }
-
-type DeleteMessageType = { type: typeof DELETE_MESSAGE, messageId: string }
-const deleteMessageAC = (messageId: string): DeleteMessageType => ({ type: DELETE_MESSAGE, messageId })
 
 export const deleteMessageThunk = (message: MessagesType): ThunkType => async (dispatch, getState) => {
   await dialogsAPI.deleteMessage(message.id)
   const stateMessageLength = getState().messagesPage.userMessages.items.length
   const userId = getState().messagesPage.openUserDialogsId
-  stateMessageLength > 10 ? dispatch(deleteMessageAC(message.id)) : dispatch(getUserMessagesThunk(userId))
+  stateMessageLength > 10 ? dispatch(actionsDialogs.deleteMessageAC(message.id)) : dispatch(getUserMessagesThunk(userId))
 }
-
-type SelectMessageType = { type: typeof SELECT_MESSAGE, selectMessage: Array<MessagesType> }
-const selectMessageAC = (selectMessage: Array<MessagesType>): SelectMessageType => ({ type: SELECT_MESSAGE, selectMessage })
 
 export const selectMessageThunk = (messageId: string): ThunkType => async (dispatch, getState) => {
   const stateMessage = getState().messagesPage.userMessages.items
@@ -146,7 +130,7 @@ export const selectMessageThunk = (messageId: string): ThunkType => async (dispa
     return item
   });
 
-  dispatch(selectMessageAC(newStateMessage))
+  dispatch(actionsDialogs.selectMessageAC(newStateMessage))
   localStorage.setItem("SelectMessage", JSON.stringify(arr));
 }
 
@@ -155,6 +139,11 @@ export const startDialogThunk = (userId: number): ThunkType => async dispatch =>
   if (response.resultCode === 0) {
     dispatch(getUserMessagesThunk(userId))
   }
+}
+
+export const newMessagesCountThunk = (): ThunkType => async dispatch => {
+  const response = await dialogsAPI.newMessagesCount()
+  if (response.status === 200) dispatch(actionsDialogs.newMessagesCount(response.data))
 }
 
 export default reduceDialogs;

@@ -1,13 +1,6 @@
 import { postsAPI, likeDislikeDeleteAPI, mediaApi, baseURL } from "../../api/apiMyBackend";
 import { ThunkAction } from 'redux-thunk';
-import { GlobalStateType } from '../reduxStore';
-
-const GET_POSTS = "/posts/seenPosts/GET_POSTS"
-const SET_POSTS = "/posts/seenPosts/SET_POSTS"
-const SET_LIKES = "/posts//likes/SET_LIKES"
-const DELETE_POST = "/posts//DELETE_POST"
-const ADD_POST = "/posts/ADD_POST"
-const TEXT = "/posts/TEXT"
+import { GlobalStateType, InferActionsTypes } from '../reduxStore';
 
 type AddPostFormDataType = {
   type: string
@@ -16,7 +9,7 @@ type AddPostFormDataType = {
 let addPostFormData: AddPostFormDataType = {
   type: '',
   file: ''
-} 
+}
 
 export type PostType = {
   id: number
@@ -37,17 +30,17 @@ type initialStateType = typeof initialState
 
 const reduceNews = (state = initialState, action: ActionsTypes): initialStateType => {
   switch (action.type) {
-    case TEXT:
+    case '/news/TEXT':
       return {
         ...state,
         textPost: action.textPost
       };
-    case GET_POSTS:
+    case '/news/GET_POSTS':
       return {
         ...state,
         ...action.payload
       }
-    case SET_POSTS:
+    case '/news/SET_POSTS':
       return {
         ...state,
         posts: [
@@ -57,17 +50,17 @@ const reduceNews = (state = initialState, action: ActionsTypes): initialStateTyp
         lastSeenId: action.lastSeenId,
         prevPostsButton: action.prevPostsButton
       };
-    case SET_LIKES:
+    case '/news/SET_LIKES':
       return {
         ...state,
         posts: likeDislikeDeletePost(state.posts, action.postId, action.likes)
       }
-    case DELETE_POST:
+    case '/news/DELETE_POST':
       return {
         ...state,
         posts: deletePostFilter(state.posts, action.postId)
       }
-    case ADD_POST:
+    case '/news/ADD_POST':
       return {
         ...state,
         posts: [
@@ -81,14 +74,17 @@ const reduceNews = (state = initialState, action: ActionsTypes): initialStateTyp
   }
 };
 
-type ActionsTypes = SetPostType | GetFirstPostsType | SetLikesType | DeletePostOfStateType | TextPostAddType | AddPostType
+type ActionsTypes = InferActionsTypes<typeof actionsNews>
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
-type SetPostType = { type: typeof SET_POSTS, posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean }
-const setPosts = (posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean): SetPostType => ({ type: SET_POSTS, posts, lastSeenId, prevPostsButton });
-
-type GetFirstPostsType = { type: typeof GET_POSTS, payload: { posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean } }
-const getFirstPosts = (posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean): GetFirstPostsType => ({ type: GET_POSTS, payload: { posts, lastSeenId, prevPostsButton } });
+export const actionsNews = {
+  setPosts: (posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean) => ({ type: '/news/SET_POSTS', posts, lastSeenId, prevPostsButton } as const),
+  getFirstPosts: (posts: Array<PostType>, lastSeenId: number, prevPostsButton: boolean) => ({ type: '/news/GET_POSTS', payload: { posts, lastSeenId, prevPostsButton } } as const),
+  setLikes: (postId: number, likes: number) => ({ type: '/news/SET_LIKES', postId, likes } as const),
+  deletePostOfState: (postId: number) => ({ type: '/news/DELETE_POST', postId } as const),
+  textPostAdd: (textPost: string) => ({ type: '/news/TEXT', textPost } as const),
+  addPost: (post: PostType) => ({ type: '/news/ADD_POST', post } as const)
+}
 
 export const getMyPosts = (lastSeenId = 0): ThunkType => async (dispatch) => {
   const promise = await postsAPI.getPosts(lastSeenId)
@@ -98,23 +94,20 @@ export const getMyPosts = (lastSeenId = 0): ThunkType => async (dispatch) => {
     const lastId = promise[promise.length - 1].id
     if (lastSeenId === 0) {
       if (promise.length < 5) {
-        dispatch(getFirstPosts(data, lastId, false))
+        dispatch(actionsNews.getFirstPosts(data, lastId, false))
       } else {
-        dispatch(getFirstPosts(data, lastId, true))
+        dispatch(actionsNews.getFirstPosts(data, lastId, true))
       }
     } else {
       if (promise.length < 5) {
-        dispatch(setPosts(data, lastId, false))
+        dispatch(actionsNews.setPosts(data, lastId, false))
       } else {
-        dispatch(setPosts(data, lastId, true))
+        dispatch(actionsNews.setPosts(data, lastId, true))
       }
     }
   }
 
 }
-
-type SetLikesType = {type: typeof SET_LIKES, postId: number, likes: number }
-const setLikes = (postId: number, likes: number): SetLikesType => ({ type: SET_LIKES, postId, likes });
 
 const likeDislikeDeletePost = (posts: Array<PostType>, postId: number, likes: number) => {
   return posts.map(post => {
@@ -127,16 +120,13 @@ const likeDislikeDeletePost = (posts: Array<PostType>, postId: number, likes: nu
 
 export const likePost = (postId: number): ThunkType => async (dispatch) => {
   const data = await likeDislikeDeleteAPI.like(postId)
-  dispatch(setLikes(postId, data.likes))
+  dispatch(actionsNews.setLikes(postId, data.likes))
 }
 
 export const dislikePost = (postId: number): ThunkType => async (dispatch) => {
   const data = await likeDislikeDeleteAPI.dislike(postId)
-  dispatch(setLikes(postId, data.likes))
+  dispatch(actionsNews.setLikes(postId, data.likes))
 }
-
-type DeletePostOfStateType = {type: typeof DELETE_POST, postId: number}
-const deletePostOfState = (postId: number): DeletePostOfStateType => ({ type: DELETE_POST, postId });
 
 const deletePostFilter = (posts: Array<PostType>, postId: number) => {
   return posts.filter(post => post.id !== postId)
@@ -144,14 +134,9 @@ const deletePostFilter = (posts: Array<PostType>, postId: number) => {
 
 export const deletePost = (postId: number): ThunkType => async (dispatch) => {
   await likeDislikeDeleteAPI.delete(postId)
-  dispatch(deletePostOfState(postId))
+  dispatch(actionsNews.deletePostOfState(postId))
 }
 
-type TextPostAddType = {type: typeof TEXT, textPost: string}
-export const textPostAdd = (textPost: string): TextPostAddType => ({ type: TEXT, textPost })
-
-type AddPostType = { type: typeof ADD_POST, post: PostType}
-const addPost = (post: PostType): AddPostType => ({ type: ADD_POST, post })
 
 export const addPostThunk = (content: string): ThunkType => async (dispatch) => {
 
@@ -168,7 +153,7 @@ export const addPostThunk = (content: string): ThunkType => async (dispatch) => 
   }
 
   const promise = await postsAPI.addPost(post)
-  dispatch(addPost(promise))
+  dispatch(actionsNews.addPost(promise))
 }
 
 export const saveMediaFile = async (file: any, type: string) => {

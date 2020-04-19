@@ -4,6 +4,7 @@ import { reduxForm } from "redux-form";
 import { fieldValue } from "../../../common/FormControl/FormControl";
 import { required } from "../../../utilities/validation/validation";
 import stylesProfile from "../../../styles/Profile.module.scss";
+// import { ProfileType } from "../../../redux/reducers/reduceProfile";
 
 const ProfileInfoForm = ({ profile, error, ...props }) => {
   return (
@@ -61,9 +62,7 @@ const ProfileInfoForm = ({ profile, error, ...props }) => {
   );
 };
 
-export const ReduxProfileInfoForm = reduxForm({ form: "profileUserInfo" })(
-  ProfileInfoForm
-);
+export const ReduxProfileInfoForm = reduxForm({ form: "profileUserInfo" })(ProfileInfoForm)
 
 export const ProfileInfoFormAboutMe = ({ profile, error, ...props }) => {
   return (
@@ -99,6 +98,7 @@ export const ProfileInfoFormAboutMe = ({ profile, error, ...props }) => {
 export const ReduxProfileInfoFormAboutMe = reduxForm({
   form: "profileUserInfoAboutMe"
 })(ProfileInfoFormAboutMe);
+
 
 export const ProfileUserInfo = ({ profile }) => {
   return (
@@ -137,8 +137,8 @@ export const ProfileAboutMe = ({ profile }) => {
           {profile.lookingForAJob ? (
             <span style={{ color: "green" }}>Yes</span>
           ) : (
-            <span style={{ color: "red" }}>No</span>
-          )}
+              <span style={{ color: "red" }}>No</span>
+            )}
         </h5>
       </div>
 

@@ -1,6 +1,6 @@
 import { getAuthThunk } from "./reduceAuth";
 import { ThunkAction } from 'redux-thunk';
-import { GlobalStateType } from '../reduxStore';
+import { GlobalStateType, InferActionsTypes } from '../reduxStore';
 
 const INITIALIZED_SUCCESS = "/auth/me/INITIALIZED_SUCCESS";
 const GLOBAL_ERROR = "GLOBAL_ERROR";
@@ -28,26 +28,26 @@ const reduceApp = (state = initialState, action: ActionsTypes): InitialStateType
       return state;
   }
 };
-type ActionsTypes = SetInitializationType | SetGlobalErrorType
+type ActionsTypes = InferActionsTypes<typeof actionsApp>
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown, ActionsTypes>
 
-type SetInitializationType = {type: typeof INITIALIZED_SUCCESS}
-const setInitialization = (): SetInitializationType => ({ type: INITIALIZED_SUCCESS });
+const actionsApp = {
+setInitialization: () => ({ type: INITIALIZED_SUCCESS }as const),
+setGlobalError: (globalError: any) => ({ type: GLOBAL_ERROR, globalError }as const)
+
+}
 
 export const initializeApp = (): ThunkType => async (dispatch) => {
   const promise = dispatch(getAuthThunk())
   promise.finally(() => {
-    dispatch(setInitialization())
+    dispatch(actionsApp.setInitialization())
   })
 }
-
-type SetGlobalErrorType = {type: typeof GLOBAL_ERROR, globalError: any}
-const setGlobalError = (globalError: any): SetGlobalErrorType => ({ type: GLOBAL_ERROR, globalError });
 
 export const globalErrorThunk = (): ThunkType => async (dispatch) => {
   const promise = dispatch(getAuthThunk())
   promise.finally(() => {
-    dispatch(setGlobalError(null))
+    dispatch(actionsApp.setGlobalError(null))
   })
 }
 

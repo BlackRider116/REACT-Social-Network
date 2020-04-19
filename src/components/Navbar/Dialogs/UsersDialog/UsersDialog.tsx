@@ -5,13 +5,19 @@ import avatarDefault from "../../../../assets/image/avatarDefault.jpg";
 import { Card } from "react-bootstrap";
 import { Scrollbars } from "react-custom-scrollbars";
 import Moment from "react-moment";
+import { UserInfoType } from "../../../../redux/reducers/reduceDialogs";
 
-const UsersDialog = props => {
-  // console.log(props.userInfo)
+type PropsType = {
+  usersInfo: Array<UserInfoType> 
+  onUserMessages: (userId: number) => void
+  openUserDialogsId: number
+}
+
+const UsersDialog: React.FC<PropsType> = props => {
   return (
     <Card className={styles.cardDialogs}>
       <Scrollbars style={{ width: "100%", height: "100%" }}>
-        {props.userInfo.map(user => (
+        {props.usersInfo.map(user => (
           <Card
             key={user.id}
             className={
@@ -23,13 +29,13 @@ const UsersDialog = props => {
             <div className={styles.dialogUser_Item}>
               <NavLink to={`/profile/${user.id}`}>
                 <img
-                  alt={user.id}
+                  alt={'user.id'}
                   src={user.photos.small ? user.photos.small : avatarDefault}
                 />
               </NavLink>
               <NavLink
                 to={`/dialogs/${user.id}`}
-                onClick={() => props.userMessages(user.id)}
+                onClick={() => props.onUserMessages(user.id)}
               >
                 <div>{user.userName}</div>
 

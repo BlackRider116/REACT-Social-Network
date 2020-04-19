@@ -8,7 +8,7 @@ import {
   dislikePost,
   deletePost,
   addPostThunk,
-  textPostAdd,
+  actionsNews,
   saveMediaFile
 } from "../../../redux/reducers/reduceNews";
 import {
@@ -17,7 +17,6 @@ import {
   Button,
   DropdownButton,
   Dropdown,
-  Card as div,
   Modal
 } from "react-bootstrap";
 import loadMedia from "../../../assets/image/loadMedia.gif";
@@ -269,6 +268,6 @@ export default compose(
     dislikePost,
     deletePost,
     addPostThunk,
-    textPostAdd
+    textPostAdd: actionsNews.textPostAdd
   })
 )(NewsContainer);

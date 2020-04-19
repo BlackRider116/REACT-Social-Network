@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentType } from "react";
 import { connect } from "react-redux";
 import { withAuthRedirect } from "../../../hoc/withAuthRedirect";
 import { compose } from "redux";
@@ -35,8 +35,8 @@ class DialogsContainer extends React.Component<PropsType> {
       <div className={styles.dialogsPage}>
         <div>
           <UsersDialog
-            userInfo={this.props.usersInfo}
-            userMessages={this.props.getUserMessagesThunk}
+            usersInfo={this.props.usersInfo}
+            onUserMessages={this.props.getUserMessagesThunk}
             openUserDialogsId={this.props.openUserDialogsId} />
         </div>
 
@@ -78,14 +78,13 @@ type MapDispatchToPropsType = {
   deleteMessageThunk: (message: MessagesType) => void
   selectMessageThunk: (messageId: string) => void
 }
-export default compose(
-  connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps,
-    {
-      getAllDialogsThunk,
-      getUserMessagesThunk,
-      sendMessageThunk,
-      deleteMessageThunk,
-      selectMessageThunk
-    }),
+export default compose<ComponentType<{}>>(
+  connect<MapStateToPropsType, MapDispatchToPropsType, {}, GlobalStateType>(mapStateToProps, {
+    getAllDialogsThunk,
+    getUserMessagesThunk,
+    sendMessageThunk,
+    deleteMessageThunk,
+    selectMessageThunk
+  }),
   withAuthRedirect
 )(DialogsContainer);
