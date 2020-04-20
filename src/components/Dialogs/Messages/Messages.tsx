@@ -77,7 +77,6 @@ const Messages: React.FC<PropsType> = ({ myId, ...props }) => {
   );
 };
 
-
 type BodyValuesType = { newMessage: string }
 type FormType = {
   openUserDialogsId: number
